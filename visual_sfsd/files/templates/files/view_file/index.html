@@ -1,0 +1,16 @@
+{% extends 'main.html' %}
+
+{% block title %}
+
+{% endblock title %}
+
+{% block content %}
+{{ file.name }}
+<br>
+
+<div id="123">
+{% for block in file.block_set.all %}
+{{ block.index }}
+{% endfor %}</div>
+
+{% endblock content %}

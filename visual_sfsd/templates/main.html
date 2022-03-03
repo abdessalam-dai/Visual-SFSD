@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{% block title %}{% endblock %}VisualSFSD</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    {% load static %}
+
+    <!-- Bootstrap -->
+
+    <!-- Style sheets -->
+    {% block stylesheets %}
+
+    {% endblock %}
+
+    <!-- Scripts -->
+    {% block scripts %}
+
+    {% endblock %}
+
+    <!-- jQuery -->
+
+    <!-- Fonts -->
+
+    <!-- Fontawesome -->
+</head>
+
+<body>
+
+    {% comment %}{% include 'components/navbar/base.html' %}{% endcomment %}
+
+    <div>
+        {% comment %}{% include 'components/messages.html' %}{% endcomment %}
+
+        {% block content %}
+
+        {% endblock %}
+    </div>
+
+    {% comment %}{% include 'components/footer.html' %}{% endcomment %}
+
+</body>
+
+</html>
