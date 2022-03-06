@@ -1,9 +1,38 @@
-{% extends 'main.html' %}
+{% extends "main.html" %}
 
 {% block title %}
 
 {% endblock title %}
 
 {% block content %}
-Create new file
+    <div>
+        <button id="option-simple-file">Simple</button>
+
+        <button id="option-indexed-file">Index</button>
+
+        <button id="option-hashing-file">Hashing</button>
+    </div>
+
+    <div style="display: none" id="simple-file-types">
+        <button id="tof">TOF</button>
+        <button id="tof">TnOF</button>
+        <button id="tof">LOF</button>
+        <button id="tof">LnOF</button>
+    </div>
+
+    <div style="display: none">
+        <form method="POST" action="">
+            {% csrf_token %}
+            <input name="file_name" type="text" placeholder="Name">
+            <input
+                name="nb_max_enregs"
+                type="number"
+                placeholder="Maximum number of enregs."
+                value="10"
+            >
+            <label for="fill-with-dummy-data">Fill with dummy data</label>
+            <input type="checkbox" id="fill-with-dummy-data" checked>
+            <button type="submit">Create</button>
+        </form>
+    </div>
 {% endblock content %}

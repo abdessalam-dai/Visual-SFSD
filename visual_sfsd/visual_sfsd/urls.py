@@ -7,3 +7,5 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('admin/', admin.site.urls),
 ]
+
+handler404 = "base.views.page_not_found_view"

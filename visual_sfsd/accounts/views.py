@@ -6,4 +6,4 @@ def login(request):
 
 
 def register(request):
-    return
+    return render(request, 'accounts/register/index.html')

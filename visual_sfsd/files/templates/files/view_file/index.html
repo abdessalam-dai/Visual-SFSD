@@ -1,16 +1,26 @@
-{% extends 'main.html' %}
+{% extends "main.html" %}
+
+{% load static %}
 
 {% block title %}
-
+    File -
 {% endblock title %}
 
+{% block scripts %}
+    <script src="{% static 'js/files/lib/d3.v7.min.js' %}"></script>
+    <script type="module" src="{% static 'js/files/index.js' %}"></script>
+{% endblock %}
+
 {% block content %}
-{{ file.name }}
-<br>
+    {% include "files/view_file/components/toolbar.html" %}
 
-<div id="123">
-{% for block in file.block_set.all %}
-{{ block.index }}
-{% endfor %}</div>
-
+{#    <br>#}
+{#    {{ file.name }}#}
+{#    <br>#}
+{##}
+{#    <div id="123">#}
+{#        {% for block in file.block_set.all %}#}
+{#        {{ block.index }}#}
+{#        {% endfor %}#}
+{#    </div>#}
 {% endblock content %}
