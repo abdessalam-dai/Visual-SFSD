@@ -61,7 +61,7 @@ let svgContainer = d3.select("#board-container")
 
 let MCBoardContainer = svgContainer.append("div")
     .style("border", "2px blue dotted")
-    .style("float", "left")
+    .style("float", "right")
 
 
 let MCBoard = MCBoardContainer.append("svg")
@@ -106,14 +106,14 @@ function randInt(min, max) {
     return Math.floor(Math.random() * (max - min) + min);
 }
 
-for (let i = 1; i <= 30; i++) {
+for (let i = 1; i <= 14; i++) {
     setTimeout(function () {
         newFile.insert(
             randInt(0, 500),
             "field1",
             "field2"
         )
-        newFile.print();
+        newFile.display();
     }, 0 * i)
 }
 

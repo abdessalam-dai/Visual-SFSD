@@ -37,33 +37,49 @@ export default class File {
         this.blocks = blocks;
     }
 
-    print(blockHighlightIndex=-2) {
+    display(blockHighlightIndex=-2) {
         // console.log(this.nbBlocks);
         // console.log(this.blocks.length);
         // console.log(this.nbInsertions);
 
         // remove previous display
-        this.MCBoard.selectAll("*").remove();
+        // this.MCBoard.selectAll("*").remove();
         this.MSBoard.selectAll("*").remove();
+
+        // add titles
+        let MCBoardTitle = this.MCBoard.append("text")
+            .attr("x", 10)
+            .attr("y", 20)
+            .text("MC");
+
+        let MSBoardTitle = this.MSBoard.append("text")
+            .attr("x", 10)
+            .attr("y", 20)
+            .text("MS");
 
         let blockColor;
         let x = 20, y = 30;
 
         // Display MC
-        let MCGroup = this.MCBoard.append("g")
-            .attr("transform", `translate(${x}, ${y})`);
+        // let MCGroup = this.MCBoard.append("g")
+        //     .attr("transform", `translate(${x}, ${y})`);
+        //
+        // MCGroup.append("rect")
+        //         .attr("x", 0)
+        //         .attr("y", 0)
+        //         .attr("width", BLOCK_WIDTH)
+        //         .attr("height", BLOCK_HEIGHT)
+        //         .attr("fill", "#71a2ff");
+        //
+        // MCGroup.append("text")
+        //     .attr("x", 10)
+        //     .attr("y", 20)
+        //     .text("Buffer");
 
-        MCGroup.append("rect")
-                .attr("x", 0)
-                .attr("y", 0)
-                .attr("width", BLOCK_WIDTH)
-                .attr("height", BLOCK_HEIGHT)
-                .attr("fill", "#71a2ff");
-
-        MCGroup.append("text")
-            .attr("x", 10)
-            .attr("y", 20)
-            .text("Buffer");
+        // display buffer
+        // if (blockHighlightIndex !== -2) {
+        //
+        // }
 
 
         let counter = 0;
@@ -76,7 +92,7 @@ export default class File {
 
         this.MSBoard.attr("width", newWidth);
         for (let block of this.blocks) {
-            let group = this.MSBoard.append("g")
+            let blockGroup = this.MSBoard.append("g")
                 .attr("transform", `translate(${x}, ${y})`);
 
             if (blockHighlightIndex === counter) {
@@ -85,26 +101,26 @@ export default class File {
                 blockColor = "#DBE2EF";
             }
 
-            group.append("rect")
+            let rect = blockGroup.append("rect")
                 .attr("x", 0)
                 .attr("y", 0)
                 .attr("width", BLOCK_WIDTH)
                 .attr("height", BLOCK_HEIGHT)
                 .attr("fill", blockColor);
 
-            group.append("text")
+            let nbText = blockGroup.append("text")
                 .attr("x", BLOCK_WIDTH - 60)
                 .attr("y", 20)
                 .text(`NB = ${block.nb}`);
 
-            group.append("text")
+            let indexText = blockGroup.append("text")
                 .attr("x", 10)
                 .attr("y", 20)
                 .text(counter);
 
             let j = 0;
 
-            let dataContainer = group.append("g")
+            let dataContainer = blockGroup.append("g")
                 .attr("transform", `translate(10, 60)`);
 
             for (let k = 0; k < block.enregs.length; k++) {
@@ -114,6 +130,49 @@ export default class File {
                     .text(`${block.enregs[k].key}`);
 
                     j += 20;
+            }
+
+            if (blockHighlightIndex === counter) {
+                console.log(blockHighlightIndex)
+                let blockGroup = this.MCBoard.append("g")
+                    .attr("transform", `translate(20, 30)`);
+
+                if (blockHighlightIndex === counter) {
+                    blockColor = "#71A2FF";
+                } else {
+                    blockColor = "#DBE2EF";
+                }
+
+                let rect = blockGroup.append("rect")
+                    .attr("x", 0)
+                    .attr("y", 0)
+                    .attr("width", BLOCK_WIDTH)
+                    .attr("height", BLOCK_HEIGHT)
+                    .attr("fill", blockColor);
+
+                let nbText = blockGroup.append("text")
+                    .attr("x", BLOCK_WIDTH - 60)
+                    .attr("y", 20)
+                    .text(`NB = ${block.nb}`);
+
+                let indexText = blockGroup.append("text")
+                    .attr("x", 10)
+                    .attr("y", 20)
+                    .text(counter);
+
+                let j = 0;
+
+                let dataContainer = blockGroup.append("g")
+                    .attr("transform", `translate(10, 60)`);
+
+                for (let k = 0; k < block.enregs.length; k++) {
+                    dataContainer.append("text")
+                        .attr("x", 0)
+                        .attr("y", j)
+                        .text(`${block.enregs[k].key}`);
+
+                        j += 20;
+                }
             }
 
             x += BLOCK_WIDTH + SPACE_BETWEEN_BLOCKS;
