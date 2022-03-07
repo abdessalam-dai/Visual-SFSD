@@ -8,11 +8,12 @@
 
 {% block scripts %}
     <script src="{% static 'js/files/lib/d3.v7.min.js' %}"></script>
-    <script type="module" src="{% static 'js/files/index.js' %}"></script>
+    <script type="module" src="{% static 'js/files/view_file/TOF/index.js' %}"></script>
 {% endblock %}
 
 {% block content %}
     {% include "files/view_file/components/toolbar.html" %}
+    {% include "files/view_file/components/board.html" %}
 
 {#    <br>#}
 {#    {{ file.name }}#}

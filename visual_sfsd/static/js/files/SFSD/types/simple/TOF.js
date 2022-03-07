@@ -1,6 +1,7 @@
 import File from '../../structres/File.js';
 import Enreg from '../../structres/Enreg.js';
 import Block from '../../structres/Block.js';
+import {BLOCK_HEIGHT, BLOCK_WIDTH} from "../../../constants.js";
 
 
 export default class TOF extends File {
@@ -34,8 +35,13 @@ export default class TOF extends File {
         while (low <= high && !found && !stop) {
             i = Math.floor((low + high) / 2);
 
+            // setTimeout(this.print(i), 1000);
+
+
             let midBlock = blocks[i];
             let midBlockNb = midBlock.enregs.length;
+
+            // console.log(midBlock)
 
             let firstKey = midBlock.enregs[0].key,
                 lastKey = midBlock.enregs[midBlockNb - 1].key;
@@ -93,11 +99,12 @@ export default class TOF extends File {
         }
     }
 
-    insert(key, data, removed = false) {
+    insert(key, field1, field2, removed = false) {
         /*
             input :
                     key :       [Int]
-                    data :      [Object]
+                    field1 :    [String]
+                    field2 :    [String]
                     removed     [Boolean]
             output :
                     [Boolean] ==> if enreg. is inserted return true, else false (if key already exits !)
@@ -111,14 +118,74 @@ export default class TOF extends File {
             j = searchResults.pos.j;
 
         if (!found) {
-            let newEnreg = new Enreg(key, data, removed);
+            let newEnreg = new Enreg(key, field1, field2, removed);
 
             if (this.blocks.length === 0) {
+
+                // let x = 20, y = 30;
+                // let group = this.MSBoard.append("g")
+                //     .attr("transform", `translate(${x}, ${y})`);
+                //
+                // let rect = group.append("rect")
+                //     .attr("x", 0)
+                //     .attr("y", 0)
+                //     .attr("width", BLOCK_WIDTH)
+                //     .attr("height", BLOCK_HEIGHT)
+                //     .attr("fill", "#DBE2EF");
+                //
+                // let indexText = group.append("text")
+                //     .attr("x", 10)
+                //     .attr("y", 20)
+                //     .text(0);
+                //
+                // let nbText = group.append("text")
+                //     .attr("x", BLOCK_WIDTH - 60)
+                //     .attr("y", 20)
+                //     .text(`NB = 1`);
+                //
+                // let dataContainer = group.append("g")
+                //     .attr("transform", `translate(10, 60)`);
+                //
+                // let enregElement = dataContainer.append("text")
+                //     .attr("x", 0)
+                //     .attr("y", j)
+                //     .text(`${newEnreg.key}`);
+                //
+                // j += 20;
+                //
+                // let enregInfo = {
+                //     x: x,
+                //     y: y,
+                //     element: enregElement,
+                // }
+                //
+                // let enregsList = [enregInfo];
+                //
+                // let htmlElements = {
+                //     group: group,
+                //     rect: rect,
+                //     indexText: indexText,
+                //     nbText: nbText,
+                //     dataContainer: dataContainer,
+                //     enregsList: enregsList
+                // }
 
                 let enregs = [newEnreg];
                 let newBlock = new Block(enregs, 1);
                 this.blocks.push(newBlock);
                 this.nbBlocks += 1;
+
+                // let usedWidth = (200 + 20) * this.blocks.length;
+                // let necessaryWidth = 20 + 200;
+                //
+                // // console.log(usedWidth);
+                //
+                // let svgCurrentWidth = this.MSBoard.attr("width");
+                // alert(svgCurrentWidth)
+                //
+                // if (svgCurrentWidth - usedWidth < necessaryWidth - 20) {
+                //     this.MSBoard.attr("width", svgCurrentWidth + necessaryWidth);
+                // }
 
             } else {
 
@@ -166,6 +233,17 @@ export default class TOF extends File {
                     let newBlock = new Block(enregs, 1);
                     this.blocks.push(newBlock);
                     this.nbBlocks += 1;
+
+
+                    // let usedWidth = (200 + 20) * this.blocks.length;
+                    // let necessaryWidth = 20 + 200;
+                    //
+                    // let svgCurrentWidth = parseInt(this.MSBoard.attr("width"));
+                    // console.log(svgCurrentWidth)
+                    //
+                    // if (svgCurrentWidth - usedWidth < necessaryWidth - 20) {
+                    //     this.MSBoard.attr("width", svgCurrentWidth + necessaryWidth);
+                    // }
                 }
             }
 
