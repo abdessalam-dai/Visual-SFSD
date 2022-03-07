@@ -1,0 +1,7 @@
+.hide {
+    display: none;
+}
+
+.selected {
+    background-color: green;
+}
