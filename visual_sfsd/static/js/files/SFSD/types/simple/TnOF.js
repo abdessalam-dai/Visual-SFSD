@@ -50,11 +50,12 @@ export default class TnOF extends File {
         }
     }
 
-    insert(key, data, removed = false) {
+    insert(key, field1, field2, removed = false) {
         /*
             input :
                     key :       [Int]
-                    data :      [Object]
+                    field1 :    [String]
+                    field2 :    [String]
                     removed     [Boolean]
             output :
                     [Boolean] ==> if enreg. is inserted return true, else false (if key already exits !)
@@ -62,7 +63,7 @@ export default class TnOF extends File {
 
         // if the key does not exist
         if (!this.search(key).found) {
-            let newEnreg = new Enreg(key, data, removed); // create a new enreg.
+            let newEnreg = new Enreg(key, field1, field2, removed); // create a new enreg.
             let lastBlock = this.blocks[this.blocks.length - 1];
 
             // check if here is enough space last block

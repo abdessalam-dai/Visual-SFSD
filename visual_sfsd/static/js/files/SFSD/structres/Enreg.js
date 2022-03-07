@@ -1,12 +1,14 @@
 export default class Enreg {
-    constructor(key, data, removed = false) {
+    constructor(key, field1, field2, removed = false) {
         /*
             key :       [Int]
-            data :      [Object]
+            field1 :    [String]
+            field2 :    [String]
             removed :   [Boolean]
         */
        this.key = key;
-       this.data = data;
+       this.field1 = field1;
+       this.field2 = field2;
        this.removed = removed;
     }
 }

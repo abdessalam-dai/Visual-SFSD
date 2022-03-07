@@ -1,6 +1,7 @@
 import File from '../../structres/File.js';
 import Enreg from '../../structres/Enreg.js';
 import Block from '../../structres/Block.js';
+import {BLOCK_HEIGHT, BLOCK_WIDTH} from "../../../constants.js";
 
 
 export default class TOF extends File {
@@ -33,6 +34,11 @@ export default class TOF extends File {
         // global search for block
         while (low <= high && !found && !stop) {
             i = Math.floor((low + high) / 2);
+
+            setTimeout(() => {
+                this.display(i);
+            }, 1000);
+
 
             let midBlock = blocks[i];
             let midBlockNb = midBlock.enregs.length;
@@ -93,11 +99,12 @@ export default class TOF extends File {
         }
     }
 
-    insert(key, data, removed = false) {
+    insert(key, field1, field2, removed = false) {
         /*
             input :
                     key :       [Int]
-                    data :      [Object]
+                    field1 :    [String]
+                    field2 :    [String]
                     removed     [Boolean]
             output :
                     [Boolean] ==> if enreg. is inserted return true, else false (if key already exits !)
@@ -111,7 +118,7 @@ export default class TOF extends File {
             j = searchResults.pos.j;
 
         if (!found) {
-            let newEnreg = new Enreg(key, data, removed);
+            let newEnreg = new Enreg(key, field1, field2, removed);
 
             if (this.blocks.length === 0) {
 
