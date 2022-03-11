@@ -31,17 +31,15 @@ export default class TOF extends File {
         let found = false,
             stop = false;
 
+        let traversedBlocks = [];
+
         // global search for block
         while (low <= high && !found && !stop) {
             i = Math.floor((low + high) / 2);
-
-            setTimeout(() => {
-                this.display(i);
-            }, 1000);
-
-
             let midBlock = blocks[i];
             let midBlockNb = midBlock.enregs.length;
+
+            traversedBlocks.push(i);
 
             let firstKey = midBlock.enregs[0].key,
                 lastKey = midBlock.enregs[midBlockNb - 1].key;
@@ -95,7 +93,8 @@ export default class TOF extends File {
             pos: {
                 i: i,
                 j: j
-            }
+            },
+            traversedBlocks: traversedBlocks
         }
     }
 

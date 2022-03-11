@@ -1,6 +1,5 @@
-import { SFSD, Block, Enreg } from '../../SFSD/SFSD.js';
+import {SFSD, Block, Enreg} from '../../SFSD/SFSD.js';
 import TOF from "../../SFSD/types/simple/TOF.js";
-
 
 
 let Sfsd = new SFSD();
@@ -33,17 +32,32 @@ let Sfsd = new SFSD();
 const keyToSearchField = document.querySelector("#key-to-search");
 const searchBtn = document.querySelector("#search-btn");
 
-searchBtn.addEventListener("click", function() {
+searchBtn.addEventListener("click", function () {
     let key = parseInt(keyToSearchField.value);
-    console.log(key);
-    console.log(newFile.search(key));
+
+    let searchResults = newFile.search(key);
+
+    let traversedBlocks = searchResults.traversedBlocks;
+
+
+    let i = 0;
+
+    function myLoop() {
+        setTimeout(function () {
+            let blockIndex = traversedBlocks[i];
+            newFile.display(blockIndex);
+            i++;
+            if (i < traversedBlocks.length) {
+                myLoop();
+            }
+        }, 1000)
+    }
+
+    myLoop();
 });
 
 
 // ----------------------------------------------
-
-
-
 
 
 let MC_BOARD_WIDTH = 300;
@@ -73,13 +87,14 @@ let MSBoardContainer = svgContainer.append("div")
     .style("float", "right")
     .style("max-width", `800px`)
     .style("border", "1px red dashed")
-    .style("overflow-x", "scroll");
-
+    .style("overflow-x", "scroll")
+    .style("scroll-behavior", "smooth");
 
 
 let MSBoard = MSBoardContainer.append("svg")
     .attr("width", MS_BOARD_WIDTH).attr("height", MS_BOARD_HEIGHT)
     .style("margin-left", "10px")
+    // .attr("viewBox", "0 0 1122 793")
     .style("background-color", "#eee");
 
 let MCBoardTitle = MCBoard.append("text")
@@ -93,9 +108,10 @@ let MSBoardTitle = MSBoard.append("text")
     .text("MS");
 
 
-
 let newFile = new TOF(
     'file.txt',
+    MCBoardContainer,
+    MSBoardContainer,
     MCBoard,
     MSBoard,
 );
@@ -106,7 +122,7 @@ function randInt(min, max) {
     return Math.floor(Math.random() * (max - min) + min);
 }
 
-for (let i = 1; i <= 14; i++) {
+for (let i = 1; i <= 70; i++) {
     setTimeout(function () {
         newFile.insert(
             randInt(0, 500),
@@ -114,7 +130,7 @@ for (let i = 1; i <= 14; i++) {
             "field2"
         )
         newFile.display();
-    }, 0 * i)
+    }, 10 * i)
 }
 
 // newFile.print();

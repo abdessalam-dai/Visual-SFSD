@@ -21,6 +21,8 @@ export default class File {
 
     constructor(
         name,
+        MCBoardContainer,
+        MSBoardContainer,
         MCBoard,
         MSBoard,
         maxNbEnregs = MAX_NB_ENREGS_DEFAULT,
@@ -31,13 +33,15 @@ export default class File {
         this.name = name;
         this.MCBoard = MCBoard;
         this.MSBoard = MSBoard;
+        this.MCBoardContainer = MCBoard;
+        this.MSBoardContainer = MSBoard;
         this.maxNbEnregs = maxNbEnregs;
         this.nbBlocks = nbBlocks;
         this.nbInsertions = nbInsertions;
         this.blocks = blocks;
     }
 
-    display(blockHighlightIndex=-2) {
+    display(blockHighlightIndex=-2, blockScrollIndex=-2) {
         // console.log(this.nbBlocks);
         // console.log(this.blocks.length);
         // console.log(this.nbInsertions);
@@ -95,8 +99,24 @@ export default class File {
             let blockGroup = this.MSBoard.append("g")
                 .attr("transform", `translate(${x}, ${y})`);
 
+            // this.MSBoardContainer.node().scrollLeft = 100;
+
+
+
+            // console.log()
+
+            // this.MSBoard.scrollTo({
+            //   top: 100,
+            //   left: 100,
+            //   behavior: 'smooth'
+            // });
+
+
             if (blockHighlightIndex === counter) {
                 blockColor = "#71A2FF";
+
+                this.MSBoardContainer.node().parentNode.scrollLeft = x;
+                console.log(x)
             } else {
                 blockColor = "#DBE2EF";
             }
@@ -133,15 +153,11 @@ export default class File {
             }
 
             if (blockHighlightIndex === counter) {
-                console.log(blockHighlightIndex)
+                // console.log(blockHighlightIndex)
                 let blockGroup = this.MCBoard.append("g")
                     .attr("transform", `translate(20, 30)`);
 
-                if (blockHighlightIndex === counter) {
-                    blockColor = "#71A2FF";
-                } else {
-                    blockColor = "#DBE2EF";
-                }
+                blockColor = "#71A2FF";
 
                 let rect = blockGroup.append("rect")
                     .attr("x", 0)
