@@ -115,8 +115,13 @@ export default class File {
             if (blockHighlightIndex === counter) {
                 blockColor = "#71A2FF";
 
-                this.MSBoardContainer.node().parentNode.scrollLeft = x;
-                console.log(x)
+                this.MSBoardContainer.node().parentNode.scrollTo(
+                    {
+                        top: 0,
+                        left: x,
+                        behavior: 'smooth'
+                    }
+                );
             } else {
                 blockColor = "#DBE2EF";
             }

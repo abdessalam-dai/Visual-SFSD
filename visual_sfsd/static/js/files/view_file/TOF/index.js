@@ -4,30 +4,6 @@ import TOF from "../../SFSD/types/simple/TOF.js";
 
 let Sfsd = new SFSD();
 
-// let newFile = Sfsd.simple.tof('file.txt');
-//
-// function randInt(min, max) {
-//     min = Math.ceil(min);
-//     max = Math.floor(max);
-//     return Math.floor(Math.random() * (max - min) + min);
-// }
-//
-// for (let i = 1; i <= 10; i++) {
-//     let rn = randInt(0, 100);
-//     newFile.insert(
-//         rn,
-//         "field1",
-//         "field2"
-//     )
-// }
-
-
-// newFile.print();
-// let res = newFile.removeLogically(33);
-// console.log(res);
-// newFile.print();
-
-
 // ----------------------------------------------
 const keyToSearchField = document.querySelector("#key-to-search");
 const searchBtn = document.querySelector("#search-btn");
