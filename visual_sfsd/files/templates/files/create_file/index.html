@@ -1,11 +1,18 @@
 {% extends "main.html" %}
+{% load static %}
 
-{% block title %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{% static 'css/create_file.css' %}">
+{% endblock %}
 
-{% endblock title %}
+{% block scripts %}
+    <script type="module" src="{% static 'js/files/create_file/index.js' %}"></script>
+{% endblock scripts %}
+
+
 
 {% block content %}
-    <div>
+    <div id="file-types">
         <button id="option-simple-file">Simple</button>
 
         <button id="option-indexed-file">Index</button>
@@ -13,18 +20,29 @@
         <button id="option-hashing-file">Hashing</button>
     </div>
 
-    <div style="display: none" id="simple-file-types">
+    <div  id="simple-file-types">
         <button id="tof">TOF</button>
-        <button id="tof">TnOF</button>
-        <button id="tof">LOF</button>
-        <button id="tof">LnOF</button>
+        <button id="tnof">TnOF</button>
+        <button id="lof">LOF</button>
+        <button id="lnof">LnOF</button>
     </div>
 
-    <div style="display: none">
+    <div  id="index-file-types">
+        <button id="clustered">clustered</button>
+        <button id="not-clustered">Not clustered </button>
+    </div>
+
+    <div  id="hashing-file-types">
+        <button id="static">Static</button>
+        <button id="dynamic">Dynamic</button>
+    </div>
+
+    <div id="form">
         <form method="POST" action="">
             {% csrf_token %}
-            <input name="file_name" type="text" placeholder="Name">
+            <input id="name-file" name="file_name" type="text" placeholder="Name">
             <input
+                id="max-enreg"
                 name="nb_max_enregs"
                 type="number"
                 placeholder="Maximum number of enregs."
@@ -32,7 +50,7 @@
             >
             <label for="fill-with-dummy-data">Fill with dummy data</label>
             <input type="checkbox" id="fill-with-dummy-data" checked>
-            <button type="submit">Create</button>
+            <button id="create-file">Create File</button>
         </form>
     </div>
 {% endblock content %}
