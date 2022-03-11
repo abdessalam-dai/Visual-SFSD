@@ -91,7 +91,7 @@ export default class File {
         let newWidth = BLOCK_WIDTH * this.blocks.length + SPACE_BETWEEN_BLOCKS * (this.blocks.length + 1);
 
         if (this.blocks.length <= 4) {
-            newWidth = 200 * 4 + 20 * 5;
+            newWidth = BLOCK_WIDTH * 4 + SPACE_BETWEEN_BLOCKS * 5;
         }
 
         this.MSBoard.attr("width", newWidth);

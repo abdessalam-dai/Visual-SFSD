@@ -13,14 +13,14 @@
         <button id="option-hashing-file">Hashing</button>
     </div>
 
-    <div style="display: none" id="simple-file-types">
+    <div style="display: block" id="simple-file-types">
         <button id="tof">TOF</button>
         <button id="tof">TnOF</button>
         <button id="tof">LOF</button>
         <button id="tof">LnOF</button>
     </div>
 
-    <div style="display: none">
+    <div style="display: block">
         <form method="POST" action="">
             {% csrf_token %}
             <input name="file_name" type="text" placeholder="Name">
