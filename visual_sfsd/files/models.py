@@ -29,3 +29,14 @@ class Enreg(models.Model):
     field1 = models.CharField(max_length=100, null=True, blank=True)
     field2 = models.CharField(max_length=100, null=True, blank=True)
     removed = models.BooleanField(default=False)
+
+
+
+""" 
+
+{
+name: 
+nbMaxEnreg:
+}
+
+"""
