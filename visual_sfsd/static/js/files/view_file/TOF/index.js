@@ -11,10 +11,7 @@ const searchBtn = document.querySelector("#search-btn");
 searchBtn.addEventListener("click", function () {
     let key = parseInt(keyToSearchField.value);
 
-    let searchResults = newFile.search(key);
-
-    let traversedBlocks = searchResults.traversedBlocks;
-
+    let {found, pos, traversedBlocks, traversedEnregs} = newFile.search(key);
 
     let i = 0;
 
@@ -98,7 +95,7 @@ function randInt(min, max) {
     return Math.floor(Math.random() * (max - min) + min);
 }
 
-for (let i = 1; i <= 70; i++) {
+for (let i = 1; i <= 25; i++) {
     setTimeout(function () {
         newFile.insert(
             randInt(0, 500),
@@ -109,4 +106,36 @@ for (let i = 1; i <= 70; i++) {
     }, 10 * i)
 }
 
+
+
 // newFile.print();
+
+
+
+// -------------------------------------
+/*
+ - JSON file format -
+
+File -> {
+    name: [String],
+    nbMaxEnregs: [Integer],
+    nbBlocks: [Integer],
+    nbInsertions: [Integer],
+    blocks: [Array of Block],
+}
+
+Block -> {
+    enregs: [Array of Enreg],
+    nb: [Integer],
+    nextBlockIndex: [Integer],
+}
+
+Enreg -> {
+    key: [Integer]
+    field1: [Integer]
+    field2: [Integer]
+    removed: [Boolean]
+}
+
+ */
+// -------------------------------------

@@ -10,7 +10,7 @@ def file_view(request, pk):
         file = File.objects.get(id=int(pk))
 
         context = {
-            'file': file
+            'file': file,
         }
         return render(request, 'files/view_file/index.html', context)
     except:

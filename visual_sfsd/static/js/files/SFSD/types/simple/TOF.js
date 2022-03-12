@@ -32,6 +32,7 @@ export default class TOF extends File {
             stop = false;
 
         let traversedBlocks = [];
+        let traversedEnregs = [];
 
         // global search for block
         while (low <= high && !found && !stop) {
@@ -52,6 +53,8 @@ export default class TOF extends File {
                 while (eLow <= eHigh && !found) {
                     j = Math.floor((eLow + eHigh) / 2);
                     let currKey = midBlock.enregs[j].key;
+
+                    traversedEnregs.push(j);
 
                     if (key === currKey) {
                         found = true;
@@ -94,7 +97,8 @@ export default class TOF extends File {
                 i: i,
                 j: j
             },
-            traversedBlocks: traversedBlocks
+            traversedBlocks: traversedBlocks,
+            traversedEnregs: traversedEnregs
         }
     }
 

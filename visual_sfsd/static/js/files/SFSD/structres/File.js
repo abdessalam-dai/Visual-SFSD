@@ -9,7 +9,6 @@ import {
 } from '../../constants.js';
 
 
-
 export default class File {
     /*
         name :          file name [String]
@@ -41,7 +40,7 @@ export default class File {
         this.blocks = blocks;
     }
 
-    display(blockHighlightIndex=-2, blockScrollIndex=-2) {
+    display(blockHighlightIndex = -2, blockScrollIndex = -2) {
         // console.log(this.nbBlocks);
         // console.log(this.blocks.length);
         // console.log(this.nbInsertions);
@@ -102,7 +101,6 @@ export default class File {
             // this.MSBoardContainer.node().scrollLeft = 100;
 
 
-
             // console.log()
 
             // this.MSBoard.scrollTo({
@@ -154,7 +152,7 @@ export default class File {
                     .attr("y", j)
                     .text(`${block.enregs[k].key}`);
 
-                    j += 20;
+                j += 20;
             }
 
             if (blockHighlightIndex === counter) {
@@ -192,7 +190,7 @@ export default class File {
                         .attr("y", j)
                         .text(`${block.enregs[k].key}`);
 
-                        j += 20;
+                    j += 20;
                 }
             }
 
@@ -200,5 +198,40 @@ export default class File {
 
             counter++;
         }
+    }
+
+    getJsonFormat() {
+        let data = {
+            name: this.name,
+            maxNbEnregs: this.maxNbEnregs,
+            nbBlocks: this.nbBlocks,
+            nbInsertions: this.nbInsertions,
+            blocks: []
+        }
+
+        for (let block of this.blocks) {
+            let blockData = {
+                enregs: [],
+                nb: block.nb,
+                nextBlockIndex: block.nextBlockIndex
+            }
+
+            let enregsData = []
+
+            for (let enreg of block.enregs) {
+                enregsData.push({
+                    key: enreg.key,
+                    field1: enreg.field1,
+                    field2: enreg.field2,
+                    removed: enreg.removed
+                })
+            }
+
+            blockData.enregs = enregsData
+
+            data.blocks.push(blockData)
+        }
+
+        return data
     }
 }
