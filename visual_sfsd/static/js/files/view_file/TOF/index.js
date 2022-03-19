@@ -11,7 +11,12 @@ const searchBtn = document.querySelector("#search-btn");
 searchBtn.addEventListener("click", function () {
     let key = parseInt(keyToSearchField.value);
 
-    let {found, pos, traversedBlocks, traversedEnregs} = newFile.search(key);
+    let {
+        found: found,
+        pos: pos,
+        traversedBlocks: traversedBlocks,
+        traversedEnregs: traversedEnregs
+    } = newFile.search(key);
 
     let i = 0;
 
@@ -23,10 +28,13 @@ searchBtn.addEventListener("click", function () {
             if (i < traversedBlocks.length) {
                 myLoop();
             }
-        }, 1000)
+        }, 400)
     }
 
-    myLoop();
+    myLoop()
+
+    // console.table(data.blocks)
+    console.log(traversedEnregs)
 });
 
 
@@ -41,12 +49,12 @@ let MS_BOARD_HEIGHT = 500;
 
 let BOARD_WIDTH = MC_BOARD_WIDTH + MS_BOARD_WIDTH + 20;
 
-let svgContainer = d3.select("#board-container")
+let boardContainer = d3.select("#board-container")
     .style("max-width", BOARD_WIDTH)
-    // .style("border", "1px red dashed")
+    .style("border", "1px green dashed")
     .style("overflow-x", "scroll");
 
-let MCBoardContainer = svgContainer.append("div")
+let MCBoardContainer = boardContainer.append("div")
     .style("border", "2px blue dotted")
     .style("float", "right")
 
@@ -56,7 +64,7 @@ let MCBoard = MCBoardContainer.append("svg")
     .style("background-color", "gray");
 
 
-let MSBoardContainer = svgContainer.append("div")
+let MSBoardContainer = boardContainer.append("div")
     .style("float", "right")
     .style("max-width", `800px`)
     .style("border", "1px red dashed")
@@ -95,47 +103,37 @@ function randInt(min, max) {
     return Math.floor(Math.random() * (max - min) + min);
 }
 
-for (let i = 1; i <= 25; i++) {
-    setTimeout(function () {
+for (let i = 1; i <= 70; i++) {
+    // setTimeout(function () {
         newFile.insert(
             randInt(0, 500),
             "field1",
             "field2"
         )
-        newFile.display();
-    }, 10 * i)
+    // }, 30 * i)
 }
 
+newFile.display();
 
-
-// newFile.print();
-
-
-
-// -------------------------------------
-/*
- - JSON file format -
-
-File -> {
-    name: [String],
-    nbMaxEnregs: [Integer],
-    nbBlocks: [Integer],
-    nbInsertions: [Integer],
-    blocks: [Array of Block],
-}
-
-Block -> {
-    enregs: [Array of Enreg],
-    nb: [Integer],
-    nextBlockIndex: [Integer],
-}
-
-Enreg -> {
-    key: [Integer]
-    field1: [Integer]
-    field2: [Integer]
-    removed: [Boolean]
-}
-
- */
-// -------------------------------------
+//
+// $.post('{% url "images:like" %}',
+//     {
+//         id: $(this).data('id'),
+//         action: $(this).data('action')
+//     },
+//     function (data) {
+//         if (data['status'] === 'ok') {
+//             var previous_action = $('a.like').data('action');
+//             // toggle data-action
+//             $('a.like').data('action', previous_action === 'like' ?
+//                 'unlike' : 'like');
+//             // toggle link text
+//             $('a.like').text(previous_action == 'like' ? 'Unlike' :
+//                 'Like');
+//             // update total likes
+//             var previous_likes = parseInt($('span.count .total').text());
+//             $('span.count .total').text(previous_action == 'like' ?
+//                 previous_likes + 1 : previous_likes - 1);
+//         }
+//     }
+// );

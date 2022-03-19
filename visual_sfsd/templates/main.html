@@ -21,6 +21,32 @@
     {% endblock %}
 
     <!-- jQuery -->
+{#    <script src="https://code.jquery.com/jquery-3.6.0.min.js"#}
+{#            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>#}
+
+    <!-- JS Cookie -->
+{#    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>#}
+{#    <script>#}
+{#        let csrfToken = Cookies.get('csrftoken');#}
+{##}
+{#        function csrfSafeMethod(method) {#}
+{#            // these HTTP methods do not require CSRF protection#}
+{#            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));#}
+{#        }#}
+{##}
+{#        $.ajaxSetup({#}
+{#            beforeSend: function (xhr, settings) {#}
+{#                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {#}
+{#                    xhr.setRequestHeader("X-CSRFToken", csrfToken);#}
+{#                }#}
+{#            }#}
+{#        });#}
+{#        $(document).ready(function () {#}
+{#            {% block domready %}#}
+{#            {% endblock %}#}
+{#        });#}
+{#    </script>#}
+
 
     <!-- Fonts -->
 
@@ -29,17 +55,17 @@
 
 <body>
 
-    {% comment %}{% include 'components/navbar/base.html' %}{% endcomment %}
+{% include 'components/navbar/navbar_view_file.html' %}
 
-    <div>
-        {% comment %}{% include 'components/messages.html' %}{% endcomment %}
+<div>
+    {% comment %}{% include 'components/messages.html' %}{% endcomment %}
 
-        {% block content %}
+    {% block content %}
 
-        {% endblock %}
-    </div>
+    {% endblock %}
+</div>
 
-    {% comment %}{% include 'components/footer.html' %}{% endcomment %}
+{% comment %}{% include 'components/footer.html' %}{% endcomment %}
 
 </body>
 

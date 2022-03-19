@@ -77,7 +77,7 @@ export default class TOF extends File {
         }
 
         if (low > high) {
-            if (high === -1) {
+            if (high === -1) { // if no blocks have been added yet
                 i = 0;
                 j = 0;
             } else {
@@ -124,7 +124,6 @@ export default class TOF extends File {
             let newEnreg = new Enreg(key, field1, field2, removed);
 
             if (this.blocks.length === 0) {
-
                 let enregs = [newEnreg];
                 let newBlock = new Block(enregs, 1);
                 this.blocks.push(newBlock);

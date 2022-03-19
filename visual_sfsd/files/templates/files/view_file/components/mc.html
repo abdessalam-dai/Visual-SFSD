@@ -1,0 +1,41 @@
+{% load static %}
+
+<div class="mc w-1/6 bg-blue-300 flex flex-col justify-between">
+    <div></div>
+    <div class="buf flex flex-row justify-center">
+
+        <div class="bloc w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0" style="height: 352px;">
+            <div class="bloc-header text-white px-3 items-center font-medium  h-8 rounded-t-lg w-full flex flex-row justify-between bg-slate-900">
+                <span>0</span>
+                <span>NB=0</span>
+            </div>
+            <div class="bloc-body w-full h-80 bg-gray-400 rounded-b-lg">
+                <ul class="text-lg font-medium text-center">
+                    <li class="border-b-2 h-10 flex justify-center flex-col">5464</li>
+                    <li class="border-b-2 h-10 flex justify-center flex-col">5464</li>
+                    <li class="border-b-2 h-10 flex justify-center flex-col">5464</li>
+                    <li class="border-b-2 h-10 flex justify-center flex-col">5464</li>
+                    <li class="border-b-2 h-10 flex justify-center flex-col">5464</li>
+                    <li class="border-b-2 h-10 flex justify-center flex-col">5464</li>
+                    <li class="border-b-2 h-10 flex justify-center flex-col">5464</li>
+                    <li class=" h-10 flex justify-center flex-col">5464</li>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="mc-footer flex px-2 flex-row justify-between items-center">
+        <img src="{% static 'imgs/upMS.svg' %}" class="w-6" alt="">
+        <span class="text-sm font-semibold text-gray-800 bottom-0">MC</span>
+    </div>
+</div>
+
+<script>
+    calcMsHeight = () => {
+        let windowHeight = window.innerHeight
+        let navbarHeight = document.querySelector('nav').offsetHeight
+        document.querySelector('.mc').style.height = String(windowHeight - navbarHeight) + "px"
+    }
+    calcMsHeight()
+    window.onresize = calcMsHeight
+</script>

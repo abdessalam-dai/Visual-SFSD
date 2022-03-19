@@ -3,25 +3,36 @@
 {% load static %}
 
 {% block title %}
-    File -
+    {{ file.name }} -
 {% endblock title %}
 
 {% block scripts %}
     <script src="{% static 'js/files/lib/d3.v7.min.js' %}"></script>
+    <script>
+        let fileData = {{ data|safe }};
+    </script>
     <script type="module" src="{% static 'js/files/view_file/TOF/index.js' %}"></script>
 {% endblock %}
 
-{% block content %}
-    {% include "files/view_file/components/toolbar.html" %}
-    {% include "files/view_file/components/board.html" %}
 
-{#    <br>#}
-{#    {{ file.name }}#}
-{#    <br>#}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{% static 'css/view_file/output.css' %}">
+{% endblock %}
+
+{#{% block domready %}#}
 {##}
-{#    <div id="123">#}
-{#        {% for block in file.block_set.all %}#}
-{#        {{ block.index }}#}
-{#        {% endfor %}#}
+{#{% endblock %}#}
+
+{% block content %}
+    <div class="flex flex-row items-center justify-between">
+        {% include "files/view_file/components/toolsbar.html" %}
+        {% include "files/view_file/components/ms.html" %}
+        {% include "files/view_file/components/mc.html" %}
+    </div>
+{#        {% include "files/view_file/components/board.html" %}#}
+
+{#    <div class="flex flex-row items-center justify-between">#}
+{##}
 {#    </div>#}
+
 {% endblock content %}

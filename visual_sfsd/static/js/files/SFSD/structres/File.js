@@ -38,6 +38,40 @@ export default class File {
         this.nbBlocks = nbBlocks;
         this.nbInsertions = nbInsertions;
         this.blocks = blocks;
+
+        // temp
+        this.d3Elements = {
+            MSBoardContainer: null,
+            MS : {
+                MSBoard: null,
+                titleText: null,
+                blocks: [
+                    // BlockGroup, BlockGroup, ...
+                ]
+            },
+            MCBoardContainer: null,
+            MC: {
+                MCBoard: null,
+                titleText: null,
+                blockGroup: null,
+            }
+        }
+
+        // MSBoardContainer (div) // for scrolling
+        //         MSBoard (svg)
+        //                 TitleText (text)
+        //                 Blocks:
+        //                         BlockGroup (g)
+        //                         BlockGroup (g)
+        //                         ...
+        //
+        //
+        // MCBoardContainer (div)
+        //         MCBoard (svg)
+        //                 TitleText (text)
+        //                 BlockGroup (g)
+        //
+
     }
 
     display(blockHighlightIndex = -2, blockScrollIndex = -2) {
@@ -46,7 +80,7 @@ export default class File {
         // console.log(this.nbInsertions);
 
         // remove previous display
-        // this.MCBoard.selectAll("*").remove();
+        this.MCBoard.selectAll("*").remove();
         this.MSBoard.selectAll("*").remove();
 
         // add titles
@@ -97,18 +131,6 @@ export default class File {
         for (let block of this.blocks) {
             let blockGroup = this.MSBoard.append("g")
                 .attr("transform", `translate(${x}, ${y})`);
-
-            // this.MSBoardContainer.node().scrollLeft = 100;
-
-
-            // console.log()
-
-            // this.MSBoard.scrollTo({
-            //   top: 100,
-            //   left: 100,
-            //   behavior: 'smooth'
-            // });
-
 
             if (blockHighlightIndex === counter) {
                 blockColor = "#71A2FF";

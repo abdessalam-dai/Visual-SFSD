@@ -1,10 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import User
+import json
 
 
 class File(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
+    data = models.TextField(null=True, blank=True)
     nb_max_enregs = models.PositiveIntegerField(default=10)
     date_created = models.DateTimeField(auto_now_add=True)
 
