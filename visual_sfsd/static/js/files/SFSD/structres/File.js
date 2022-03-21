@@ -20,9 +20,7 @@ export default class File {
 
     constructor(
         name,
-        MCBoardContainer,
-        MSBoardContainer,
-        MCBoard,
+        buff,
         MSBoard,
         maxNbEnregs = MAX_NB_ENREGS_DEFAULT,
         nbBlocks = NB_BLOCKS_DEFAULT,
@@ -30,196 +28,109 @@ export default class File {
         blocks = BLOCKS_DEFAULT,
     ) {
         this.name = name;
-        this.MCBoard = MCBoard;
+        this.buff = buff;
         this.MSBoard = MSBoard;
-        this.MCBoardContainer = MCBoard;
-        this.MSBoardContainer = MSBoard;
         this.maxNbEnregs = maxNbEnregs;
         this.nbBlocks = nbBlocks;
         this.nbInsertions = nbInsertions;
         this.blocks = blocks;
-
-        // temp
-        this.d3Elements = {
-            MSBoardContainer: null,
-            MS : {
-                MSBoard: null,
-                titleText: null,
-                blocks: [
-                    // BlockGroup, BlockGroup, ...
-                ]
-            },
-            MCBoardContainer: null,
-            MC: {
-                MCBoard: null,
-                titleText: null,
-                blockGroup: null,
-            }
-        }
-
-        // MSBoardContainer (div) // for scrolling
-        //         MSBoard (svg)
-        //                 TitleText (text)
-        //                 Blocks:
-        //                         BlockGroup (g)
-        //                         BlockGroup (g)
-        //                         ...
-        //
-        //
-        // MCBoardContainer (div)
-        //         MCBoard (svg)
-        //                 TitleText (text)
-        //                 BlockGroup (g)
-        //
-
     }
 
-    display(blockHighlightIndex = -2, blockScrollIndex = -2) {
-        // console.log(this.nbBlocks);
-        // console.log(this.blocks.length);
-        // console.log(this.nbInsertions);
+    createBoardsDOM() {
+        this.MSBoard.selectAll("*").remove()
 
-        // remove previous display
-        this.MCBoard.selectAll("*").remove();
-        this.MSBoard.selectAll("*").remove();
+        const blocDiv = `
+        <div class="bloc w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0" style="height: 352px;">
+            <div
+                class="bloc-header text-white px-3 items-center font-medium h-8 rounded-t-lg w-full flex flex-row justify-between bg-slate-900">
+                <span class="bloc-index">0</span>
+                <span class="bloc-nb">NB=0</span>
+            </div>
+<!--            <div class="bloc-body w-full h-80 bg-gray-400 rounded-b-lg">-->
+<!--                <ul class="text-lg font-medium text-center">-->
+<!--&lt;!&ndash;                    <li class="border-b-2 h-10 flex justify-center flex-col">5464</li>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <li class="border-b-2 h-10 flex justify-center flex-col">5464</li>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <li class="border-b-2 h-10 flex justify-center flex-col">5464</li>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <li class="border-b-2 h-10 flex justify-center flex-col">5464</li>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <li class="border-b-2 h-10 flex justify-center flex-col">5464</li>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <li class="border-b-2 h-10 flex justify-center flex-col">5464</li>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <li class="border-b-2 h-10 flex justify-center flex-col">5464</li>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <li class=" h-10 flex justify-center flex-col">5464</li>&ndash;&gt;-->
+<!--                </ul>-->
+<!--            </div>-->
+        </div>`
 
-        // add titles
-        let MCBoardTitle = this.MCBoard.append("text")
-            .attr("x", 10)
-            .attr("y", 20)
-            .text("MC");
-
-        let MSBoardTitle = this.MSBoard.append("text")
-            .attr("x", 10)
-            .attr("y", 20)
-            .text("MS");
-
-        let blockColor;
-        let x = 20, y = 30;
-
-        // Display MC
-        // let MCGroup = this.MCBoard.append("g")
-        //     .attr("transform", `translate(${x}, ${y})`);
-        //
-        // MCGroup.append("rect")
-        //         .attr("x", 0)
-        //         .attr("y", 0)
-        //         .attr("width", BLOCK_WIDTH)
-        //         .attr("height", BLOCK_HEIGHT)
-        //         .attr("fill", "#71a2ff");
-        //
-        // MCGroup.append("text")
-        //     .attr("x", 10)
-        //     .attr("y", 20)
-        //     .text("Buffer");
-
-        // display buffer
-        // if (blockHighlightIndex !== -2) {
-        //
-        // }
-
-
-        let counter = 0;
-
-        let newWidth = BLOCK_WIDTH * this.blocks.length + SPACE_BETWEEN_BLOCKS * (this.blocks.length + 1);
-
-        if (this.blocks.length <= 4) {
-            newWidth = BLOCK_WIDTH * 4 + SPACE_BETWEEN_BLOCKS * 5;
-        }
-
-        this.MSBoard.attr("width", newWidth);
         for (let block of this.blocks) {
-            let blockGroup = this.MSBoard.append("g")
-                .attr("transform", `translate(${x}, ${y})`);
-
-            if (blockHighlightIndex === counter) {
-                blockColor = "#71A2FF";
-
-                this.MSBoardContainer.node().parentNode.scrollTo(
-                    {
-                        top: 0,
-                        left: x,
-                        behavior: 'smooth'
-                    }
-                );
-            } else {
-                blockColor = "#DBE2EF";
-            }
-
-            let rect = blockGroup.append("rect")
-                .attr("x", 0)
-                .attr("y", 0)
-                .attr("width", BLOCK_WIDTH)
-                .attr("height", BLOCK_HEIGHT)
-                .attr("fill", blockColor);
-
-            let nbText = blockGroup.append("text")
-                .attr("x", BLOCK_WIDTH - 60)
-                .attr("y", 20)
-                .text(`NB = ${block.nb}`);
-
-            let indexText = blockGroup.append("text")
-                .attr("x", 10)
-                .attr("y", 20)
-                .text(counter);
-
-            let j = 0;
-
-            let dataContainer = blockGroup.append("g")
-                .attr("transform", `translate(10, 60)`);
-
-            for (let k = 0; k < block.enregs.length; k++) {
-                dataContainer.append("text")
-                    .attr("x", 0)
-                    .attr("y", j)
-                    .text(`${block.enregs[k].key}`);
-
-                j += 20;
-            }
-
-            if (blockHighlightIndex === counter) {
-                // console.log(blockHighlightIndex)
-                let blockGroup = this.MCBoard.append("g")
-                    .attr("transform", `translate(20, 30)`);
-
-                blockColor = "#71A2FF";
-
-                let rect = blockGroup.append("rect")
-                    .attr("x", 0)
-                    .attr("y", 0)
-                    .attr("width", BLOCK_WIDTH)
-                    .attr("height", BLOCK_HEIGHT)
-                    .attr("fill", blockColor);
-
-                let nbText = blockGroup.append("text")
-                    .attr("x", BLOCK_WIDTH - 60)
-                    .attr("y", 20)
-                    .text(`NB = ${block.nb}`);
-
-                let indexText = blockGroup.append("text")
-                    .attr("x", 10)
-                    .attr("y", 20)
-                    .text(counter);
-
-                let j = 0;
-
-                let dataContainer = blockGroup.append("g")
-                    .attr("transform", `translate(10, 60)`);
-
-                for (let k = 0; k < block.enregs.length; k++) {
-                    dataContainer.append("text")
-                        .attr("x", 0)
-                        .attr("y", j)
-                        .text(`${block.enregs[k].key}`);
-
-                    j += 20;
-                }
-            }
-
-            x += BLOCK_WIDTH + SPACE_BETWEEN_BLOCKS;
-
-            counter++;
+            this.MSBoard.node().insertAdjacentHTML('beforeend', blocDiv)
         }
+
+        this.MSBoard.selectAll('.bloc')
+            .data(this.blocks)
+            .select(".bloc-index")
+            .text(function (block, index) {
+                return index
+            })
+
+        this.MSBoard.selectAll('.bloc')
+            .data(this.blocks)
+            .select(".bloc-nb")
+            .text(function (block) {
+                return `NB=${block.nb}`
+            })
+
+        let cpt = 1;
+
+        this.MSBoard.selectAll('.bloc')
+            .data(this.blocks)
+            .append("div")
+            .attr("class", "bloc-body w-full h-80 bg-gray-400 rounded-b-lg")
+            .append("ul")
+            .attr("class", "text-lg font-medium text-center")
+            .each(function (block) {
+                d3.select(this)
+                    .selectAll("li")
+                    .data(block.enregs)
+                    .enter()
+                    .append("li")
+                    .attr("class", "border-b-2 h-10 flex justify-center flex-col")
+                    .style("opacity", "0")
+                    .style("color", function (enreg) {
+                        return enreg.removed ? "#a70000" : "black"
+                    })
+                    .style("cursor", "pointer")
+                    .style("overflow-y", "hidden")
+                    .on("click", function (e, enreg) {
+                        console.log(enreg.key)
+                    })
+                    .on("mouseover", function () {
+                        d3.select(this)
+                            .style("background", "gray")
+                    })
+                    .on("mouseout", function () {
+                        d3.select(this)
+                            .style("background", "#9CA3AF")
+                    })
+                    .on("click", function (e, enreg) {
+                        alert(`
+                        key:${enreg.key}
+                        field1: ${enreg.field1}
+                        field2: ${enreg.field2}
+                        removed: ${enreg.removed}
+                        `)
+                    })
+                    .each(function () {
+                        cpt++
+                        d3.select(this)
+                            .transition()
+                            .ease(d3.easeBack)
+                            .duration(cpt * 150)
+                            .style("opacity", "1")
+                    })
+                    .append("span")
+                    .text(function (enreg) {
+                        return enreg.key
+                    })
+            })
     }
 
     getJsonFormat() {

@@ -24,6 +24,22 @@
 {#{% endblock %}#}
 
 {% block content %}
+    <label for="key-to-search">Key to search</label>
+    <input type="text" style="border: 1px solid red" id="key-to-search">
+    <button id="search-btn">Search enreg.</button>
+    <br>
+    <label for="key-to-remove">Key to remove</label>
+    <input type="text" style="border: 1px solid red" id="key-to-remove">
+    <button id="remove-btn">Remove enreg.</button>
+    <br>
+    <label for="key-to-insert">Key</label>
+    <input type="text" style="border: 1px solid red" id="key-to-insert">
+    <label for="field1-to-insert">Field1</label>
+    <input type="text" style="border: 1px solid red" id="field1-to-insert">
+    <label for="field2-to-insert">Field2</label>
+    <input type="text" style="border: 1px solid red" id="field2-to-insert">
+    <button id="insert-btn">Insert enreg.</button>
+
     <div class="flex flex-row items-center justify-between">
         {% include "files/view_file/components/toolsbar.html" %}
         {% include "files/view_file/components/ms.html" %}

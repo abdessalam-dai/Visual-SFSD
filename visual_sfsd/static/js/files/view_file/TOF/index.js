@@ -2,100 +2,91 @@ import {SFSD, Block, Enreg} from '../../SFSD/SFSD.js';
 import TOF from "../../SFSD/types/simple/TOF.js";
 
 
-let Sfsd = new SFSD();
-
 // ----------------------------------------------
-const keyToSearchField = document.querySelector("#key-to-search");
-const searchBtn = document.querySelector("#search-btn");
-
-searchBtn.addEventListener("click", function () {
-    let key = parseInt(keyToSearchField.value);
-
-    let {
-        found: found,
-        pos: pos,
-        traversedBlocks: traversedBlocks,
-        traversedEnregs: traversedEnregs
-    } = newFile.search(key);
-
-    let i = 0;
-
-    function myLoop() {
-        setTimeout(function () {
-            let blockIndex = traversedBlocks[i];
-            newFile.display(blockIndex);
-            i++;
-            if (i < traversedBlocks.length) {
-                myLoop();
-            }
-        }, 400)
-    }
-
-    myLoop()
-
-    // console.table(data.blocks)
-    console.log(traversedEnregs)
-});
-
-
-// ----------------------------------------------
+// const keyToSearchField = document.querySelector("#key-to-search");
+// const searchBtn = document.querySelector("#search-btn");
+//
+// searchBtn.addEventListener("click", function () {
+//     let key = parseInt(keyToSearchField.value);
+//
+//     let {
+//         found: found,
+//         pos: pos,
+//         traversedBlocks: traversedBlocks,
+//         traversedEnregs: traversedEnregs
+//     } = newFile.search(key);
+//
+//     let i = 0;
+//
+//     function myLoop() {
+//         setTimeout(function () {
+//             let blockIndex = traversedBlocks[i];
+//             newFile.display(blockIndex);
+//             i++;
+//             if (i < traversedBlocks.length) {
+//                 myLoop();
+//             }
+//         }, 400)
+//     }
+//
+//     myLoop()
+//
+//     // console.table(data.blocks)
+//     console.log(traversedEnregs)
+// });
 
 
-let MC_BOARD_WIDTH = 300;
-let MC_BOARD_HEIGHT = 500;
-
-let MS_BOARD_WIDTH = 200 * 3 + 20 * 4;
-let MS_BOARD_HEIGHT = 500;
-
-let BOARD_WIDTH = MC_BOARD_WIDTH + MS_BOARD_WIDTH + 20;
-
-let boardContainer = d3.select("#board-container")
-    .style("max-width", BOARD_WIDTH)
-    .style("border", "1px green dashed")
-    .style("overflow-x", "scroll");
-
-let MCBoardContainer = boardContainer.append("div")
-    .style("border", "2px blue dotted")
-    .style("float", "right")
-
-
-let MCBoard = MCBoardContainer.append("svg")
-    .attr("width", MC_BOARD_WIDTH).attr("height", MC_BOARD_HEIGHT)
-    .style("background-color", "gray");
-
-
-let MSBoardContainer = boardContainer.append("div")
-    .style("float", "right")
-    .style("max-width", `800px`)
-    .style("border", "1px red dashed")
-    .style("overflow-x", "scroll")
-    .style("scroll-behavior", "smooth");
-
-
-let MSBoard = MSBoardContainer.append("svg")
-    .attr("width", MS_BOARD_WIDTH).attr("height", MS_BOARD_HEIGHT)
-    .style("margin-left", "10px")
-    // .attr("viewBox", "0 0 1122 793")
-    .style("background-color", "#eee");
-
-let MCBoardTitle = MCBoard.append("text")
-    .attr("x", 10)
-    .attr("y", 20)
-    .text("MC");
-
-let MSBoardTitle = MSBoard.append("text")
-    .attr("x", 10)
-    .attr("y", 20)
-    .text("MS");
-
+// START - Create file
+const buff = d3.select(".buf")
+const MSBoard = d3.select(".ms-container")
 
 let newFile = new TOF(
     'file.txt',
-    MCBoardContainer,
-    MSBoardContainer,
-    MCBoard,
+    buff,
     MSBoard,
 );
+
+// newFile.insert(
+//     0,
+//     "dai",
+//     "abdou",
+//     false,
+// )
+//
+// newFile.display()
+
+// END - Create file
+
+
+// START - DOM Elements
+const generateDataBtn = document.querySelector('#generate-data-btn');
+
+const keyToSearch = document.querySelector("#key-to-search");
+const searchBtn = document.querySelector("#search-btn");
+
+const keyToRemove = document.querySelector("#key-to-remove");
+const removeBtn = document.querySelector("#remove-btn");
+
+const keyToInsert = document.querySelector("#key-to-insert");
+const field1ToInsert = document.querySelector("#field1-to-insert");
+const field2ToInsert = document.querySelector("#field2-to-insert");
+const insertBtn = document.querySelector("#insert-btn");
+
+
+const changeButtonsState = (state) => {
+    generateDataBtn.disabled = state
+    searchBtn.disabled = state
+    removeBtn.disabled = state
+    insertBtn.disabled = state
+}
+
+// END - DOM Elements
+
+
+// START - Fill with dummy data
+const n = 8
+const min = 0
+const max = 30
 
 function randInt(min, max) {
     min = Math.ceil(min);
@@ -103,37 +94,143 @@ function randInt(min, max) {
     return Math.floor(Math.random() * (max - min) + min);
 }
 
-for (let i = 1; i <= 70; i++) {
-    // setTimeout(function () {
-        newFile.insert(
-            randInt(0, 500),
-            "field1",
-            "field2"
-        )
-    // }, 30 * i)
+function generateData(n, min, max) {
+    const randomData = ["DAWDI", "bousla", "kacimi", "yanis", "farouk", "rami", "ali", "MOHEMMED", "massinisa", "yuva", "aksil", "tari", "sebaa", "mouloud", "hamid", "ahmed", "bilal", "abdessalam", "zinneddin", "yahia", "houssam", "wassim"]
+
+    let arrOfKeys = [];
+    let arr = [];
+    let key;
+    let field1, field2;
+    let i = 0;
+
+    while (i < n) {
+        key = randInt(min, max);
+
+        field1 = randomData[randInt(0, randomData.length - 1)];
+        field2 = randomData[randInt(0, randomData.length - 1)];
+
+        if (!arrOfKeys.includes(key)) {
+            let newObj = {
+                key: key,
+                field1: field1,
+                field2: field2,
+            }
+            arr.push(newObj);
+            arrOfKeys.push(key)
+            i++;
+        }
+    }
+
+    return arr.sort((a, b) => a.key - b.key) // return sorted array according to key
 }
 
-newFile.display();
+function handleGenerateData() {
+    generateDataBtn.addEventListener('click', () => {
+        changeButtonsState(true)
 
-//
-// $.post('{% url "images:like" %}',
-//     {
-//         id: $(this).data('id'),
-//         action: $(this).data('action')
-//     },
-//     function (data) {
-//         if (data['status'] === 'ok') {
-//             var previous_action = $('a.like').data('action');
-//             // toggle data-action
-//             $('a.like').data('action', previous_action === 'like' ?
-//                 'unlike' : 'like');
-//             // toggle link text
-//             $('a.like').text(previous_action == 'like' ? 'Unlike' :
-//                 'Like');
-//             // update total likes
-//             var previous_likes = parseInt($('span.count .total').text());
-//             $('span.count .total').text(previous_action == 'like' ?
-//                 previous_likes + 1 : previous_likes - 1);
-//         }
-//     }
-// );
+        let data = generateData(n, min, max)
+
+        for (const enreg of data) {
+            newFile.insert(
+                enreg.key,
+                enreg.field1,
+                enreg.field2,
+                false
+            )
+        }
+
+        // console.log(newFile.getJsonFormat())
+        // console.log(newFile.blocks)
+        newFile.createBoardsDOM()
+
+        changeButtonsState(false)
+    })
+
+}
+
+handleGenerateData()
+
+
+let data = generateData(7, 0, 100)
+
+for (const enreg of data) {
+    await newFile.insert(
+        enreg.key,
+        enreg.field1,
+        enreg.field2,
+        false,
+        false
+    )
+}
+
+newFile.createBoardsDOM()
+
+// console.log(newFile.getJsonFormat())
+// console.log(newFile.blocks)
+// END - Fill with dummy data
+
+
+// START - Search for element
+function handleSearch() {
+    searchBtn.addEventListener("click", async function () {
+        changeButtonsState(true)
+
+        let key = parseInt(keyToSearch.value);
+
+        let {
+            found: found,
+            pos: pos,
+        } = await newFile.search(key, true);
+
+        console.log(found, pos)
+
+        changeButtonsState(false)
+    });
+}
+
+handleSearch()
+// END - Search for element
+
+
+// START - Remove element
+function handleRemove() {
+    removeBtn.addEventListener("click", async function () {
+        changeButtonsState(true)
+
+        let key = parseInt(keyToRemove.value);
+
+        let removeSuccess = await newFile.removeLogically(key, true);
+
+        console.log(removeSuccess)
+
+        changeButtonsState(false)
+    });
+}
+
+handleRemove()
+
+// END - Remove element
+
+
+// START - Inert Enreg.
+function handleInsert() {
+    insertBtn.addEventListener("click", async function () {
+        changeButtonsState(true)
+
+        let key = parseInt(keyToInsert.value);
+        let field1 = field1ToInsert.value;
+        let field2 = field2ToInsert.value;
+
+        let insertingResult = await newFile.insert(key, field1, field2, false, true);
+
+        console.log(insertingResult)
+
+        changeButtonsState(false)
+
+        newFile.createBoardsDOM()
+    });
+}
+
+handleInsert()
+
+// END - Inert Enreg.
