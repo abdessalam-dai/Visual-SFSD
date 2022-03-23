@@ -38,6 +38,73 @@ def file_view(request, pk):
         # file.data = json_data
         # file.save()
 
+        # data2 = {
+        #     "name": "file.txt",
+        #     "maxNbEnregs": 5,
+        #     "nbBlocks": 2,
+        #     "nbInsertions": 7,
+        #     "blocks": [
+        #         {
+        #             "enregs": [
+        #                 {
+        #                     "key": 2,
+        #                     "field1": "sebaa",
+        #                     "field2": "yahia",
+        #                     "removed": False
+        #                 },
+        #                 {
+        #                     "key": 38,
+        #                     "field1": "sebaa",
+        #                     "field2": "yanis",
+        #                     "removed": False
+        #                 },
+        #                 {
+        #                     "key": 40,
+        #                     "field1": "bilal",
+        #                     "field2": "abdessalam",
+        #                     "removed": False
+        #                 },
+        #                 {
+        #                     "key": 44,
+        #                     "field1": "mouloud",
+        #                     "field2": "yahia",
+        #                     "removed": False
+        #                 },
+        #                 {
+        #                     "key": 53,
+        #                     "field1": "tari",
+        #                     "field2": "tari",
+        #                     "removed": False
+        #                 }
+        #             ],
+        #             "nb": 5,
+        #             "nextBlockIndex": -1
+        #         },
+        #         {
+        #             "enregs": [
+        #                 {
+        #                     "key": 73,
+        #                     "field1": "kacimi",
+        #                     "field2": "yahia",
+        #                     "removed": False
+        #                 },
+        #                 {
+        #                     "key": 83,
+        #                     "field1": "houssam",
+        #                     "field2": "mouloud",
+        #                     "removed": False
+        #                 }
+        #             ],
+        #             "nb": 2,
+        #             "nextBlockIndex": -1
+        #         }
+        #     ]
+        # }
+        #
+        # json_data = json.dumps(data2)
+        # file.data = json_data
+        # file.save()
+
         context = {
             'file': file,
             'data': file.data

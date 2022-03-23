@@ -37,7 +37,7 @@ const initUI = function() {
 
 const userChoiceOfFile = function(element) {
     initUI()
-    if (element.id == 'option-simple-file') {
+    if (element.id === 'option-simple-file') {
         simpleFileTypes.classList.remove('hide');
         SimpleFileOptionBtn.classList.add('selected');
         exactType(simpleFileTypes)

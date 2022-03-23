@@ -151,7 +151,7 @@ function handleGenerateData() {
 handleGenerateData()
 
 
-let data = generateData(7, 0, 100)
+let data = generateData(35, 0, 100)
 
 for (const enreg of data) {
     await newFile.insert(
@@ -165,8 +165,6 @@ for (const enreg of data) {
 
 newFile.createBoardsDOM()
 
-// console.log(newFile.getJsonFormat())
-// console.log(newFile.blocks)
 // END - Fill with dummy data
 
 

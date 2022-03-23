@@ -23,6 +23,12 @@
 {##}
 {#{% endblock %}#}
 
+
+{% block navbar %}
+{% include 'components/navbar/navbar_view_file.html' %}
+{% endblock %}
+
+
 {% block content %}
     <label for="key-to-search">Key to search</label>
     <input type="text" style="border: 1px solid red" id="key-to-search">
@@ -45,10 +51,7 @@
         {% include "files/view_file/components/ms.html" %}
         {% include "files/view_file/components/mc.html" %}
     </div>
-{#        {% include "files/view_file/components/board.html" %}#}
 
-{#    <div class="flex flex-row items-center justify-between">#}
-{##}
-{#    </div>#}
+{#    {{ data }}#}
 
 {% endblock content %}
