@@ -358,12 +358,15 @@ export default class TOF extends File {
                         currBlock.nb += 1;
 
                         if (animate) {
-                            bufferElement.select(".bloc-body ul")
+                            bufferElement.select(".bloc .bloc-body ul")
                                 .append("li")
                                 .style("background", "#34ffbd")
                                 .attr("class", "border-b-2 h-10 flex justify-center flex-col")
                                 .append("span")
                                 .text(`${newEnreg.key}`);
+
+                            bufferElement.select(".bloc .bloc-header .bloc-nb")
+                                .text(`NB=${currBlock.nb}`);
 
                             await sleep(1000);
 
@@ -381,7 +384,7 @@ export default class TOF extends File {
                             continueShifting = false;
 
                             if (animate) {
-                                bufferElement.select(".bloc-body ul")
+                                bufferElement.select(".bloc .bloc-body ul")
                                     .append("li")
                                     .style("background", "#34ffbd")
                                     .attr("class", "border-b-2 h-10 flex justify-center flex-col")
@@ -391,13 +394,13 @@ export default class TOF extends File {
                                 bufferElement.select(".bloc .bloc-header .bloc-nb")
                                     .text(`NB=${currBlock.nb}`);
 
+                                await sleep(1000);
+
                                 // write buffer in MS
                                 this.updateBlockInMS(i, currBlock);
-
-                                await sleep(1000);
                             }
 
-                        } else { // else, insert it in the next block (i + 1)
+                        } else { // else, insert it in the next block (i + 1), in the next iteration
                             if (animate) {
                                 // write buffer in MS
                                 this.updateBlockInMS(i, currBlock);
@@ -417,6 +420,41 @@ export default class TOF extends File {
                     let newBlock = new Block(enregs, 1);
                     this.blocks.push(newBlock);
                     this.nbBlocks += 1;
+
+                    if (animate) {
+                        this.buff.selectAll("*").remove()
+                        bufferElement = this.buff.append("div")
+                            .attr("class", "bloc w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0")
+                            .style("height", "352px");
+
+                        bufferElement.append("div")
+                            .attr("class", "bloc-header text-white px-3 items-center font-medium h-8 rounded-t-lg w-full flex flex-row justify-between bg-slate-900")
+
+                        bufferElement.select(".bloc .bloc-header")
+                            .append("span")
+                            .attr("class", "bloc-index")
+                            .text("Buffer 1");
+
+                        bufferElement.select(".bloc .bloc-header")
+                            .append("span")
+                            .attr("class", "bloc-nb")
+                            .text("NB=1");
+
+                        bufferElement.append("div")
+                            .attr("class", "bloc-body w-full h-80 bg-gray-400 rounded-b-lg")
+                            .append("ul")
+                            .attr("class", "text-lg font-medium text-center")
+                            .append("li")
+                            .style("background", "#34ffbd")
+                            .attr("class", "border-b-2 h-10 flex justify-center flex-col")
+                            .append("span")
+                            .text(`${newEnreg.key}`);
+
+                        await sleep(1000);
+
+                        // write buffer in MS
+                        this.updateBlockInMS(i, newBlock);
+                    }
                 }
             }
 
@@ -531,16 +569,26 @@ export default class TOF extends File {
 
         if (bufferIndex === 1) {
             this.buff.selectAll("*").remove()
-            return this.buff.append("div")
+            let buff = this.buff.append("div")
                 .attr("class", "bloc w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0")
                 .style("height", "352px")
                 .html(blockElement.html());
+
+            buff.select(".bloc-header .bloc-index")
+                .text("Buffer 1");
+
+            return buff;
         } else {
             this.buff2.selectAll("*").remove()
-            return this.buff2.append("div")
+            let buff = this.buff2.append("div")
                 .attr("class", "bloc w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0")
                 .style("height", "352px")
                 .html(blockElement.html());
+
+            buff.select(".bloc-header .bloc-index")
+                .text("Buffer 2");
+
+            return buff;
         }
     }
 
