@@ -92,22 +92,23 @@ export default class File {
 
         // CREATING THE TOOL TIP FOR INDEX
 
-        d3.selectAll(".bloc-index")
+        this.MSBoard.selectAll(".bloc-index")
             .append("div")
             .attr("class", "tool-tip-index")
             .style("position", "absolute")
+            .style("width", "160px")
             .style("z-index", "10")
             .style("visibility", "hidden")
             .style("background", "#38BDF8")
             .style("color", "#9333EA")
             .style("padding", "5px")
-            .text("Block Index")
+            .text("Index")
 
-        d3.selectAll(".bloc-index")
+        this.MSBoard.selectAll(".bloc-index")
             .on("mouseover", function (e) {
                 d3.select(this)
                     .select(".tool-tip-index")
-                    .style("transition", "visibility 0s linear")
+                    .style("transition", "visibility 0s linear 50ms")
                     .style("visibility", "visible")
             })
             .on("mouseout", function (e) {
@@ -117,23 +118,23 @@ export default class File {
                     .style("visibility", "hidden")
             })
 
-        d3.selectAll(".bloc-address")
+        this.MSBoard.selectAll(".bloc-address")
             .append("div")
             .attr("class", "tool-tip-address")
             .style("position", "absolute")
+            .style("width", "160px")
             .style("z-index", "10")
             .style("visibility", "hidden")
             .style("background", "#38BDF8")
             .style("color", "#9333EA")
             .style("padding", "5px")
-            .text("Block Physical address")
+            .text("Physical address")
         // CREATING THE TOOL TIP FOR INDEX
-        d3.selectAll(".bloc-address")
-
+        this.MSBoard.selectAll(".bloc-address")
             .on("mouseover", function (e) {
                 d3.select(this)
                     .select(".tool-tip-address")
-                    .style("transition", "visibility 0s linear")
+                    .style("transition", "visibility 0s linear 50ms")
                     .style("visibility", "visible")
             })
             .on("mouseout", function (e) {
@@ -145,23 +146,24 @@ export default class File {
 
         // CREATING THE TOOL TIP FOR NB
 
-        d3.selectAll(".bloc-nb")
+        this.MSBoard.selectAll(".bloc-nb")
             .append("div")
             .attr("class", "tool-tip-nb")
             .style("position", "absolute")
+            .style("width", "160px")
             .style("z-index", "10")
             .style("visibility", "hidden")
             .style("background", "#38BDF8")
             .style("color", "#9333EA")
             .style("padding", "5px")
-            .text("Number of Enreg in the current block")
+            .text("Number of Enregs.");
 
         // CREATING THE TOOL TIP FOR INDEX
-        d3.selectAll(".bloc-nb")
+        this.MSBoard.selectAll(".bloc-nb")
             .on("mouseover", function (e) {
                 d3.select(this)
                     .select(".tool-tip-nb")
-                    .style("transition", "visibility 0s linear")
+                    .style("transition", "visibility 0s linear 50ms")
                     .style("visibility", "visible")
             })
             .on("mouseout", function (e) {

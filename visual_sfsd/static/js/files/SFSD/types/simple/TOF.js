@@ -82,10 +82,7 @@ export default class TOF extends File {
 
                 MCDescription = d3.select(".mc-description");
 
-                // showing the complexity
-
-                d3.select('.complexity-in-reading')
-                    .text(`Number of times reading form the  MS is ${readTimes}`)
+                this.updateIOTimes(readTimes, 0);
             }
 
             // local search for enreg. inside block
@@ -278,6 +275,7 @@ export default class TOF extends File {
                 const address = this.setBlockAddress(0);
                 let newBlock = new Block(enregs, 1, address);
                 this.blocks.push(newBlock);
+                writeTimes++;
                 this.nbBlocks += 1;
             } else {
                 let continueShifting = true;
@@ -286,8 +284,11 @@ export default class TOF extends File {
                 while (continueShifting && i < this.blocks.length) {
                     currBlock = this.blocks[i];  // read current block
                     readTimes++;
-                    writeTimes++;
+
+
                     if (animate) {
+                        this.updateIOTimes(readTimes, writeTimes);
+
                         midBlockElement = this.MSBoard.select(`.bloc:nth-child(${i + 1})`)
 
                         await this.traverseBlockAnimation(i);
@@ -298,11 +299,6 @@ export default class TOF extends File {
                             .select(`.bloc-body ul li:nth-child(${j + 1})`)
                             .style("background", "#9043ef");
 
-                        d3.select(".complexity-in-reading")
-                            .text(`Number of times reading form the  MS is ${readTimes}`)
-
-                        d3.select(".complexity-in-writing")
-                            .text(`Insert took ${writeTimes} to write in the ms`)
                         await sleep(1000);
                     }
 
@@ -372,6 +368,7 @@ export default class TOF extends File {
                     if (j === currBlock.nb) {
                         continueShifting = false;
                         currBlock.nb += 1;
+                        writeTimes++;
 
                         if (animate) {
                             bufferElement.select(".bloc .bloc-body ul")
@@ -397,6 +394,7 @@ export default class TOF extends File {
                             currBlock.nb += 1;
                             currBlock.enregs[currBlock.nb - 1] = lastEnreg;
                             this.blocks[i] = currBlock;  // save current block in the blocks array
+                            writeTimes++;
                             continueShifting = false;
 
                             if (animate) {
@@ -423,6 +421,7 @@ export default class TOF extends File {
                             }
 
                             this.blocks[i] = currBlock;  // save current block in the blocks array
+                            writeTimes++;
                             i += 1;
                             j = 0;
                             newEnreg = lastEnreg;
@@ -436,6 +435,7 @@ export default class TOF extends File {
                     const address = this.setBlockAddress(this.blocks.length - 1);
                     let newBlock = new Block(enregs, 1, address);
                     this.blocks.push(newBlock);
+                    writeTimes++;
                     this.nbBlocks += 1;
 
                     if (animate) {
@@ -476,6 +476,10 @@ export default class TOF extends File {
             }
 
             this.nbInsertions += 1;
+
+            if (animate) {
+                this.updateIOTimes(readTimes, writeTimes);
+            }
 
             return true;
         } else {
@@ -542,34 +546,32 @@ export default class TOF extends File {
                     true :   if the process of deletion went correctly 
                     false :  if the key does not exist
        */
-        let {found, pos} = await this.search(key, animate, true)
+        let {found, pos, readTimes} = await this.search(key, animate, true)
         let {i, j} = pos
         let writeTimes;
-        console.log(i, j)
 
         if (found) {
             this.blocks[i].enregs[j].removed = true;
-
-            this.buff
-                .select(`.bloc .bloc-body ul li:nth-child(${j + 1})`)
-                .transition()
-                .duration(500 * delay)
-                .style("color", "#a70000");
-
-            await sleep(1000);
-
-            this.MSBoard
-                .select(`.bloc:nth-child(${i + 1})`)
-                .select(`.bloc-body ul li:nth-child(${j + 1})`)
-                .transition()
-                .duration(500 * delay)
-                .style("color", "#a70000");
-
-            // Number Of times writing in MS
             writeTimes = 1;
-            d3.select(".complexity-in-writing")
-                .text(`Remove logically took ${writeTimes} to write in the ms`)
 
+            if (animate) {
+                this.buff
+                    .select(`.bloc .bloc-body ul li:nth-child(${j + 1})`)
+                    .transition()
+                    .duration(500 * delay)
+                    .style("color", "#a70000");
+
+                await sleep(1000);
+
+                this.MSBoard
+                    .select(`.bloc:nth-child(${i + 1})`)
+                    .select(`.bloc-body ul li:nth-child(${j + 1})`)
+                    .transition()
+                    .duration(500 * delay)
+                    .style("color", "#a70000");
+                
+                this.updateIOTimes(readTimes, writeTimes);
+            }
 
             return true;
         } else {
@@ -609,9 +611,11 @@ export default class TOF extends File {
                 .style("height", "352px")
                 .html(blockElement.html());
 
-            buff.select(".bloc-header .bloc-index")
-                .text("Buffer 1");
+            buff.select(".bloc-header .bloc-address").remove();
 
+            buff.selectAll(".bloc-header span")
+                .select("div")
+                .remove();
             return buff;
         } else {
             this.buff2.selectAll("*").remove()
@@ -623,8 +627,21 @@ export default class TOF extends File {
             buff.select(".bloc-header .bloc-index")
                 .text("Buffer 2");
 
+            buff.select(".bloc-header .bloc-address").remove();
+
+            buff.selectAll(".bloc-header span")
+                .select("div")
+                .remove();
             return buff;
         }
+    }
+
+    updateIOTimes(readTimes, writeTimes) {
+        d3.select(".complexity-in-reading")
+            .text(`Number of reads : ${readTimes}`);
+
+        d3.select(".complexity-in-writing")
+            .text(`Number of writes : ${writeTimes}`);
     }
 
     async removePhysically(key, animate = false) {
@@ -638,7 +655,6 @@ export default class TOF extends File {
         let {found, pos, readTimes} = await this.search(key, animate, true);
         let {i, j} = pos;
         let writeTimes = 0;
-
 
         let midBlockElement;
         let bufferElement;
@@ -654,9 +670,10 @@ export default class TOF extends File {
             while (continueShifting) {
                 let currBlock = this.blocks[i];
                 readTimes++;
-                writeTimes++;
 
                 if (animate) {
+                    this.updateIOTimes(readTimes, writeTimes);
+
                     midBlockElement = this.MSBoard.select(`.bloc:nth-child(${i + 1})`)
 
                     await this.traverseBlockAnimation(i);
@@ -666,12 +683,6 @@ export default class TOF extends File {
                     jthElement = bufferElement
                         .select(`.bloc-body ul li:nth-child(${j + 1})`)
                         .style("background", "#9043ef");
-
-                    d3.select(".complexity-in-reading")
-                        .text(`Number of times reading form the  MS is ${readTimes}`)
-
-                    d3.select(".complexity-in-writing")
-                        .text(`Insert took ${writeTimes} to write in the ms`);
 
                     await sleep(1000);
                 }
@@ -706,7 +717,7 @@ export default class TOF extends File {
                             await sleep(600);
 
                             currElement
-                                .style("background", "#9CA3AF")
+                                .style("background", "#9CA3AF");
                         }
 
                         k++;
@@ -741,10 +752,15 @@ export default class TOF extends File {
                         }
 
                         this.blocks[i] = currBlock; // write dir
+                        writeTimes++;
                     } else {
                         let nextBlock = this.blocks[i + 1];
+                        readTimes++;
+
 
                         if (animate) {
+                            this.updateIOTimes(readTimes, writeTimes);
+
                             nextBlockElement = this.MSBoard.select(`.bloc:nth-child(${i + 2})`)
 
                             await this.traverseBlockAnimation(i + 1);
@@ -786,6 +802,7 @@ export default class TOF extends File {
                         // replace the last enreg. of current block with the first enreg. of the next block
                         currBlock.enregs[currBlock.nb - 1] = nextBlock.enregs[0];
                         this.blocks[i] = currBlock; // write dir
+                        writeTimes++;
                         j = 0;
                         i += 1;
                     }
@@ -793,6 +810,10 @@ export default class TOF extends File {
             }
 
             this.nbInsertions -= 1;
+
+            if (animate) {
+                this.updateIOTimes(readTimes, writeTimes);
+            }
 
             return true;
         } else {
