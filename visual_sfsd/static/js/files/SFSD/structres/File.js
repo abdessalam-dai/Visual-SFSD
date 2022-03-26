@@ -43,8 +43,9 @@ export default class File {
         <div class="bloc w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0" style="height: 352px;">
             <div
                 class="bloc-header text-white px-3 items-center font-medium h-8 rounded-t-lg w-full flex flex-row justify-between bg-slate-900">
-                <span class="bloc-index">0</span>
-                <span class="bloc-nb">NB=0</span>
+                <span class="bloc-index" style="position: relative">0</span>
+                <span class="bloc-address" style="position: relative"></span>
+                <span class="bloc-nb" style="position: relative">NB=0</span>
             </div>
 <!--            <div class="bloc-body w-full h-80 bg-gray-400 rounded-b-lg">-->
 <!--                <ul class="text-lg font-medium text-center">-->
@@ -73,9 +74,99 @@ export default class File {
 
         this.MSBoard.selectAll('.bloc')
             .data(this.blocks)
+            .select(".bloc-address")
+            .style("color" , "#38BDF8")
+            .text(function (block , index){
+
+                return `0x${block.blockAddress}`;
+            })
+
+        this.MSBoard.selectAll('.bloc')
+            .data(this.blocks)
             .select(".bloc-nb")
             .text(function (block) {
                 return `NB=${block.nb}`
+            })
+
+        // CREATING THE TOOL TIP FOR INDEX
+
+       d3.selectAll(".bloc-index")
+            .append("div")
+            .attr("class" , "tool-tip-index")
+            .style("position", "absolute")
+            .style("z-index", "10")
+            .style("visibility", "hidden")
+            .style("background", "#38BDF8")
+            .style("color" , "#9333EA")
+            .style("padding" , "5px")
+            .text("Block Index")
+
+        d3.selectAll(".bloc-index")
+            .on("mouseover" , function (e) {
+                d3.select(this)
+                    .select(".tool-tip-index")
+                    .style("transition" , "visibility 0s linear 900ms")
+                    .style("visibility" , "visible")
+            })
+            .on("mouseout" , function (e) {
+                d3.select(this)
+                    .select(".tool-tip-index")
+                    .style("transition" , "visibility 0s linear 100ms")
+                    .style("visibility" , "hidden")
+            })
+
+        d3.selectAll(".bloc-address")
+            .append("div")
+            .attr("class" , "tool-tip-address")
+            .style("position", "absolute")
+            .style("z-index", "10")
+            .style("visibility", "hidden")
+            .style("background", "#38BDF8")
+            .style("color" , "#9333EA")
+            .style("padding" , "5px")
+            .text("Block Physical address")
+        // CREATING THE TOOL TIP FOR INDEX
+        d3.selectAll(".bloc-address")
+
+            .on("mouseover" , function (e) {
+                d3.select(this)
+                    .select(".tool-tip-address")
+                    .style("transition" , "visibility 0s linear 900ms")
+                    .style("visibility" , "visible")
+            })
+            .on("mouseout" , function (e) {
+                d3.select(this)
+                    .select(".tool-tip-address")
+                    .style("transition" , "visibility 0s linear 100ms")
+                    .style("visibility" , "hidden")
+            })
+
+        // CREATING THE TOOL TIP FOR NB
+
+        d3.selectAll(".bloc-nb")
+            .append("div")
+            .attr("class" , "tool-tip-nb")
+            .style("position", "absolute")
+            .style("z-index", "10")
+            .style("visibility", "hidden")
+            .style("background", "#38BDF8")
+            .style("color" , "#9333EA")
+            .style("padding" , "5px")
+            .text("Number of Enreg in the current block")
+
+        // CREATING THE TOOL TIP FOR INDEX
+        d3.selectAll(".bloc-nb")
+            .on("mouseover" , function (e) {
+                d3.select(this)
+                    .select(".tool-tip-nb")
+                    .style("transition" , "visibility 0s linear 900ms")
+                    .style("visibility" , "visible")
+            })
+            .on("mouseout" , function (e) {
+                d3.select(this)
+                    .select(".tool-tip-nb")
+                    .style("transition" , "visibility 0s linear 100ms")
+                    .style("visibility" , "hidden")
             })
 
         let cpt = 1;

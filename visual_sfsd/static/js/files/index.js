@@ -34,3 +34,6 @@ newFile.print();
 let res = newFile.removeLogically(33);
 console.log(res);
 newFile.print();
+const line = d3.line(d => d.date, d => d.value)
+    .curve(d3.curveCatmullRom.alpha(0.5));
+console.log(12)
