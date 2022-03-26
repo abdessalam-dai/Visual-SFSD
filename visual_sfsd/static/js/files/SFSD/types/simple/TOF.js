@@ -1,10 +1,27 @@
 import File from '../../structres/File.js';
 import Enreg from '../../structres/Enreg.js';
 import Block from '../../structres/Block.js';
+import {MAX_NB_ENREGS_DEFAULT} from "../../../constants.js";
+
+let delay = 0.5;
 
 function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise(resolve => setTimeout(resolve, ms * delay));
 }
+
+// START - Change animation speed.
+const animationSpeedBar = document.querySelector("#animation-speed-bar");
+
+function handleChangeAnimationSpeed() {
+    animationSpeedBar.addEventListener("change", function () {
+        delay = (200 - animationSpeedBar.value) / 100;
+        console.log(delay);
+    });
+}
+
+handleChangeAnimationSpeed();
+
+// END - Inert Enreg.
 
 export default class TOF extends File {
     async search(key, animate = false, isRemoveCalling = false, isInsertCalling = false) {
@@ -50,36 +67,27 @@ export default class TOF extends File {
                 lastKey = midBlock.enregs[midBlockNb - 1].key;
 
             if (animate) {
-                console.log(this.blocks[i])
-                console.log(i)
+                d3.select(".mc-key")
+                    .text(`Key = ${key}`);
+
+                console.log(this.blocks[i]);
+                console.log(i);
+
                 midBlockElement = this.MSBoard.select(`.bloc:nth-child(${i + 1})`)
 
-                midBlockElement.transition()
-                    .duration(600)
-                    .style("transform", "translate(0, -10px)")
-                    .select('.bloc-header')
-                    .style('background', "#1765ba")
+                await this.traverseBlockAnimation(i);
 
-                midBlockElement.transition()
-                    .delay(600)
-                    .duration(600)
-                    .style("transform", "translate(0, 0)")
+                bufferElement = this.updateBufferElement(midBlockElement);
 
-                this.buff.selectAll("*").remove()
-                bufferElement = this.buff.append("div")
-                    .attr("class", "bloc w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0")
-                    .style("height", "352px")
-                    .html(midBlockElement.html())
-
-                MCDescription = d3.select(".mc-description")
-                MCDescription.text(`${firstKey} ≤ ${key} ≤ ${lastKey}`)
+                MCDescription = d3.select(".mc-description");
             }
 
             // local search for enreg. inside block
             if (key >= firstKey && key <= lastKey) {
                 if (animate) {
-                    MCDescription.style("color", "green")
-                    await sleep(1000)
+                    MCDescription.style("background", "green")
+                        .text(`${key} ∈ [${lastKey}, ${firstKey}]`);
+                    await sleep(1000);
                 }
 
                 let eLow = 0,
@@ -91,7 +99,7 @@ export default class TOF extends File {
 
                     if (animate) {
                         midElement = bufferElement.select(".bloc-body ul")
-                            .select(`li:nth-child(${j + 1})`)
+                            .select(`li:nth-child(${j + 1})`);
                     }
 
                     if (key === currKey) {
@@ -117,16 +125,13 @@ export default class TOF extends File {
                     if (animate) {
                         midElement
                             .transition()
-                            .ease(d3.easeLinear)
-                            .duration(600)
+                            .duration(600 * delay)
                             .style("background", elementBGColor)
-
-                        midElement
                             .transition()
-                            .delay(1000)
-                            .duration(300)
-                            .style("background", "#9CA3AF")
-                        await sleep(1000)
+                            .delay(600 * delay)
+                            .duration(300 * delay)
+                            .style("background", "#9CA3AF");
+                        await sleep(1000);
                     }
                 }
 
@@ -136,18 +141,22 @@ export default class TOF extends File {
                 stop = true;
             } else if (key < firstKey) {
                 if (animate) {
-                    MCDescription.style("color", "red")
+                    MCDescription.style("background", "red")
+                        .text(`${key} ∉ [${lastKey}, ${firstKey}]`);
+                    await sleep(1000);
                 }
                 high = i - 1;
             } else {  // key > lastKey
                 if (animate) {
-                    MCDescription.style("color", "red")
+                    MCDescription.style("background", "red")
+                        .text(`${key} ∉ [${lastKey}, ${firstKey}]`);
+                    await sleep(1000);
                 }
                 low = i + 1;
             }
 
             if (animate) {
-                await sleep(1000)
+                await sleep(1000);
             }
         }
 
@@ -167,12 +176,9 @@ export default class TOF extends File {
                         if (i >= this.blocks.length) {
                             isBlocksLengthExceeded = true;
                         } else {
-                            midBlockElement = this.MSBoard.select(`.bloc:nth-child(${i + 1})`)
-                            this.buff.selectAll("*").remove()
-                            bufferElement = this.buff.append("div")
-                                .attr("class", "bloc w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0")
-                                .style("height", "352px")
-                                .html(midBlockElement.html())
+                            midBlockElement = this.MSBoard.select(`.bloc:nth-child(${i + 1})`);
+
+                            bufferElement = bufferElement = this.updateBufferElement(midBlockElement, 1);
                         }
                     }
                 }
@@ -187,8 +193,7 @@ export default class TOF extends File {
                     msg += ", insertion is impossible"
                 }
 
-                MCDescription
-                    .text(msg)
+                MCDescription.text(msg)
             } else {
                 elementBGColor = "#FF9D58"
                 let msg = `Element with key ${key} was not found`
@@ -196,8 +201,12 @@ export default class TOF extends File {
                     msg += `, it should be positioned in the block ${i}, position ${j}`
                 }
                 MCDescription
+                    .style("background", "red")
                     .text(msg)
             }
+
+            midElement = bufferElement.select(".bloc-body ul")
+                .select(`li:nth-child(${j + 1})`);
 
             if (!midElement) {
                 console.log(j)
@@ -209,13 +218,13 @@ export default class TOF extends File {
             if (!isBlocksLengthExceeded) {
                 midElement
                     .transition()
-                    .duration(300)
+                    .duration(300 * delay)
                     .style("background", elementBGColor)
             }
 
             this.MSBoard.selectAll(".bloc").select(".bloc-header")
                 .transition()
-                .duration(600)
+                .duration(600 * delay)
                 .style('background', "#0F172A")
         }
 
@@ -270,28 +279,15 @@ export default class TOF extends File {
                     if (animate) {
                         midBlockElement = this.MSBoard.select(`.bloc:nth-child(${i + 1})`)
 
-                        midBlockElement.transition()
-                            .duration(600)
-                            .style("transform", "translate(0, -10px)")
-                            .select('.bloc-header')
-                            .style('background', "#1765ba")
+                        await this.traverseBlockAnimation(i);
 
-                        midBlockElement.transition()
-                            .delay(600)
-                            .duration(600)
-                            .style("transform", "translate(0, 0)")
-
-                        this.buff.selectAll("*").remove()
-                        bufferElement = this.buff.append("div")
-                            .attr("class", "bloc w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0")
-                            .style("height", "352px")
-                            .html(midBlockElement.html())
+                        bufferElement = this.updateBufferElement(midBlockElement);
 
                         jthElement = bufferElement
                             .select(`.bloc-body ul li:nth-child(${j + 1})`)
-                            .style("background", "#9043ef")
+                            .style("background", "#9043ef");
 
-                        await sleep(1000)
+                        await sleep(1000);
                     }
 
                     lastIndex = currBlock.nb - 1;
@@ -315,21 +311,20 @@ export default class TOF extends File {
                             currElement.select("span")
                                 .transition()
                                 .ease(d3.easeLinear)
-                                .duration(300)
+                                .duration(500 * delay)
                                 .style("transform", "translate(0, +40px)")
                                 .transition()
                                 .duration(0)
                                 .style("transform", "translate(0, -40px)")
                                 .text(`${currBlock.enregs[k - 1].key}`)
                                 .transition()
-                                .duration(300)
-                                .style("transform", "translate(0, 0)")
+                                .duration(500 * delay)
+                                .style("transform", "translate(0, 0)");
 
-                            await sleep(600)
+                            await sleep(1000);
 
                             currElement
                                 .style("background", "#9CA3AF")
-                            await sleep(1000)
                         }
 
                         k -= 1;
@@ -339,13 +334,23 @@ export default class TOF extends File {
                     currBlock.enregs[j] = newEnreg;
 
                     if (animate) {
-                        jthElement
+                        jthElement.select("span")
                             .transition()
-                            .duration(300)
+                            .duration(500 * delay)
+                            .style("transform", "translate(150px, 0)")
+                            .transition()
+                            .duration(0)
+                            .style("transform", "translate(-150px, 0)")
                             .text(`${newEnreg.key}`)
-                            .style("background", "#9CA3AF")
+                            .transition()
+                            .duration(500 * delay)
+                            .style("transform", "translate(0, 0)");
 
-                        await sleep(1000);
+                        jthElement.transition()
+                            .duration(300 * delay)
+                            .style("background", "#9CA3AF");
+
+                        await sleep(1300);
                     }
 
                     if (j === currBlock.nb) {
@@ -358,7 +363,7 @@ export default class TOF extends File {
                                 .style("background", "#34ffbd")
                                 .attr("class", "border-b-2 h-10 flex justify-center flex-col")
                                 .append("span")
-                                .text(`${newEnreg.key}`)
+                                .text(`${newEnreg.key}`);
 
                             await sleep(1000);
                         }
@@ -372,14 +377,13 @@ export default class TOF extends File {
                             this.blocks[i] = currBlock;  // save current block in the blocks array
                             continueShifting = false;
 
-
                             if (animate) {
                                 bufferElement.select(".bloc-body ul")
                                     .append("li")
                                     .style("background", "#34ffbd")
                                     .attr("class", "border-b-2 h-10 flex justify-center flex-col")
                                     .append("span")
-                                    .text(`${lastEnreg.key}`)
+                                    .text(`${lastEnreg.key}`);
 
                                 await sleep(1000);
                             }
@@ -418,7 +422,7 @@ export default class TOF extends File {
                     true :   if the process of deletion went correctly 
                     false :  if the key does not exist
        */
-        let {found, pos} = await this.search(key, true, true)
+        let {found, pos} = await this.search(key, animate, true)
         let {i, j} = pos
 
         console.log(i, j)
@@ -429,21 +433,206 @@ export default class TOF extends File {
             this.buff
                 .select(`.bloc .bloc-body ul li:nth-child(${j + 1})`)
                 .transition()
-                .duration(500)
-                .style("color", "#a70000")
+                .duration(500 * delay)
+                .style("color", "#a70000");
 
-            await sleep(1000)
+            await sleep(1000);
 
             this.MSBoard
                 .select(`.bloc:nth-child(${i + 1})`)
                 .select(`.bloc-body ul li:nth-child(${j + 1})`)
                 .transition()
-                .duration(500)
-                .style("color", "#a70000")
+                .duration(500 * delay)
+                .style("color", "#a70000");
 
-            let MCDescription = d3.select(".mc-description")
-                .text(`Element with key ${key} has been removed successfully`)
-                .style("color", "green")
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    async traverseBlockAnimation(i) {
+        let midBlockElement = this.MSBoard.select(`.bloc:nth-child(${i + 1})`);
+
+        midBlockElement.transition()
+            .duration(600 * delay)
+            .style("transform", "translate(0, -10px)")
+            .select('.bloc-header')
+            .style('background', "#1765ba");
+
+        midBlockElement.transition()
+            .delay(600 * delay)
+            .duration(600 * delay)
+            .style("transform", "translate(0, 0)");
+    }
+
+    updateBufferElement(blockElement, bufferIndex = 1) {
+        if (bufferIndex === 1) {
+            this.buff.selectAll("*").remove()
+            return this.buff.append("div")
+                .attr("class", "bloc w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0")
+                .style("height", "352px")
+                .html(blockElement.html());
+        } else {
+            this.buff2.selectAll("*").remove()
+            return this.buff2.append("div")
+                .attr("class", "bloc w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0")
+                .style("height", "352px")
+                .html(blockElement.html());
+        }
+
+    }
+
+    async removePhysically(key, animate = false) {
+        /*
+           input :
+                    key :    key to remove [Int]
+           output :
+                    true :   if the process of deletion went correctly
+                    false :  if the key does not exist
+       */
+        let {found, pos} = await this.search(key, animate, true);
+        let {i, j} = pos;
+
+        let midBlockElement;
+        let bufferElement;
+        let buffer2Element;
+        let jthElement;
+        let currElement;
+        let nextBlockElement;
+        let nextFirstElement;
+
+        if (found) {
+            let continueShifting = true;
+
+            while (continueShifting) {
+                let currBlock = this.blocks[i];
+
+                if (animate) {
+                    midBlockElement = this.MSBoard.select(`.bloc:nth-child(${i + 1})`)
+
+                    await this.traverseBlockAnimation(i);
+
+                    bufferElement = this.updateBufferElement(midBlockElement, 1);
+
+                    jthElement = bufferElement
+                        .select(`.bloc-body ul li:nth-child(${j + 1})`)
+                        .style("background", "#9043ef");
+
+                    await sleep(1000);
+                }
+
+                if (currBlock.nb === 1) { // if this is the only element in the last block
+                    this.blocks.pop();
+                    this.nbBlocks -= 1;
+                    continueShifting = false;
+                } else {
+                    let k = j;
+                    while (k <= currBlock.nb - 2) {
+                        currBlock.enregs[k] = currBlock.enregs[k + 1];
+
+                        if (animate) {
+                            currElement = bufferElement
+                                .select(`.bloc-body ul li:nth-child(${k + 1})`)
+                                .style("background", "#34ffbd");
+
+                            currElement.select("span")
+                                .transition()
+                                .ease(d3.easeLinear)
+                                .duration(300 * delay)
+                                .style("transform", "translate(0, -40px)")
+                                .transition()
+                                .duration(0)
+                                .style("transform", "translate(0, +40px)")
+                                .text(`${currBlock.enregs[k + 1].key}`)
+                                .transition()
+                                .duration(300 * delay)
+                                .style("transform", "translate(0, 0)")
+
+                            await sleep(600);
+
+                            currElement
+                                .style("background", "#9CA3AF")
+                        }
+
+                        k++;
+                    }
+
+                    // the block is not full (nb < B) OR (i) is the last block
+                    if ((currBlock.nb !== MAX_NB_ENREGS_DEFAULT) || (i === this.nbBlocks - 1)) {
+                        continueShifting = false;
+                        currBlock.enregs.pop();
+                        currBlock.nb -= 1;
+
+                        if (animate) {
+                            currElement = bufferElement
+                                .select(`.bloc-body ul li:nth-child(${currBlock.nb + 1})`)
+                                .style("background", "#9043ef");
+
+                            currElement.select("span")
+                                .transition()
+                                .ease(d3.easeLinear)
+                                .duration(300 * delay)
+                                .style("transform", "translate(-150px, 0)");
+
+                            await sleep(300);
+
+                            currElement.remove();
+
+                            bufferElement.select(".bloc .bloc-header span:nth-child(2)")
+                                .text(`NB=${currBlock.nb}`)
+                        }
+
+                        this.blocks[i] = currBlock; // write dir
+                    } else {
+                        let nextBlock = this.blocks[i + 1];
+
+                        if (animate) {
+                            nextBlockElement = this.MSBoard.select(`.bloc:nth-child(${i + 2})`)
+
+                            await this.traverseBlockAnimation(i + 1);
+
+                            buffer2Element = this.updateBufferElement(nextBlockElement, 2);
+
+                            nextFirstElement = buffer2Element
+                                .select(`.bloc-body ul li:nth-child(1)`)
+                                .transition()
+                                .ease(d3.easeLinear)
+                                .duration(300 * delay)
+                                .style("background", "#9043ef");
+
+                            await sleep(2000);
+
+                            currElement = bufferElement
+                                .select(`.bloc-body ul li:nth-child(${currBlock.nb})`)
+                                .style("background", "#34ffbd");
+
+                            currElement.select("span")
+                                .transition()
+                                .ease(d3.easeLinear)
+                                .duration(300 * delay)
+                                .style("transform", "translate(0, -40px)")
+                                .transition()
+                                .duration(0)
+                                .style("transform", "translate(0, +40px)")
+                                .text(`${nextBlock.enregs[0].key}`)
+                                .transition()
+                                .duration(300 * delay)
+                                .style("transform", "translate(0, 0)");
+
+                            await sleep(1500);
+                        }
+
+                        // replace the last enreg. of current block with the first enreg. of the next block
+                        currBlock.enregs[currBlock.nb - 1] = nextBlock.enregs[0];
+                        this.blocks[i] = currBlock; // write dir
+                        j = 0;
+                        i += 1;
+                    }
+                }
+            }
+
+            this.nbInsertions -= 1;
 
             return true;
         } else {

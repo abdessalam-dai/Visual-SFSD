@@ -38,11 +38,13 @@ import TOF from "../../SFSD/types/simple/TOF.js";
 
 // START - Create file
 const buff = d3.select(".buf")
+const buff2 = d3.select(".buf2")
 const MSBoard = d3.select(".ms-container")
 
 let newFile = new TOF(
     'file.txt',
     buff,
+    buff2,
     MSBoard,
 );
 
@@ -67,6 +69,9 @@ const searchBtn = document.querySelector("#search-btn");
 const keyToRemove = document.querySelector("#key-to-remove");
 const removeBtn = document.querySelector("#remove-btn");
 
+const keyToRemovePhysically = document.querySelector("#key-to-remove-physically");
+const removePhysicallyBtn = document.querySelector("#remove-physically-btn");
+
 const keyToInsert = document.querySelector("#key-to-insert");
 const field1ToInsert = document.querySelector("#field1-to-insert");
 const field2ToInsert = document.querySelector("#field2-to-insert");
@@ -78,6 +83,7 @@ const changeButtonsState = (state) => {
     searchBtn.disabled = state
     removeBtn.disabled = state
     insertBtn.disabled = state
+    removePhysicallyBtn.disabled = state
 }
 
 // END - DOM Elements
@@ -151,7 +157,7 @@ function handleGenerateData() {
 handleGenerateData()
 
 
-let data = generateData(35, 0, 100)
+let data = generateData(20, 0, 100)
 
 for (const enreg of data) {
     await newFile.insert(
@@ -208,6 +214,30 @@ function handleRemove() {
 handleRemove()
 
 // END - Remove element
+
+
+
+// START - Remove element physically
+function handleRemovePhysically() {
+    removePhysicallyBtn.addEventListener("click", async function () {
+        changeButtonsState(true)
+
+        let key = parseInt(keyToRemovePhysically.value);
+
+        let removeSuccess = await newFile.removePhysically(key, true);
+
+        newFile.createBoardsDOM()
+
+        console.log(removeSuccess)
+
+        changeButtonsState(false)
+    });
+}
+
+handleRemovePhysically()
+
+// END - Remove element physically
+
 
 
 // START - Inert Enreg.

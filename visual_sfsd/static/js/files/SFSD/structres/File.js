@@ -21,6 +21,7 @@ export default class File {
     constructor(
         name,
         buff,
+        buff2,
         MSBoard,
         maxNbEnregs = MAX_NB_ENREGS_DEFAULT,
         nbBlocks = NB_BLOCKS_DEFAULT,
@@ -29,6 +30,7 @@ export default class File {
     ) {
         this.name = name;
         this.buff = buff;
+        this.buff2 = buff2;
         this.MSBoard = MSBoard;
         this.maxNbEnregs = maxNbEnregs;
         this.nbBlocks = nbBlocks;
@@ -99,6 +101,7 @@ export default class File {
                     })
                     .style("cursor", "pointer")
                     .style("overflow-y", "hidden")
+                    .style("overflow-x", "hidden")
                     .on("click", function (e, enreg) {
                         console.log(enreg.key)
                     })
@@ -123,7 +126,7 @@ export default class File {
                         d3.select(this)
                             .transition()
                             .ease(d3.easeBack)
-                            .duration(cpt * 150)
+                            .duration(cpt * 10)
                             .style("opacity", "1")
                     })
                     .append("span")
