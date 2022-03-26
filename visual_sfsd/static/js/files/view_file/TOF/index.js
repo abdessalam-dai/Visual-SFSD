@@ -157,7 +157,7 @@ function handleGenerateData() {
 handleGenerateData()
 
 
-let data = generateData(20, 0, 100)
+let data = generateData(0, 0, 100)
 
 for (const enreg of data) {
     await newFile.insert(
@@ -184,10 +184,9 @@ function handleSearch() {
         let {
             found: found,
             pos: pos,
+            readTimes: readTimes
         } = await newFile.search(key, true);
-
-        console.log(found, pos)
-
+        console.log(found, pos  , readTimes)
         changeButtonsState(false)
     });
 }

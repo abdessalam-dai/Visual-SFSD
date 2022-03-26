@@ -23,6 +23,7 @@ export default class File {
         buff,
         buff2,
         MSBoard,
+        complexity,
         maxNbEnregs = MAX_NB_ENREGS_DEFAULT,
         nbBlocks = NB_BLOCKS_DEFAULT,
         nbInsertions = NB_INSERTIONS_DEFAULT,
@@ -32,6 +33,7 @@ export default class File {
         this.buff = buff;
         this.buff2 = buff2;
         this.MSBoard = MSBoard;
+        this.complexity = complexity;
         this.maxNbEnregs = maxNbEnregs;
         this.nbBlocks = nbBlocks;
         this.nbInsertions = nbInsertions;
