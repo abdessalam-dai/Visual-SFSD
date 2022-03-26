@@ -157,6 +157,7 @@ function handleGenerateData() {
 handleGenerateData()
 
 
+
 let data = generateData(n, min, max);
 
 for (const enreg of data) {
@@ -184,10 +185,9 @@ function handleSearch() {
         let {
             found: found,
             pos: pos,
+            readTimes: readTimes
         } = await newFile.search(key, true);
-
-        console.log(found, pos)
-
+        console.log(found, pos  , readTimes)
         changeButtonsState(false)
     });
 }

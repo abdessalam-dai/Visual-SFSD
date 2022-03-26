@@ -56,11 +56,12 @@ export default class TOF extends File {
         let midElement;
         let elementBGColor;
         let isBlocksLengthExceeded = false;
-
+        let readTimes = 0;
         // global search for block
         while (low <= high && !found && !stop) {
             i = Math.floor((low + high) / 2);
             let midBlock = blocks[i];
+            readTimes++;
             let midBlockNb = midBlock.enregs.length;
 
             let firstKey = midBlock.enregs[0].key,
@@ -80,6 +81,11 @@ export default class TOF extends File {
                 bufferElement = this.updateBufferElement(midBlockElement);
 
                 MCDescription = d3.select(".mc-description");
+
+                // showing the complexity
+
+                d3.select('.complexity-in-reading')
+                    .text(`Number of times reading form the  MS is ${readTimes}`)
             }
 
             // local search for enreg. inside block
@@ -234,6 +240,7 @@ export default class TOF extends File {
                 i: i,
                 j: j
             },
+            readTimes: readTimes
         }
     }
 
@@ -254,7 +261,8 @@ export default class TOF extends File {
         let found = searchResults.found,
             i = searchResults.pos.i,
             j = searchResults.pos.j;
-
+        let readTimes = searchResults.readTimes;
+        let writeTimes = 0;
         let midBlockElement;
         let bufferElement;
         let tempVariableElement;
@@ -275,7 +283,8 @@ export default class TOF extends File {
 
                 while (continueShifting && i < this.blocks.length) {
                     currBlock = this.blocks[i];  // read current block
-
+                    readTimes++;
+                    writeTimes++;
                     if (animate) {
                         midBlockElement = this.MSBoard.select(`.bloc:nth-child(${i + 1})`)
 
@@ -287,6 +296,11 @@ export default class TOF extends File {
                             .select(`.bloc-body ul li:nth-child(${j + 1})`)
                             .style("background", "#9043ef");
 
+                        d3.select(".complexity-in-reading")
+                            .text(`Number of times reading form the  MS is ${readTimes}`)
+
+                        d3.select(".complexity-in-writing")
+                            .text(`Insert took ${writeTimes} to write in the ms`)
                         await sleep(1000);
                     }
 
@@ -515,7 +529,7 @@ export default class TOF extends File {
        */
         let {found, pos} = await this.search(key, animate, true)
         let {i, j} = pos
-
+        let writeTimes;
         console.log(i, j)
 
         if (found) {
@@ -535,6 +549,12 @@ export default class TOF extends File {
                 .transition()
                 .duration(500 * delay)
                 .style("color", "#a70000");
+
+            // Number Of times writing in MS
+            writeTimes = 1;
+            d3.select(".complexity-in-writing")
+                .text(`Remove logically took ${writeTimes} to write in the ms`)
+
 
             return true;
         } else {
@@ -600,8 +620,10 @@ export default class TOF extends File {
                     true :   if the process of deletion went correctly
                     false :  if the key does not exist
        */
-        let {found, pos} = await this.search(key, animate, true);
+        let {found, pos , readTimes} = await this.search(key, animate, true);
         let {i, j} = pos;
+        let writeTimes = 0;
+
 
         let midBlockElement;
         let bufferElement;
@@ -616,6 +638,8 @@ export default class TOF extends File {
 
             while (continueShifting) {
                 let currBlock = this.blocks[i];
+                readTimes++;
+                writeTimes++;
 
                 if (animate) {
                     midBlockElement = this.MSBoard.select(`.bloc:nth-child(${i + 1})`)
@@ -627,6 +651,12 @@ export default class TOF extends File {
                     jthElement = bufferElement
                         .select(`.bloc-body ul li:nth-child(${j + 1})`)
                         .style("background", "#9043ef");
+
+                    d3.select(".complexity-in-reading")
+                        .text(`Number of times reading form the  MS is ${readTimes}`)
+
+                    d3.select(".complexity-in-writing")
+                        .text(`Insert took ${writeTimes} to write in the ms`);
 
                     await sleep(1000);
                 }
