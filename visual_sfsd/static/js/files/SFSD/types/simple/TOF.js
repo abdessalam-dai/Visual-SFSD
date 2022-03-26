@@ -1,6 +1,7 @@
 import File from '../../structres/File.js';
 import Enreg from '../../structres/Enreg.js';
 import Block from '../../structres/Block.js';
+import {ENREG_SIZE, MAX_NB_ENREGS_DEFAULT} from "../../../constants.js";
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -257,7 +258,9 @@ export default class TOF extends File {
 
             if (this.blocks.length === 0) {
                 let enregs = [newEnreg];
-                let newBlock = new Block(enregs, 1);
+                // it is the first block
+                const address = this.setBlockAddress(0);
+                let newBlock = new Block(enregs, 1 , address);
                 this.blocks.push(newBlock);
                 this.nbBlocks += 1;
             } else {
@@ -396,7 +399,8 @@ export default class TOF extends File {
 
                 if (i > this.nbBlocks - 1) {
                     let enregs = [newEnreg];
-                    let newBlock = new Block(enregs, 1);
+                    const address = this.setBlockAddress(this.blocks.length - 1);
+                    let newBlock = new Block(enregs, 1, address);
                     this.blocks.push(newBlock);
                     this.nbBlocks += 1;
                 }
@@ -448,6 +452,20 @@ export default class TOF extends File {
             return true;
         } else {
             return false;
+        }
+    }
+
+    setBlockAddress(index) {
+        if (index === 0) {
+            if(this.blocks.length === 0){
+                return Math.floor(Math.random() * 10000000000).toString(16);
+            }
+            else {
+                return Number((ENREG_SIZE + 1)  + parseInt(this.blocks[0].blockAddress, 16)).toString(16)
+            }
+        }
+        else{
+            return Number(index * ENREG_SIZE + parseInt(this.blocks[0].blockAddress , 16)).toString(16)
         }
     }
 }
