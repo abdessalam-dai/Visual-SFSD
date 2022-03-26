@@ -17,6 +17,30 @@
 
 {% block stylesheets %}
     <link rel="stylesheet" href="{% static 'css/view_file/output.css' %}">
+
+    <style>
+        /* width */
+        .ms-container::-webkit-scrollbar {
+            width: 20px;
+        }
+
+        /* Track */
+        .ms-container::-webkit-scrollbar-track {
+            box-shadow: inset 0 0 5px grey;
+            border-radius: 10px;
+        }
+
+        /* Handle */
+        .ms-container::-webkit-scrollbar-thumb {
+            background: #93C5FD;
+            border-radius: 10px;
+        }
+
+        .ms-container {
+            scroll-behavior: smooth;
+            padding: 45px 10px;
+        }
+    </style>
 {% endblock %}
 
 {#{% block domready %}#}
@@ -25,7 +49,7 @@
 
 
 {% block navbar %}
-{% include 'components/navbar/navbar_view_file.html' %}
+    {% include 'components/navbar/navbar_view_file.html' %}
 {% endblock %}
 
 
@@ -52,7 +76,7 @@
     <br>
 
     <label for="animation-speed-bar">Animation speed : </label>
-    Slow<input type="range" id="animation-speed-bar" min="0" max="190" />Fast
+    Slow<input type="range" id="animation-speed-bar" min="0" max="190"/>Fast
     <br>
 
     <div class="flex flex-row items-center justify-between">
@@ -61,6 +85,6 @@
         {% include "files/view_file/components/mc.html" %}
     </div>
 
-{#    {{ data }}#}
+    {#    {{ data }}#}
 
 {% endblock content %}

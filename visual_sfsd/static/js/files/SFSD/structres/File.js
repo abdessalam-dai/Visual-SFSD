@@ -113,14 +113,6 @@ export default class File {
                         d3.select(this)
                             .style("background", "#9CA3AF")
                     })
-                    .on("click", function (e, enreg) {
-                        alert(`
-                        key:${enreg.key}
-                        field1: ${enreg.field1}
-                        field2: ${enreg.field2}
-                        removed: ${enreg.removed}
-                        `)
-                    })
                     .each(function () {
                         cpt++
                         d3.select(this)
@@ -132,7 +124,7 @@ export default class File {
                     .append("span")
                     .text(function (enreg) {
                         return enreg.key
-                    })
+                    });
             })
     }
 

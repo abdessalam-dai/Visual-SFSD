@@ -37,9 +37,9 @@ import TOF from "../../SFSD/types/simple/TOF.js";
 
 
 // START - Create file
-const buff = d3.select(".buf")
-const buff2 = d3.select(".buf2")
-const MSBoard = d3.select(".ms-container")
+const buff = d3.select(".buf");
+const buff2 = d3.select(".buf2");
+const MSBoard = d3.select(".ms-container");
 
 let newFile = new TOF(
     'file.txt',
@@ -90,9 +90,9 @@ const changeButtonsState = (state) => {
 
 
 // START - Fill with dummy data
-const n = 8
-const min = 0
-const max = 30
+const n = 30;
+const min = 0;
+const max = 100;
 
 function randInt(min, max) {
     min = Math.ceil(min);
@@ -157,7 +157,7 @@ function handleGenerateData() {
 handleGenerateData()
 
 
-let data = generateData(20, 0, 100)
+let data = generateData(n, min, max);
 
 for (const enreg of data) {
     await newFile.insert(
@@ -216,7 +216,6 @@ handleRemove()
 // END - Remove element
 
 
-
 // START - Remove element physically
 function handleRemovePhysically() {
     removePhysicallyBtn.addEventListener("click", async function () {
@@ -237,7 +236,6 @@ function handleRemovePhysically() {
 handleRemovePhysically()
 
 // END - Remove element physically
-
 
 
 // START - Inert Enreg.
@@ -262,3 +260,21 @@ function handleInsert() {
 handleInsert()
 
 // END - Inert Enreg.
+
+
+// START - Scroll buttons
+const scrollLeftBtn = document.querySelector("#scroll-left-btn");
+const scrollRightBtn = document.querySelector("#scroll-right-btn");
+
+function handleScrollButtons() {
+    scrollLeftBtn.addEventListener('click', function () {
+        MSBoard.node().scrollLeft -= 224
+    });
+
+    scrollRightBtn.addEventListener('click', function () {
+        MSBoard.node().scrollLeft += 224
+    });
+}
+
+handleScrollButtons();
+// END - Scroll buttons

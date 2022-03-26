@@ -73,7 +73,7 @@ export default class TOF extends File {
                 console.log(this.blocks[i]);
                 console.log(i);
 
-                midBlockElement = this.MSBoard.select(`.bloc:nth-child(${i + 1})`)
+                midBlockElement = this.MSBoard.select(`.bloc:nth-child(${i + 1})`);
 
                 await this.traverseBlockAnimation(i);
 
@@ -295,7 +295,7 @@ export default class TOF extends File {
 
                     if (animate) {
                         tempVariableElement = d3.select(".temp-variable")
-                            .text(`${lastEnreg.key}`)
+                            .text(`${lastEnreg.key}`);
                     }
 
                     k = lastIndex;
@@ -366,6 +366,9 @@ export default class TOF extends File {
                                 .text(`${newEnreg.key}`);
 
                             await sleep(1000);
+
+                            // write buffer in MS
+                            this.updateBlockInMS(i, currBlock);
                         }
 
                     } else {
@@ -385,10 +388,21 @@ export default class TOF extends File {
                                     .append("span")
                                     .text(`${lastEnreg.key}`);
 
+                                bufferElement.select(".bloc .bloc-header .bloc-nb")
+                                    .text(`NB=${currBlock.nb}`);
+
+                                // write buffer in MS
+                                this.updateBlockInMS(i, currBlock);
+
                                 await sleep(1000);
                             }
 
                         } else { // else, insert it in the next block (i + 1)
+                            if (animate) {
+                                // write buffer in MS
+                                this.updateBlockInMS(i, currBlock);
+                            }
+
                             this.blocks[i] = currBlock;  // save current block in the blocks array
                             i += 1;
                             j = 0;
@@ -412,6 +426,45 @@ export default class TOF extends File {
         } else {
             return false;
         }
+    }
+
+    updateBlockInMS(i, block) {
+        let blockElement = this.MSBoard.select(`.bloc:nth-child(${i + 1})`);
+
+        console.log(blockElement.node())
+
+        blockElement.select(".bloc-body ul")
+            .selectAll("li")
+            .remove();
+
+        blockElement
+            .select(".bloc-body ul")
+            .selectAll("li")
+            .data(block.enregs)
+            .enter()
+            .append("li")
+            .attr("class", "border-b-2 h-10 flex justify-center flex-col")
+            .style("color", function (enreg) {
+                return enreg.removed ? "#a70000" : "black"
+            })
+            .style("cursor", "pointer")
+            .style("overflow-y", "hidden")
+            .style("overflow-x", "hidden")
+            .on("click", function (e, enreg) {
+                console.log(enreg.key)
+            })
+            .on("mouseover", function () {
+                d3.select(this)
+                    .style("background", "gray")
+            })
+            .on("mouseout", function () {
+                d3.select(this)
+                    .style("background", "#9CA3AF")
+            })
+            .append("span")
+            .text(function (enreg) {
+                return enreg.key
+            });
     }
 
     async removeLogically(key, animate = false) {
@@ -467,6 +520,15 @@ export default class TOF extends File {
     }
 
     updateBufferElement(blockElement, bufferIndex = 1) {
+        // scroll to blockElement
+        let msLeft = this.MSBoard.node().offsetLeft;
+        let blockLeft = blockElement.node().offsetLeft;
+
+        this.MSBoard.node().scroll({
+            left: blockLeft - msLeft - 240,
+            behavior: "smooth",
+        });
+
         if (bufferIndex === 1) {
             this.buff.selectAll("*").remove()
             return this.buff.append("div")
@@ -480,7 +542,6 @@ export default class TOF extends File {
                 .style("height", "352px")
                 .html(blockElement.html());
         }
-
     }
 
     async removePhysically(key, animate = false) {
@@ -579,8 +640,11 @@ export default class TOF extends File {
 
                             currElement.remove();
 
-                            bufferElement.select(".bloc .bloc-header span:nth-child(2)")
-                                .text(`NB=${currBlock.nb}`)
+                            bufferElement.select(".bloc .bloc-header .bloc-nb")
+                                .text(`NB=${currBlock.nb}`);
+
+                            // write buffer in MS
+                            this.updateBlockInMS(i, currBlock);
                         }
 
                         this.blocks[i] = currBlock; // write dir
@@ -619,6 +683,9 @@ export default class TOF extends File {
                                 .transition()
                                 .duration(300 * delay)
                                 .style("transform", "translate(0, 0)");
+
+                            // write buffer in MS
+                            this.updateBlockInMS(i, currBlock);
 
                             await sleep(1500);
                         }
