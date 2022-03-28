@@ -401,7 +401,7 @@ export default class TOF extends File {
                         if (animate) {
                             currElement = bufferElement
                                 .select(`.bloc-body ul li:nth-child(${k + 1})`)
-                                .style("background", "#34ffbd")
+                                .style("background", "#34ffbd");
 
                             currElement.select("span")
                                 .transition()
@@ -419,7 +419,7 @@ export default class TOF extends File {
                             await sleep(1000);
 
                             currElement
-                                .style("background", "#9CA3AF")
+                                .style("background", "#9CA3AF");
                         }
 
                         k -= 1;
@@ -908,7 +908,43 @@ export default class TOF extends File {
         }
     }
 
-    async editEnreg(key) {
+    async editEnreg(key, field1, field2, removed = false, animate = false) {
+        let {found, pos, readTimes} = await this.search(key, animate);
+        let {i, j} = pos
+        let writeTimes;
+
+        let currElement;
+        let bufferElement;
+        let block;
+
+        if (found) {
+            block = this.blocks[i];
+            block.enregs[j].field1 = field1;
+            block.enregs[j].field2 = field2;
+            block.enregs[j].removed = removed;
+
+            this.blocks[i] = block;
+            writeTimes = 1;
+
+            if (animate) {
+                this.buff
+                    .select(`.bloc .bloc-body ul li:nth-child(${j + 1})`)
+                    .transition()
+                    .duration(500 * delay)
+                    .style("background", "#34ffbd");
+
+                await sleep(1000);
+
+                this.updateBlockInMS(i, block);
+
+                this.updateIOTimes(readTimes, writeTimes);
+                this.updateMCDescription("Editing was successful", "success");
+            }
+
+            return true;
+        } else {
+            return false;
+        }
 
     }
 }

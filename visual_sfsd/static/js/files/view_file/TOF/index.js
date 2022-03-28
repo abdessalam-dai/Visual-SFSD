@@ -35,11 +35,18 @@ const field2ToInsert = document.querySelector("#field2-to-insert");
 const insertBtn = document.querySelector("#insert-btn");
 
 
+const keyToEdit = document.querySelector("#key-to-edit");
+const field1ToEdit = document.querySelector("#field1-to-edit");
+const field2ToEdit = document.querySelector("#field2-to-edit");
+const editBtn = document.querySelector("#edit-btn");
+
+
 const changeButtonsState = (state) => {
     generateDataBtn.disabled = state
     searchBtn.disabled = state
     removeBtn.disabled = state
     insertBtn.disabled = state
+    editBtn.disabled = state
     removePhysicallyBtn.disabled = state
 }
 
@@ -215,6 +222,31 @@ function handleInsert() {
 }
 
 handleInsert()
+
+// END - Inert Enreg.
+
+
+
+// START - Inert Enreg.
+function handleEdit() {
+    editBtn.addEventListener("click", async function () {
+        changeButtonsState(true)
+
+        let key = parseInt(keyToEdit.value);
+        let field1 = field1ToEdit.value;
+        let field2 = field2ToEdit.value;
+
+        let editingResults = await newFile.editEnreg(key, field1, field2, false, true);
+
+        console.log(editingResults)
+
+        changeButtonsState(false)
+
+        newFile.createBoardsDOM()
+    });
+}
+
+handleEdit()
 
 // END - Inert Enreg.
 

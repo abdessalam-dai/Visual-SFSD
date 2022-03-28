@@ -193,7 +193,10 @@ export default class File {
                     .style("overflow-y", "hidden")
                     .style("overflow-x", "hidden")
                     .on("click", function (e, enreg) {
-                        console.log(enreg.key)
+                        alert(`key: ${enreg.key}
+                            field1: ${enreg.field1}
+                            field2: ${enreg.field2}
+                            removed: ${enreg.removed}`)
                     })
                     .on("mouseover", function () {
                         d3.select(this)
