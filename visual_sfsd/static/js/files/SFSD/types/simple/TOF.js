@@ -1,7 +1,13 @@
 import File from '../../structres/File.js';
 import Enreg from '../../structres/Enreg.js';
 import Block from '../../structres/Block.js';
-import {ENREG_SIZE, MAX_NB_ENREGS_DEFAULT} from "../../../constants.js";
+import {
+    ENREG_SIZE, MAX_NB_ENREGS_DEFAULT,
+    MAX_NB_BLOCKS,
+    ERROR_BG,
+    WARNING_BG,
+    SUCCESS_BG
+} from "../../../constants.js";
 
 let delay = 0.5;
 
@@ -20,11 +26,20 @@ function handleChangeAnimationSpeed() {
 }
 
 handleChangeAnimationSpeed();
-
 // END - Inert Enreg.
 
 export default class TOF extends File {
-    async search(key, animate = false, isRemoveCalling = false, isInsertCalling = false) {
+    async highlightInstruction(i) {
+        d3.selectAll(`.algorithm div`)
+            .attr("class", "no-highlight-instruction");
+
+        d3.select(".algorithm")
+            .select(`div:nth-child(${i + 1})`)
+            .attr("class", "highlight-instruction");
+        await sleep(1000);
+    }
+
+    async search(key, animate = false) {
         /*
             input :
                     key : key to search [Int]
@@ -41,14 +56,22 @@ export default class TOF extends File {
         let blocks = this.blocks;
         let nbBlocks = this.blocks.length;
 
-        let low = 0,
-            high = nbBlocks - 1;
+        let low = 0;
+        if (animate) {
+            await this.highlightInstruction(0);
+            await this.highlightInstruction(1);
+        }
+        let high = nbBlocks - 1;
 
         let i = 0,
             j = 0;
 
         let found = false,
             stop = false;
+
+        if (animate) {
+            await this.highlightInstruction(2);
+        }
 
         let midBlockElement;
         let bufferElement;
@@ -59,6 +82,10 @@ export default class TOF extends File {
         let readTimes = 0;
         // global search for block
         while (low <= high && !found && !stop) {
+            if (animate) {
+                await this.highlightInstruction(3);
+                await this.highlightInstruction(4);
+            }
             i = Math.floor((low + high) / 2);
             let midBlock = blocks[i];
             readTimes++;
@@ -77,27 +104,32 @@ export default class TOF extends File {
                 midBlockElement = this.MSBoard.select(`.bloc:nth-child(${i + 1})`);
 
                 await this.traverseBlockAnimation(i);
+                await this.highlightInstruction(5);
 
                 bufferElement = this.updateBufferElement(midBlockElement);
-
-                MCDescription = d3.select(".mc-description");
 
                 this.updateIOTimes(readTimes, 0);
             }
 
             // local search for enreg. inside block
+            if (animate) await this.highlightInstruction(6);
             if (key >= firstKey && key <= lastKey) {
                 if (animate) {
-                    MCDescription.style("background", "green")
-                        .text(`${key} ∈ [${lastKey}, ${firstKey}]`);
+                    this.updateMCDescription(`${key} ∈ [${lastKey}, ${firstKey}]`, "success");
                     await sleep(1000);
+
+                    await this.highlightInstruction(7);
                 }
 
                 let eLow = 0,
                     eHigh = midBlock.enregs.length - 1;
 
+                if (animate) await this.highlightInstruction(8);
                 while (eLow <= eHigh && !found) {
                     j = Math.floor((eLow + eHigh) / 2);
+
+                    if (animate) await this.highlightInstruction(10);
+
                     let currKey = midBlock.enregs[j].key;
 
                     if (animate) {
@@ -105,23 +137,31 @@ export default class TOF extends File {
                             .select(`li:nth-child(${j + 1})`);
                     }
 
+                    if (animate) await this.highlightInstruction(11);
                     if (key === currKey) {
                         found = true;
+                        if (animate) await this.highlightInstruction(12);
 
                         if (animate) {
                             elementBGColor = "#34ffbd"
                         }
-                    } else if (key < currKey) {
-                        eHigh = j - 1;
-
-                        if (animate) {
-                            elementBGColor = "#fd5564"
-                        }
                     } else {
-                        eLow = j + 1;
+                        if (animate) await this.highlightInstruction(14);
+                        if (key < currKey) {
+                            eHigh = j - 1;
+                            if (animate) await this.highlightInstruction(15);
 
-                        if (animate) {
-                            elementBGColor = "#fd5564"
+                            if (animate) {
+                                elementBGColor = "#fd5564"
+                            }
+                        } else {
+                            if (animate) await this.highlightInstruction(16);
+                            eLow = j + 1;
+                            if (animate) await this.highlightInstruction(17);
+
+                            if (animate) {
+                                elementBGColor = "#fd5564"
+                            }
                         }
                     }
 
@@ -138,24 +178,29 @@ export default class TOF extends File {
                     }
                 }
 
+                if (animate) await this.highlightInstruction(21);
                 if (eLow > eHigh) {
                     j = eLow;
+                    if (animate) await this.highlightInstruction(22);
                 }
                 stop = true;
+                if (animate) await this.highlightInstruction(24);
             } else if (key < firstKey) {
+                if (animate) await this.highlightInstruction(26);
                 if (animate) {
-                    MCDescription.style("background", "red")
-                        .text(`${key} ∉ [${lastKey}, ${firstKey}]`);
+                    this.updateMCDescription(`${key} ∉ [${lastKey}, ${firstKey}]`, "error");
                     await sleep(1000);
                 }
                 high = i - 1;
+                if (animate) await this.highlightInstruction(27);
             } else {  // key > lastKey
+                if (animate) await this.highlightInstruction(28);
                 if (animate) {
-                    MCDescription.style("background", "red")
-                        .text(`${key} ∉ [${lastKey}, ${firstKey}]`);
+                    this.updateMCDescription(`${key} ∉ [${lastKey}, ${firstKey}]`, "error");
                     await sleep(1000);
                 }
                 low = i + 1;
+                if (animate) await this.highlightInstruction(29);
             }
 
             if (animate) {
@@ -163,7 +208,9 @@ export default class TOF extends File {
             }
         }
 
+        if (animate) await this.highlightInstruction(33);
         if (low > high) {
+            if (animate) await this.highlightInstruction(34);
             if (high === -1) { // if no blocks have been added yet
                 i = 0;
                 j = 0;
@@ -190,45 +237,33 @@ export default class TOF extends File {
 
         if (animate) {
             if (found) {
-                let msg = `Element with key ${key} was found in the block ${i}, position ${j}`
-
-                if (isInsertCalling) {
-                    msg += ", insertion is impossible"
-                }
-
-                MCDescription.text(msg)
+                this.updateMCDescription(`Element with key=${key} was found in the block ${i}, position ${j}`, "success");
             } else {
                 elementBGColor = "#FF9D58"
-                let msg = `Element with key ${key} was not found`
-                if (!isRemoveCalling) {
-                    msg += `, it should be positioned in the block ${i}, position ${j}`
-                }
-                MCDescription
-                    .style("background", "red")
-                    .text(msg)
+                this.updateMCDescription(`Element with key=${key} was not found, it should be positioned in the block ${i}, position ${j}`, "error");
             }
 
             midElement = bufferElement.select(".bloc-body ul")
                 .select(`li:nth-child(${j + 1})`);
 
             if (!midElement) {
-                console.log(j)
                 midElement = bufferElement.select(".bloc-body ul")
-                    .select(`li:nth-child(${j + 1})`)
-                console.log(midElement.node())
+                    .select(`li:nth-child(${j + 1})`);
             }
 
             if (!isBlocksLengthExceeded) {
                 midElement
                     .transition()
                     .duration(300 * delay)
-                    .style("background", elementBGColor)
+                    .style("background", elementBGColor);
             }
 
             this.MSBoard.selectAll(".bloc").select(".bloc-header")
                 .transition()
                 .duration(600 * delay)
-                .style('background', "#0F172A")
+                .style('background', "#0F172A");
+
+            await sleep(1000);
         }
 
         return {
@@ -241,6 +276,37 @@ export default class TOF extends File {
         }
     }
 
+    isInsertionAllowed() {
+        // allow insertion only if the maximum capacity of blocks isn't reached
+        if (this.blocks.length === 0) {
+            return true;
+        } else if (this.blocks[this.blocks.length - 1].enregs.length < MAX_NB_ENREGS_DEFAULT) {
+            return true;
+        } else if (this.blocks.length < MAX_NB_BLOCKS) {
+            return true;
+        }
+
+        return false;
+    }
+
+    updateMCDescription(message, status) { // here, status can be error, warning or success
+        let bg;
+        switch (status) {
+            case "error":
+                bg = ERROR_BG;
+                break;
+            case "warning":
+                bg = WARNING_BG;
+                break;
+            default:
+                bg = SUCCESS_BG;
+        }
+
+        let MCDescription = d3.select(".mc-description")
+            .text(message)
+            .style("background", bg);
+    }
+
     async insert(key, field1, field2, removed = false, animate) {
         /*
             input :
@@ -249,11 +315,11 @@ export default class TOF extends File {
                     field2 :    [String]
                     removed     [Boolean]
             output :
-                    [Boolean] ==> if enreg. is inserted return true, else false (if key already exits !)
+                    [Boolean] ==> if enreg. is inserted return true, else false
         */
 
         // search if key already exists in the file
-        let searchResults = await this.search(key, animate, false, true);
+        let searchResults = await this.search(key, animate);
 
         let found = searchResults.found,
             i = searchResults.pos.i,
@@ -262,11 +328,29 @@ export default class TOF extends File {
         let writeTimes = 0;
         let midBlockElement;
         let bufferElement;
-        let tempVariableElement;
+        // let tempVariableElement;
         let currElement;
         let jthElement;
 
-        if (!found) {
+        if (!this.isInsertionAllowed()) {
+            if (animate) {
+                this.updateMCDescription("Insertion is impossible! Maximum number of blocks has been reached", "error");
+            }
+
+            return false;
+        }
+
+        if (found) {
+            if (animate) {
+                this.updateMCDescription(`Insertion is impossible! An element with key=${key} already exists`, "error");
+            }
+
+            return false;
+        } else {
+            if (animate) {
+                this.updateMCDescription(`Element with key=${key} should be positioned in the block ${i}, position ${j}`, "success");
+            }
+
             let newEnreg = new Enreg(key, field1, field2, removed);
 
             if (this.blocks.length === 0) {
@@ -284,7 +368,6 @@ export default class TOF extends File {
                 while (continueShifting && i < this.blocks.length) {
                     currBlock = this.blocks[i];  // read current block
                     readTimes++;
-
 
                     if (animate) {
                         this.updateIOTimes(readTimes, writeTimes);
@@ -305,10 +388,10 @@ export default class TOF extends File {
                     lastIndex = currBlock.nb - 1;
                     lastEnreg = currBlock.enregs[lastIndex]; // save last enreg.
 
-                    if (animate) {
-                        tempVariableElement = d3.select(".temp-variable")
-                            .text(`${lastEnreg.key}`);
-                    }
+                    // if (animate) {
+                    //     tempVariableElement = d3.select(".temp-variable")
+                    //         .text(`${lastEnreg.key}`);
+                    // }
 
                     k = lastIndex;
 
@@ -479,11 +562,10 @@ export default class TOF extends File {
 
             if (animate) {
                 this.updateIOTimes(readTimes, writeTimes);
+                this.updateMCDescription("Insertion was successful", "success");
             }
 
             return true;
-        } else {
-            return false;
         }
     }
 
@@ -546,7 +628,7 @@ export default class TOF extends File {
                     true :   if the process of deletion went correctly 
                     false :  if the key does not exist
        */
-        let {found, pos, readTimes} = await this.search(key, animate, true)
+        let {found, pos, readTimes} = await this.search(key, animate);
         let {i, j} = pos
         let writeTimes;
 
@@ -569,8 +651,9 @@ export default class TOF extends File {
                     .transition()
                     .duration(500 * delay)
                     .style("color", "#a70000");
-                
+
                 this.updateIOTimes(readTimes, writeTimes);
+                this.updateMCDescription("Removing was successful", "success");
             }
 
             return true;
@@ -610,6 +693,9 @@ export default class TOF extends File {
                 .attr("class", "bloc w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0")
                 .style("height", "352px")
                 .html(blockElement.html());
+
+            buff.select(".bloc-header .bloc-index")
+                .text("Buffer 1");
 
             buff.select(".bloc-header .bloc-address").remove();
 
@@ -652,7 +738,7 @@ export default class TOF extends File {
                     true :   if the process of deletion went correctly
                     false :  if the key does not exist
        */
-        let {found, pos, readTimes} = await this.search(key, animate, true);
+        let {found, pos, readTimes} = await this.search(key, animate);
         let {i, j} = pos;
         let writeTimes = 0;
 
@@ -712,7 +798,7 @@ export default class TOF extends File {
                                 .text(`${currBlock.enregs[k + 1].key}`)
                                 .transition()
                                 .duration(300 * delay)
-                                .style("transform", "translate(0, 0)")
+                                .style("transform", "translate(0, 0)");
 
                             await sleep(600);
 
@@ -813,11 +899,16 @@ export default class TOF extends File {
 
             if (animate) {
                 this.updateIOTimes(readTimes, writeTimes);
+                this.updateMCDescription("Removing physically was successful", "success");
             }
 
             return true;
         } else {
             return false;
         }
+    }
+
+    async editEnreg(key) {
+
     }
 }

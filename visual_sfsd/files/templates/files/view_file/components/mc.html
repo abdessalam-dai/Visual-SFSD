@@ -1,8 +1,9 @@
 {% load static %}
-
+{% include "files/view_file/components/complexity.html" %}
 <div class="mc w-1/6 bg-blue-300 flex flex-col justify-between">
-    <div class="mc-key text-center font-medium" style="padding: 10px 10px">Key = </div>
-    <div class="mc-description text-center font-medium" style="padding: 10px 10px; ; color: #fff"></div>
+    <div class="mc-key text-center font-medium" style="padding: 10px 10px">Key =</div>
+    <div class="mc-description text-center font-medium"
+         style="padding: 10px 10px; ; color: #fff; font-size: 1.2em"></div>
     <div class="buf flex flex-row justify-center">
         <div class="bloc w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0" style="height: 352px;">
             <div class="bloc-header text-white px-3 items-center font-medium  h-8 rounded-t-lg w-full flex flex-row justify-between bg-slate-900">
@@ -27,12 +28,62 @@
             </div>
         </div>
     </div>
-    <div class="temp-variable" style="border: 1px solid red; margin: 0 30px">temp</div>
+    {#    <div class="temp-variable" style="border: 1px solid red; margin: 0 30px">temp</div>#}
     <div class="mc-footer flex px-2 flex-row justify-between items-center">
         <img src="{% static 'imgs/upMS.svg' %}" class="w-6" alt="">
         <span class="text-sm font-semibold text-gray-800 bottom-0">MC</span>
     </div>
 </div>
+
+<div class="algorithm">
+    <div><div></div>bs ← entete( F,1 ); </div>
+    <div><div></div>bi ← 1; </div>
+    <div> <div></div>Trouv ← faux; stop ← faux; j ← 1; </div>
+    <div> <div></div><b>TQ</b> ( bi ≤ bs et Non Trouv et Non stop ) </div>
+    <div> <div></div>&emsp;i ← (bi + bs) div 2; </div>
+    <div> <div></div>&emsp;LireDir( F, i, buf ); </div>
+    <div> <div></div>&emsp;<b>SI</b> ( c ≥ buf.tab[1].cle et c ≤ buf.tab[buf.NB].cle ) </div>
+    <div> <div></div>&emsp;&emsp;inf ← 1; sup ← buf.NB; </div>
+    <div> <div></div>&emsp;&emsp;<b>TQ</b> (inf ≤ sup et Non Trouv) </div>
+    <div> <div></div>&emsp;&emsp;&emsp;// recherche interne </div>
+    <div> <div></div>&emsp;&emsp;&emsp;j ← (inf + sup) div 2; </div>
+    <div> <div></div>&emsp;&emsp;&emsp;<b>SI</b> (c = buf.tab[j].cle) </div>
+    <div> <div></div>&emsp;&emsp;&emsp;&emsp;Trouv ← vrai</div>
+    <div> <div></div>&emsp;&emsp;&emsp;<b>SINON</b> </div>
+    <div> <div></div>&emsp;&emsp;&emsp;&emsp;<b>SI</b> (c < buf.tab[j].cle) </div>
+    <div> <div></div>&emsp;&emsp;&emsp;&emsp;&emsp;sup ← j-1 </div>
+    <div> <div></div>&emsp;&emsp;&emsp;&emsp;<b>SINON</b> </div>
+    <div> <div></div>&emsp;&emsp;&emsp;&emsp;&emsp;inf ← j+1 </div>
+    <div> <div></div>&emsp;&emsp;&emsp;&emsp;<b>FSI</b> </div>
+    <div> <div></div>&emsp;&emsp;&emsp;<b>FSI</b> </div>
+    <div> <div></div>&emsp;&emsp;<b>FTQ</b> </div>
+    <div> <div></div>&emsp;&emsp;<b>SI</b> ( inf > sup ) </div>
+    <div> <div></div>&emsp;&emsp;&emsp;j ← inf </div>
+    <div> <div></div>&emsp;&emsp;<b>FSI</b> </div>
+    <div> <div></div>&emsp;&emsp;stop ← vrai </div>
+    <div> <div></div>&emsp;<b>SINON</b> </div>
+    <div> <div></div>&emsp;&emsp;<b>SI</b> ( c < buf.tab[1].cle ) </div>
+    <div> <div></div>&emsp;&emsp;&emsp;bs ← i-1 </div>
+    <div> <div></div>&emsp;&emsp;<b>SINON</b> </div>
+    <div> <div></div>&emsp;&emsp;&emsp;bi ← i+1 </div>
+    <div> <div></div>&emsp;&emsp;<b>FSI</b> </div>
+    <div> <div></div>&emsp;<b>FSI</b> </div>
+    <div> <div></div><b>FTQ</b> </div>
+    <div> <div></div><b>SI</b> ( bi > bs ) </div>
+    <div> <div></div>&emsp;i ← bi ; j ← 1 </div>
+    <div> <div></div><b>FSI</b> </div>
+
+</div>
+
+<script>
+    let nbInstructions = d3.selectAll(".algorithm > div")
+        .nodes().length;
+    for (let i=0; i<nbInstructions; i++) {
+        d3.select(`.algorithm > div:nth-child(${i+1})`)
+            .select("div")
+            .text(i);
+    }
+</script>
 
 <script>
     calcMsHeight = () => {

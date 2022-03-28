@@ -2,40 +2,6 @@ import {SFSD, Block, Enreg} from '../../SFSD/SFSD.js';
 import TOF from "../../SFSD/types/simple/TOF.js";
 
 
-// ----------------------------------------------
-// const keyToSearchField = document.querySelector("#key-to-search");
-// const searchBtn = document.querySelector("#search-btn");
-//
-// searchBtn.addEventListener("click", function () {
-//     let key = parseInt(keyToSearchField.value);
-//
-//     let {
-//         found: found,
-//         pos: pos,
-//         traversedBlocks: traversedBlocks,
-//         traversedEnregs: traversedEnregs
-//     } = newFile.search(key);
-//
-//     let i = 0;
-//
-//     function myLoop() {
-//         setTimeout(function () {
-//             let blockIndex = traversedBlocks[i];
-//             newFile.display(blockIndex);
-//             i++;
-//             if (i < traversedBlocks.length) {
-//                 myLoop();
-//             }
-//         }, 400)
-//     }
-//
-//     myLoop()
-//
-//     // console.table(data.blocks)
-//     console.log(traversedEnregs)
-// });
-
-
 // START - Create file
 const buff = d3.select(".buf");
 const buff2 = d3.select(".buf2");
@@ -47,15 +13,6 @@ let newFile = new TOF(
     buff2,
     MSBoard,
 );
-
-// newFile.insert(
-//     0,
-//     "dai",
-//     "abdou",
-//     false,
-// )
-//
-// newFile.display()
 
 // END - Create file
 
@@ -90,7 +47,7 @@ const changeButtonsState = (state) => {
 
 
 // START - Fill with dummy data
-const n = 30;
+const n = 24;
 const min = 0;
 const max = 100;
 

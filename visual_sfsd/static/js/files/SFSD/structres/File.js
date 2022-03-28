@@ -3,9 +3,6 @@ import {
     NB_BLOCKS_DEFAULT,
     NB_INSERTIONS_DEFAULT,
     BLOCKS_DEFAULT,
-    BLOCK_WIDTH,
-    BLOCK_HEIGHT,
-    SPACE_BETWEEN_BLOCKS,
 } from '../../constants.js';
 
 
@@ -39,7 +36,7 @@ export default class File {
     }
 
     createBoardsDOM() {
-        this.MSBoard.selectAll("*").remove()
+        this.MSBoard.selectAll("*").remove();
 
         const blocDiv = `
         <div class="bloc w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0" style="height: 352px;">
@@ -91,7 +88,6 @@ export default class File {
             });
 
         // CREATING THE TOOL TIP FOR INDEX
-
         this.MSBoard.selectAll(".bloc-index")
             .append("div")
             .attr("class", "tool-tip-index")

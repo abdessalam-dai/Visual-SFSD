@@ -40,6 +40,37 @@
             scroll-behavior: smooth;
             padding: 45px 10px;
         }
+
+        .algorithm {
+            position: absolute;
+            width: 700px;
+            height: 400px;
+            top: 0;
+            left: calc(50% - 350px);
+            padding: 20px 0;
+            background: #9ca3af;
+            overflow-y: scroll;
+        }
+
+        .algorithm div {
+            padding: 1px 25px 0 5px;
+            font-size: 1.2em;
+        }
+
+        .algorithm div div {
+            width: 40px;
+            display: inline-block;
+            color: #374151;
+        }
+
+        .algorithm .highlight-instruction {
+            background: #eee !important;
+        }
+
+        .algorithm .no-highlight-instruction {
+            background: none !important;
+        }
+
     </style>
 {% endblock %}
 
@@ -79,7 +110,6 @@
     Slow<input type="range" id="animation-speed-bar" min="0" max="190"/>Fast
     <br>
 
-    {% include "files/view_file/components/complexity.html"%}
     <div class="flex flex-row items-center justify-between">
         {% include "files/view_file/components/toolsbar.html" %}
         {% include "files/view_file/components/ms.html" %}
