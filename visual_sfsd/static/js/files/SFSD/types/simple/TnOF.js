@@ -62,21 +62,40 @@ export default class TnOF extends File {
         */
 
         // if the key does not exist
+
+        let searchResults = this.search(key);
+        let found = searchResults.found,
+            i = searchResults.pos.i,
+            j = searchResults.pos.j;
+
         if (!this.search(key).found) {
             let newEnreg = new Enreg(key, field1, field2, removed); // create a new enreg.
-            let lastBlock = this.blocks[this.blocks.length - 1];
+            this.nbInsertions += 1; // increment the number of insertion in the file
 
-            // check if here is enough space last block
-            if (lastBlock.enregs.length < this.maxNbEnregs) {
-                this.blocks[lastBlock].enregs.push(newEnreg);
-            } else {
-                // create a new block and append to it the new enreg.
+            //handle the case when it's the first time we create a block
+
+            if (this.blocks.length === 0) {
                 let newBlock = new Block();
-                this.blocks.push(newBlock);
                 newBlock.enregs.push(newEnreg);
-                this.nbBlocks += 1;
+                this.blocks.push(newBlock)
+                newBlock.nb++; // increment the number of nb = number of enreg
             }
-
+            else {
+                let lastBlock = this.blocks[this.blocks.length - 1];
+                console.log(lastBlock.nb)
+                if (lastBlock.enregs.length < this.maxNbEnregs) {
+                    lastBlock.enregs.push(newEnreg);
+                    lastBlock.nb++; // increment the number of nb = number of enreg
+                } else {
+                    // create a new block and append to it the new enreg.
+                    let newBlock = new Block();
+                    this.blocks.push(newBlock);
+                    newBlock.enregs.push(newEnreg);
+                    this.nbBlocks += 1;
+                    newBlock.nb++; // increment the number of nb = number of enreg
+                }
+            }
+            console.log(this.blocks)
             return true;
         }
         else {
