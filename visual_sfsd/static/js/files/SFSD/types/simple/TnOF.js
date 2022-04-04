@@ -82,6 +82,7 @@ export default class TnOF extends File {
             if (this.blocks.length === 0) {
                 let address = this.setBlockAddress(0)
                 let newBlock = new Block([newEnreg], 1 , address);
+                this.nbBlocks += 1;
                 this.blocks.push(newBlock)
             }
             else {
@@ -119,6 +120,32 @@ export default class TnOF extends File {
             return true;
         }
         else {
+            return false;
+        }
+    }
+
+    removePhysically(key) {
+        let {found , pos , readTimes} = this.search(key);
+        let {i , j} = pos;
+        let indexOfLastEnreg = this.blocks[this.blocks.length - 1].nb -1;
+        let lastEnreg = this.blocks[this.blocks.length - 1].enregs[indexOfLastEnreg]
+        if (found) {
+            // we replace the enreg to delete physically with the last enreg;
+            this.blocks[i].enregs[j] = lastEnreg;
+
+            // if the last enreg is the only enreg in the block
+            if (indexOfLastEnreg === 0) {
+                this.blocks[this.blocks.length - 1].enregs.pop(); // in reality just an extra instruction
+                this.blocks.pop();
+                this.nbBlocks--;
+            } else {
+                this.blocks[this.blocks.length - 1].enregs.pop();
+                this.blocks[this.blocks.length - 1].nb--;
+            }
+
+            this.nbInsertions--;
+            return true;
+        } else {
             return false;
         }
     }
