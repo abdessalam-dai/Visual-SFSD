@@ -1,8 +1,6 @@
 import {SFSD, Block, Enreg} from '../../SFSD/SFSD.js';
 import TnOF from "../../SFSD/types/simple/TnOF.js";
 
-console.log("test")
-
 // START - Create file
 const buff = d3.select(".buf");
 const buff2 = d3.select(".buf2");
