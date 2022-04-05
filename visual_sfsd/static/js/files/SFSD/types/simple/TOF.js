@@ -6,7 +6,12 @@ import {
     MAX_NB_BLOCKS,
     ERROR_BG,
     WARNING_BG,
-    SUCCESS_BG
+    SUCCESS_BG,
+    ENREG_HIGHLIGHT_GREY,
+    ENREG_HIGHLIGHT_GREEN,
+    ENREG_HIGHLIGHT_ORANGE,
+    ENREG_HIGHLIGHT_RED,
+    ENREG_HIGHLIGHT_PURPLE
 } from "../../../constants.js";
 
 let delay = 0.5;
@@ -26,33 +31,20 @@ function handleChangeAnimationSpeed() {
 }
 
 handleChangeAnimationSpeed();
-// END - Inert Enreg.
+// END - Change animation speed.
 
 export default class TOF extends File {
     async highlightInstruction(i) {
-        d3.selectAll(`.algorithm div`)
-            .attr("class", "no-highlight-instruction");
-
-        d3.select(".algorithm")
-            .select(`div:nth-child(${i + 1})`)
-            .attr("class", "highlight-instruction");
-        await sleep(1000);
+        // d3.selectAll(`.algorithm div`)
+        //     .attr("class", "no-highlight-instruction");
+        //
+        // d3.select(".algorithm")
+        //     .select(`div:nth-child(${i + 1})`)
+        //     .attr("class", "highlight-instruction");
+        // await sleep(1000);
     }
 
     async search(key, animate = false) {
-        /*
-            input :
-                    key : key to search [Int]
-            output :
-                    {
-                        found : [Boolean]
-                        pos : {
-                            i: [Int],
-                            j: [Int]
-                        }
-                    }
-        */
-
         let blocks = this.blocks;
         let nbBlocks = this.blocks.length;
 
@@ -95,15 +87,12 @@ export default class TOF extends File {
                 lastKey = midBlock.enregs[midBlockNb - 1].key;
 
             if (animate) {
-                d3.select(".mc-key")
-                    .text(`Key = ${key}`);
-
                 console.log(this.blocks[i]);
                 console.log(i);
 
                 midBlockElement = this.MSBoard.select(`.bloc:nth-child(${i + 1})`);
 
-                await this.traverseBlockAnimation(i);
+                await this.traverseBlockAnimation(i, delay);
                 await this.highlightInstruction(5);
 
                 bufferElement = this.updateBufferElement(midBlockElement);
@@ -143,7 +132,7 @@ export default class TOF extends File {
                         if (animate) await this.highlightInstruction(12);
 
                         if (animate) {
-                            elementBGColor = "#34ffbd"
+                            elementBGColor = ENREG_HIGHLIGHT_GREEN
                         }
                     } else {
                         if (animate) await this.highlightInstruction(14);
@@ -152,7 +141,7 @@ export default class TOF extends File {
                             if (animate) await this.highlightInstruction(15);
 
                             if (animate) {
-                                elementBGColor = "#fd5564"
+                                elementBGColor = ENREG_HIGHLIGHT_RED
                             }
                         } else {
                             if (animate) await this.highlightInstruction(16);
@@ -160,7 +149,7 @@ export default class TOF extends File {
                             if (animate) await this.highlightInstruction(17);
 
                             if (animate) {
-                                elementBGColor = "#fd5564"
+                                elementBGColor = ENREG_HIGHLIGHT_RED
                             }
                         }
                     }
@@ -173,7 +162,7 @@ export default class TOF extends File {
                             .transition()
                             .delay(600 * delay)
                             .duration(300 * delay)
-                            .style("background", "#9CA3AF");
+                            .style("background", ENREG_HIGHLIGHT_GREY);
                         await sleep(1000);
                     }
                 }
@@ -239,7 +228,7 @@ export default class TOF extends File {
             if (found) {
                 this.updateMCDescription(`Element with key=${key} was found in the block ${i}, position ${j}`, "success");
             } else {
-                elementBGColor = "#FF9D58"
+                elementBGColor = ENREG_HIGHLIGHT_ORANGE;
                 this.updateMCDescription(`Element with key=${key} was not found, it should be positioned in the block ${i}, position ${j}`, "error");
             }
 
@@ -258,10 +247,7 @@ export default class TOF extends File {
                     .style("background", elementBGColor);
             }
 
-            this.MSBoard.selectAll(".bloc").select(".bloc-header")
-                .transition()
-                .duration(600 * delay)
-                .style('background', "#0F172A");
+            await this.resetBlocksHeaders(delay);
 
             await sleep(1000);
         }
@@ -276,62 +262,7 @@ export default class TOF extends File {
         }
     }
 
-    isInsertionAllowed() {
-        // allow insertion only if the maximum capacity of blocks isn't reached
-        if (this.blocks.length === 0) {
-            return true;
-        } else if (this.blocks[this.blocks.length - 1].enregs.length < MAX_NB_ENREGS_DEFAULT) {
-            return true;
-        } else if (this.blocks.length < MAX_NB_BLOCKS) {
-            return true;
-        }
-
-        return false;
-    }
-
-    updateMCDescription(message, status) { // here, status can be error, warning or success
-        let bg;
-        switch (status) {
-            case "error":
-                bg = ERROR_BG;
-                break;
-            case "warning":
-                bg = WARNING_BG;
-                break;
-            default:
-                bg = SUCCESS_BG;
-        }
-
-        let MCDescription = d3.select(".mc-description")
-            .text(message)
-            .style("background", bg);
-    }
-
     async insert(key, field1, field2, removed = false, animate) {
-        /*
-            input :
-                    key :       [Int]
-                    field1 :    [String]
-                    field2 :    [String]
-                    removed     [Boolean]
-            output :
-                    [Boolean] ==> if enreg. is inserted return true, else false
-        */
-
-        // search if key already exists in the file
-        let searchResults = await this.search(key, animate);
-
-        let found = searchResults.found,
-            i = searchResults.pos.i,
-            j = searchResults.pos.j;
-        let readTimes = searchResults.readTimes;
-        let writeTimes = 0;
-        let midBlockElement;
-        let bufferElement;
-        // let tempVariableElement;
-        let currElement;
-        let jthElement;
-
         if (!this.isInsertionAllowed()) {
             if (animate) {
                 this.updateMCDescription("Insertion is impossible! Maximum number of blocks has been reached", "error");
@@ -339,6 +270,19 @@ export default class TOF extends File {
 
             return false;
         }
+
+        let searchResults = await this.search(key, animate);
+
+        let found = searchResults.found,
+            i = searchResults.pos.i,
+            j = searchResults.pos.j;
+
+        let readTimes = searchResults.readTimes;
+        let writeTimes = 0;
+        let midBlockElement;
+        let bufferElement;
+        let currElement;
+        let jthElement;
 
         if (found) {
             if (animate) {
@@ -354,13 +298,11 @@ export default class TOF extends File {
             let newEnreg = new Enreg(key, field1, field2, removed);
 
             if (this.blocks.length === 0) {
-                let enregs = [newEnreg];
-                // it is the first block
-                const address = this.setBlockAddress(0);
-                let newBlock = new Block(enregs, 1, address);
+                let address = this.setBlockAddress(0);
+                let newBlock = new Block([newEnreg], 1, address);
                 this.blocks.push(newBlock);
-                writeTimes++;
                 this.nbBlocks += 1;
+                writeTimes++;
             } else {
                 let continueShifting = true;
                 let currBlock, lastIndex, lastEnreg, k;
@@ -374,24 +316,19 @@ export default class TOF extends File {
 
                         midBlockElement = this.MSBoard.select(`.bloc:nth-child(${i + 1})`)
 
-                        await this.traverseBlockAnimation(i);
+                        await this.traverseBlockAnimation(i, delay);
 
                         bufferElement = this.updateBufferElement(midBlockElement);
 
                         jthElement = bufferElement
                             .select(`.bloc-body ul li:nth-child(${j + 1})`)
-                            .style("background", "#9043ef");
+                            .style("background", ENREG_HIGHLIGHT_PURPLE);
 
                         await sleep(1000);
                     }
 
                     lastIndex = currBlock.nb - 1;
                     lastEnreg = currBlock.enregs[lastIndex]; // save last enreg.
-
-                    // if (animate) {
-                    //     tempVariableElement = d3.select(".temp-variable")
-                    //         .text(`${lastEnreg.key}`);
-                    // }
 
                     k = lastIndex;
 
@@ -401,7 +338,7 @@ export default class TOF extends File {
                         if (animate) {
                             currElement = bufferElement
                                 .select(`.bloc-body ul li:nth-child(${k + 1})`)
-                                .style("background", "#34ffbd");
+                                .style("background", ENREG_HIGHLIGHT_GREEN);
 
                             currElement.select("span")
                                 .transition()
@@ -419,7 +356,7 @@ export default class TOF extends File {
                             await sleep(1000);
 
                             currElement
-                                .style("background", "#9CA3AF");
+                                .style("background", ENREG_HIGHLIGHT_GREY);
                         }
 
                         k -= 1;
@@ -443,7 +380,7 @@ export default class TOF extends File {
 
                         jthElement.transition()
                             .duration(300 * delay)
-                            .style("background", "#9CA3AF");
+                            .style("background", ENREG_HIGHLIGHT_GREY);
 
                         await sleep(1300);
                     }
@@ -456,7 +393,7 @@ export default class TOF extends File {
                         if (animate) {
                             bufferElement.select(".bloc .bloc-body ul")
                                 .append("li")
-                                .style("background", "#34ffbd")
+                                .style("background", ENREG_HIGHLIGHT_GREEN)
                                 .attr("class", "border-b-2 h-10 flex justify-center flex-col")
                                 .append("span")
                                 .text(`${newEnreg.key}`);
@@ -483,7 +420,7 @@ export default class TOF extends File {
                             if (animate) {
                                 bufferElement.select(".bloc .bloc-body ul")
                                     .append("li")
-                                    .style("background", "#34ffbd")
+                                    .style("background", ENREG_HIGHLIGHT_GREEN)
                                     .attr("class", "border-b-2 h-10 flex justify-center flex-col")
                                     .append("span")
                                     .text(`${lastEnreg.key}`);
@@ -514,41 +451,14 @@ export default class TOF extends File {
                 }
 
                 if (i > this.nbBlocks - 1) {
-                    let enregs = [newEnreg];
-                    const address = this.setBlockAddress(this.blocks.length - 1);
-                    let newBlock = new Block(enregs, 1, address);
+                    let address = this.setBlockAddress(this.blocks.length - 1);
+                    let newBlock = new Block([newEnreg], 1, address);
                     this.blocks.push(newBlock);
                     writeTimes++;
                     this.nbBlocks += 1;
 
                     if (animate) {
-                        this.buff.selectAll("*").remove()
-                        bufferElement = this.buff.append("div")
-                            .attr("class", "bloc w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0")
-                            .style("height", "352px");
-
-                        bufferElement.append("div")
-                            .attr("class", "bloc-header text-white px-3 items-center font-medium h-8 rounded-t-lg w-full flex flex-row justify-between bg-slate-900")
-
-                        bufferElement.select(".bloc .bloc-header")
-                            .append("span")
-                            .attr("class", "bloc-index")
-                            .text("Buffer 1");
-
-                        bufferElement.select(".bloc .bloc-header")
-                            .append("span")
-                            .attr("class", "bloc-nb")
-                            .text("NB=1");
-
-                        bufferElement.append("div")
-                            .attr("class", "bloc-body w-full h-80 bg-gray-400 rounded-b-lg")
-                            .append("ul")
-                            .attr("class", "text-lg font-medium text-center")
-                            .append("li")
-                            .style("background", "#34ffbd")
-                            .attr("class", "border-b-2 h-10 flex justify-center flex-col")
-                            .append("span")
-                            .text(`${newEnreg.key}`);
+                        this.createNewBlockInBuff(newEnreg);
 
                         await sleep(1000);
 
@@ -569,65 +479,7 @@ export default class TOF extends File {
         }
     }
 
-    setBlockAddress(index) {
-        if (index === 0) {
-            if (this.blocks.length === 0) {
-                return Math.floor(Math.random() * 10000000000).toString(16);
-            } else {
-                return Number((ENREG_SIZE + 1) + parseInt(this.blocks[0].blockAddress, 16)).toString(16)
-            }
-        } else {
-            return Number(index * ENREG_SIZE + parseInt(this.blocks[0].blockAddress, 16)).toString(16)
-        }
-    }
-
-    updateBlockInMS(i, block) {
-        let blockElement = this.MSBoard.select(`.bloc:nth-child(${i + 1})`);
-
-        console.log(blockElement.node())
-
-        blockElement.select(".bloc-body ul")
-            .selectAll("li")
-            .remove();
-
-        blockElement
-            .select(".bloc-body ul")
-            .selectAll("li")
-            .data(block.enregs)
-            .enter()
-            .append("li")
-            .attr("class", "border-b-2 h-10 flex justify-center flex-col")
-            .style("color", function (enreg) {
-                return enreg.removed ? "#a70000" : "black"
-            })
-            .style("cursor", "pointer")
-            .style("overflow-y", "hidden")
-            .style("overflow-x", "hidden")
-            .on("click", function (e, enreg) {
-                console.log(enreg.key)
-            })
-            .on("mouseover", function () {
-                d3.select(this)
-                    .style("background", "gray")
-            })
-            .on("mouseout", function () {
-                d3.select(this)
-                    .style("background", "#9CA3AF")
-            })
-            .append("span")
-            .text(function (enreg) {
-                return enreg.key
-            });
-    }
-
     async removeLogically(key, animate = false) {
-        /*
-           input :
-                    key :    key to remove [Int]
-           output :
-                    true :   if the process of deletion went correctly 
-                    false :  if the key does not exist
-       */
         let {found, pos, readTimes} = await this.search(key, animate);
         let {i, j} = pos
         let writeTimes;
@@ -654,6 +506,8 @@ export default class TOF extends File {
 
                 this.updateIOTimes(readTimes, writeTimes);
                 this.updateMCDescription("Removing was successful", "success");
+
+                this.createBoardsDOM();
             }
 
             return true;
@@ -662,82 +516,7 @@ export default class TOF extends File {
         }
     }
 
-    async traverseBlockAnimation(i) {
-        let midBlockElement = this.MSBoard.select(`.bloc:nth-child(${i + 1})`);
-
-        midBlockElement.transition()
-            .duration(600 * delay)
-            .style("transform", "translate(0, -10px)")
-            .select('.bloc-header')
-            .style('background', "#1765ba");
-
-        midBlockElement.transition()
-            .delay(600 * delay)
-            .duration(600 * delay)
-            .style("transform", "translate(0, 0)");
-    }
-
-    updateBufferElement(blockElement, bufferIndex = 1) {
-        // scroll to blockElement
-        let msLeft = this.MSBoard.node().offsetLeft;
-        let blockLeft = blockElement.node().offsetLeft;
-
-        this.MSBoard.node().scroll({
-            left: blockLeft - msLeft - 240,
-            behavior: "smooth",
-        });
-
-        if (bufferIndex === 1) {
-            this.buff.selectAll("*").remove()
-            let buff = this.buff.append("div")
-                .attr("class", "bloc w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0")
-                .style("height", "352px")
-                .html(blockElement.html());
-
-            buff.select(".bloc-header .bloc-index")
-                .text("Buffer 1");
-
-            buff.select(".bloc-header .bloc-address").remove();
-
-            buff.selectAll(".bloc-header span")
-                .select("div")
-                .remove();
-            return buff;
-        } else {
-            this.buff2.selectAll("*").remove()
-            let buff = this.buff2.append("div")
-                .attr("class", "bloc w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0")
-                .style("height", "352px")
-                .html(blockElement.html());
-
-            buff.select(".bloc-header .bloc-index")
-                .text("Buffer 2");
-
-            buff.select(".bloc-header .bloc-address").remove();
-
-            buff.selectAll(".bloc-header span")
-                .select("div")
-                .remove();
-            return buff;
-        }
-    }
-
-    updateIOTimes(readTimes, writeTimes) {
-        d3.select(".complexity-in-reading")
-            .text(`Number of reads : ${readTimes}`);
-
-        d3.select(".complexity-in-writing")
-            .text(`Number of writes : ${writeTimes}`);
-    }
-
     async removePhysically(key, animate = false) {
-        /*
-           input :
-                    key :    key to remove [Int]
-           output :
-                    true :   if the process of deletion went correctly
-                    false :  if the key does not exist
-       */
         let {found, pos, readTimes} = await this.search(key, animate);
         let {i, j} = pos;
         let writeTimes = 0;
@@ -762,13 +541,13 @@ export default class TOF extends File {
 
                     midBlockElement = this.MSBoard.select(`.bloc:nth-child(${i + 1})`)
 
-                    await this.traverseBlockAnimation(i);
+                    await this.traverseBlockAnimation(i, delay);
 
                     bufferElement = this.updateBufferElement(midBlockElement, 1);
 
                     jthElement = bufferElement
                         .select(`.bloc-body ul li:nth-child(${j + 1})`)
-                        .style("background", "#9043ef");
+                        .style("background", ENREG_HIGHLIGHT_PURPLE);
 
                     await sleep(1000);
                 }
@@ -785,7 +564,7 @@ export default class TOF extends File {
                         if (animate) {
                             currElement = bufferElement
                                 .select(`.bloc-body ul li:nth-child(${k + 1})`)
-                                .style("background", "#34ffbd");
+                                .style("background", ENREG_HIGHLIGHT_GREEN);
 
                             currElement.select("span")
                                 .transition()
@@ -803,7 +582,7 @@ export default class TOF extends File {
                             await sleep(600);
 
                             currElement
-                                .style("background", "#9CA3AF");
+                                .style("background", ENREG_HIGHLIGHT_GREY);
                         }
 
                         k++;
@@ -818,7 +597,7 @@ export default class TOF extends File {
                         if (animate) {
                             currElement = bufferElement
                                 .select(`.bloc-body ul li:nth-child(${currBlock.nb + 1})`)
-                                .style("background", "#9043ef");
+                                .style("background", ENREG_HIGHLIGHT_PURPLE);
 
                             currElement.select("span")
                                 .transition()
@@ -843,13 +622,12 @@ export default class TOF extends File {
                         let nextBlock = this.blocks[i + 1];
                         readTimes++;
 
-
                         if (animate) {
                             this.updateIOTimes(readTimes, writeTimes);
 
-                            nextBlockElement = this.MSBoard.select(`.bloc:nth-child(${i + 2})`)
+                            nextBlockElement = this.MSBoard.select(`.bloc:nth-child(${i + 2})`);
 
-                            await this.traverseBlockAnimation(i + 1);
+                            await this.traverseBlockAnimation(i + 1, delay);
 
                             buffer2Element = this.updateBufferElement(nextBlockElement, 2);
 
@@ -858,13 +636,13 @@ export default class TOF extends File {
                                 .transition()
                                 .ease(d3.easeLinear)
                                 .duration(300 * delay)
-                                .style("background", "#9043ef");
+                                .style("background", ENREG_HIGHLIGHT_PURPLE);
 
                             await sleep(2000);
 
                             currElement = bufferElement
                                 .select(`.bloc-body ul li:nth-child(${currBlock.nb})`)
-                                .style("background", "#34ffbd");
+                                .style("background", ENREG_HIGHLIGHT_GREEN);
 
                             currElement.select("span")
                                 .transition()
@@ -913,8 +691,6 @@ export default class TOF extends File {
         let {i, j} = pos
         let writeTimes;
 
-        let currElement;
-        let bufferElement;
         let block;
 
         if (found) {
@@ -931,7 +707,7 @@ export default class TOF extends File {
                     .select(`.bloc .bloc-body ul li:nth-child(${j + 1})`)
                     .transition()
                     .duration(500 * delay)
-                    .style("background", "#34ffbd");
+                    .style("background", ENREG_HIGHLIGHT_GREEN);
 
                 await sleep(1000);
 
@@ -945,6 +721,5 @@ export default class TOF extends File {
         } else {
             return false;
         }
-
     }
 }

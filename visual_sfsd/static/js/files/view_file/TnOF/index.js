@@ -1,4 +1,3 @@
-import {SFSD, Block, Enreg} from '../../SFSD/SFSD.js';
 import TnOF from "../../SFSD/types/simple/TnOF.js";
 
 // START - Create file
@@ -53,7 +52,7 @@ const changeButtonsState = (state) => {
 
 
 // START - Fill with dummy data
-const n = 20;
+const n = 24;
 const min = 0;
 const max = 100;
 
@@ -150,7 +149,7 @@ function handleSearch() {
             pos: pos,
             readTimes: readTimes
         } = await newFile.search(key, true);
-        console.log(found, pos  , readTimes)
+        console.log(found, pos, readTimes)
         changeButtonsState(false)
     });
 }

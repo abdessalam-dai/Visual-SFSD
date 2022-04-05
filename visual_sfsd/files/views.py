@@ -109,7 +109,13 @@ def file_view(request, pk):
             'file': file,
             'data': file.data
         }
-        return render(request, 'files/view_file/index.html', context)
+
+        if file.file_type == 'TOF':
+            template_path = 'files/view_file/TOF/index.html'
+        else:  # elif file.file_type == 'TnOF':
+            template_path = 'files/view_file/TnOF/index.html'
+
+        return render(request, template_path, context)
     except:
         raise Http404
 
@@ -117,28 +123,3 @@ def file_view(request, pk):
 def create_file(request):
     # form =
     return render(request, 'files/create_file/index.html')
-
-# def request_download_page(request):
-#     form = RequestDownloadForm()
-#
-#     if request.method == 'POST':
-#         form = RequestDownloadForm(request.POST)
-#         if form.is_valid():
-#             category = request.POST.get('category')
-#
-#             download = form.save(commit=False)
-#             download.owner = request.user
-#             download.save()
-#
-#             if category in ('COURS', 'MOVTV'):
-#                 video_quality = request.POST.get('video_quality')
-#
-#                 video = Video(download=download, quality=video_quality)
-#                 video.save()
-#
-#             messages.success(request, 'Form submission successful')
-#             return redirect('download', pk=download.id)
-#
-#     context = {'form': form}
-#     return render(request, 'base/request_download.html', context)
-#

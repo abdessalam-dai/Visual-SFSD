@@ -1,23 +1,35 @@
 import File from '../../structres/File.js';
 import Enreg from '../../structres/Enreg.js';
 import Block from '../../structres/Block.js';
-import {ENREG_SIZE} from "../../../constants.js";
+import {ENREG_HIGHLIGHT_GREEN, ENREG_HIGHLIGHT_PURPLE, ENREG_HIGHLIGHT_RED} from "../../../constants.js";
+
+
+let delay = 0.5;
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms * delay));
+}
+
+// START - Change animation speed.
+const animationSpeedBar = document.querySelector("#animation-speed-bar");
+
+function handleChangeAnimationSpeed() {
+    animationSpeedBar.addEventListener("change", function () {
+        delay = (200 - animationSpeedBar.value) / 100;
+        console.log(delay);
+    });
+}
+
+handleChangeAnimationSpeed();
+// END - Change animation speed.
 
 
 export default class TnOF extends File {
-    search(key) {
-        /*
-            input :
-                    key : key to search [Int]
-            output :
-                    {
-                        found : [Boolean]
-                        pos : {
-                            i: [Int],
-                            j: [Int]
-                        }
-                    }
-        */
+    async search(key, animate = false) {
+        let currBlockElement;
+        let bufferElement;
+        let midElement;
+        let elementBGColor;
 
         let nbBlocks = this.blocks.length;
 
@@ -29,19 +41,62 @@ export default class TnOF extends File {
         while (i < nbBlocks && !found) {
             let currBlock = this.blocks[i];
             readTimes++;
-            j = 0;
 
+            if (animate) {
+                currBlockElement = this.MSBoard.select(`.bloc:nth-child(${i + 1})`);
+
+                await this.traverseBlockAnimation(i, delay);
+
+                bufferElement = this.updateBufferElement(currBlockElement);
+
+                this.updateIOTimes(readTimes, 0);
+            }
+
+            j = 0;
             while (j < currBlock.nb && !found) {
+                if (animate) {
+                    midElement = bufferElement.select(".bloc-body ul")
+                        .select(`li:nth-child(${j + 1})`);
+                }
                 if (key === currBlock.enregs[j].key) {
                     found = true;
-                    break;
+                    elementBGColor = ENREG_HIGHLIGHT_GREEN;
                 } else {
                     j++;
+                    elementBGColor = ENREG_HIGHLIGHT_RED;
+                }
+
+                if (animate) {
+                    midElement
+                        .transition()
+                        .duration(600 * delay)
+                        .style("background", elementBGColor)
+                        .transition()
+                        .delay(600 * delay)
+                        .duration(300 * delay)
+                        .style("background", "#9CA3AF");
+                    await sleep(1000);
                 }
             }
+
             if (!found) {
-                i++;
+                if (i !== nbBlocks - 1) {
+                    i++;
+                } else {
+                    break;
+                }
             }
+        }
+
+        if (animate) {
+            if (found) {
+                this.updateMCDescription(`Element with key=${key} was found in the block ${i}, position ${j}`, "success");
+            } else {
+                this.updateMCDescription(`Element with key=${key} was not found, it should be positioned in the block ${i}, position ${j}`, "error");
+            }
+
+            await this.resetBlocksHeaders(delay);
+            await sleep(2000);
         }
 
         return {
@@ -54,131 +109,306 @@ export default class TnOF extends File {
         }
     }
 
-    insert(key, field1, field2, removed = false) {
-        /*
-            input :
-                    key :       [Int]
-                    field1 :    [String]
-                    field2 :    [String]
-                    removed     [Boolean]
-            output :
-                    [Boolean] ==> if enreg. is inserted return true, else false (if key already exits !)
-        */
+    async insert(key, field1, field2, removed = false, animate) {
+        if (!this.isInsertionAllowed()) {
+            if (animate) {
+                this.updateMCDescription("Insertion is impossible! Maximum number of blocks has been reached", "error");
+            }
 
-        // if the key does not exist
+            return false;
+        }
 
-        let searchResults = this.search(key);
+        let searchResults = await this.search(key, animate);
+
         let found = searchResults.found,
             i = searchResults.pos.i,
             j = searchResults.pos.j;
 
+        let readTimes = searchResults.readTimes;
+        let writeTimes = 0;
+        let lastBlockElement;
+        let bufferElement;
+        let currElement;
+        let jthElement;
 
-        if (!found) {
+        if (found) {
+            if (animate) {
+                this.updateMCDescription(`Insertion is impossible! An element with key=${key} already exists`, "error");
+            }
+
+            return false;
+        } else {
+            if (animate) {
+                this.updateMCDescription(`Element with key=${key} should be positioned in the block ${i}, position ${j}`, "success");
+            }
+
             let newEnreg = new Enreg(key, field1, field2, removed); // create a new enreg.
-            this.nbInsertions += 1; // increment the number of insertion in the file
 
             //handle the case when it's the first time we create a block
-
             if (this.blocks.length === 0) {
-                let address = this.setBlockAddress(0)
-                let newBlock = new Block([newEnreg], 1 , address);
+                let address = this.setBlockAddress(0);
+                let newBlock = new Block([newEnreg], 1, address);
+                this.blocks.push(newBlock);
                 this.nbBlocks += 1;
-                this.blocks.push(newBlock)
-            }
-            else {
+                writeTimes++;
+            } else {
                 let lastBlock = this.blocks[this.blocks.length - 1];
-                // console.log(lastBlock.nb)
+                readTimes++;
+
+                if (animate) {
+                    this.updateIOTimes(readTimes, writeTimes);
+
+                    lastBlockElement = this.MSBoard.select(`.bloc:nth-child(${i + 1})`)
+
+                    await this.traverseBlockAnimation(i, delay);
+
+                    bufferElement = this.updateBufferElement(lastBlockElement);
+
+                    await sleep(1000);
+                }
+
                 if (lastBlock.enregs.length < this.maxNbEnregs) {
+                    // if the last block is not full, then insert the new enreg. at the end
                     lastBlock.enregs.push(newEnreg);
-                    lastBlock.nb++; // increment the number of nb = number of enreg
+                    lastBlock.nb++;
+                    this.blocks[this.blocks.length - 1] = lastBlock;
+                    writeTimes++;
+
+                    if (animate) {
+                        bufferElement.select(".bloc .bloc-body ul")
+                            .append("li")
+                            .style("background", ENREG_HIGHLIGHT_GREEN)
+                            .attr("class", "border-b-2 h-10 flex justify-center flex-col")
+                            .append("span")
+                            .text(`${newEnreg.key}`);
+
+                        bufferElement.select(".bloc .bloc-header .bloc-nb")
+                            .text(`NB=${lastBlock.nb}`);
+
+                        await sleep(1000);
+
+                        // write buffer in MS
+                        this.updateBlockInMS(i, lastBlock);
+                    }
                 } else {
-                    // create a new block and append to it the new enreg.
-                    let newBlock = new Block();
+                    // else, create a new block and append to it the new enreg.
+                    let address = this.setBlockAddress(this.blocks.length - 1);
+                    let newBlock = new Block([newEnreg], 1, address);
                     this.blocks.push(newBlock);
-                    newBlock.enregs.push(newEnreg);
+                    writeTimes++;
                     this.nbBlocks += 1;
-                    newBlock.nb++; // increment the number of nb = number of enreg
-                    newBlock.blockAddress = this.setBlockAddress(this.blocks.length - 1);
+
+                    if (animate) {
+                        this.createNewBlockInBuff(newEnreg);
+
+                        await sleep(1000);
+
+                        // write buffer in MS
+                        this.updateBlockInMS(i, newBlock);
+                    }
                 }
             }
-            // console.log(this.blocks)
+
+            if (animate) {
+                this.updateIOTimes(readTimes, writeTimes);
+                this.updateMCDescription("Insertion was successful", "success");
+            }
+
+            this.nbInsertions += 1; // increment the number of insertion in the file
+
             return true;
-        }
-        else {
-            return false
         }
     }
 
-    removeLogically(key) {
-        let {found, pos, readTimes} =  this.search(key);
-        let {i, j} = pos;
+    async removeLogically(key, animate = false) {
+        let {found, pos, readTimes} = await this.search(key, animate);
+        let {i, j} = pos
         let writeTimes;
 
         if (found) {
             this.blocks[i].enregs[j].removed = true;
             writeTimes = 1;
+
+            if (animate) {
+                this.buff
+                    .select(`.bloc .bloc-body ul li:nth-child(${j + 1})`)
+                    .transition()
+                    .duration(500 * delay)
+                    .style("color", "#a70000");
+
+                await sleep(1000);
+
+                this.MSBoard
+                    .select(`.bloc:nth-child(${i + 1})`)
+                    .select(`.bloc-body ul li:nth-child(${j + 1})`)
+                    .transition()
+                    .duration(500 * delay)
+                    .style("color", "#a70000");
+
+                this.updateIOTimes(readTimes, writeTimes);
+                this.updateMCDescription("Removing was successful", "success");
+
+                this.createBoardsDOM();
+            }
+
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
 
-    removePhysically(key) {
-        let {found , pos , readTimes} = this.search(key);
-        let {i , j} = pos;
-        let indexOfLastEnreg = this.blocks[this.blocks.length - 1].nb -1;
-        let lastEnreg = this.blocks[this.blocks.length - 1].enregs[indexOfLastEnreg]
+    async removePhysically(key, animate = false) {
+        let {found, pos, readTimes} = await this.search(key, animate);
+        let {i, j} = pos;
+        let writeTimes = 0;
+
+        let currBlockElement;
+        let lastBlockElement;
+        let bufferElement;
+        let buffer2Element;
+        let jthElement;
+        let currElement;
+        let lastElement;
+
         if (found) {
-            // we replace the enreg to delete physically with the last enreg;
-            this.blocks[i].enregs[j] = lastEnreg;
+            let currBlock = this.blocks[i];
+            readTimes++;
+
+            if (animate) {
+                this.updateIOTimes(readTimes, writeTimes);
+
+                currBlockElement = this.MSBoard.select(`.bloc:nth-child(${i + 1})`)
+
+                await this.traverseBlockAnimation(i, delay);
+
+                bufferElement = this.updateBufferElement(currBlockElement, 1);
+
+                jthElement = bufferElement
+                    .select(`.bloc-body ul li:nth-child(${j + 1})`)
+                    .style("background", ENREG_HIGHLIGHT_PURPLE);
+
+                await sleep(1000);
+            }
+
+            let lastBlock = this.blocks[this.nbBlocks - 1];
+            readTimes++;
+
+            let indexOfLastEnreg = lastBlock.nb - 1;
+
+            // we replace the enreg to delete physically with the last enreg
+            currBlock.enregs[j] = lastBlock.enregs[indexOfLastEnreg];
+            this.blocks[i] = currBlock;
+            writeTimes++;
+
+            if (animate) {
+                this.updateIOTimes(readTimes, writeTimes);
+
+                lastBlockElement = this.MSBoard.select(`.bloc:nth-child(${this.blocks.length})`);
+
+                await this.traverseBlockAnimation(this.nbBlocks - 1, delay);
+
+                buffer2Element = this.updateBufferElement(lastBlockElement, 2);
+
+                lastElement = buffer2Element
+                    .select(`.bloc-body ul li:nth-child(${indexOfLastEnreg + 1})`);
+
+                lastElement.transition()
+                    .ease(d3.easeLinear)
+                    .duration(300 * delay)
+                    .style("background", ENREG_HIGHLIGHT_PURPLE);
+
+                await sleep(2000);
+
+                currElement = bufferElement
+                    .select(`.bloc-body ul li:nth-child(${j + 1})`)
+                    .style("background", ENREG_HIGHLIGHT_GREEN);
+
+                currElement.select("span")
+                    .transition()
+                    .duration(500 * delay)
+                    .style("transform", "translate(150px, 0)")
+                    .transition()
+                    .duration(0)
+                    .style("transform", "translate(-150px, 0)")
+                    .text(`${lastBlock.enregs[indexOfLastEnreg].key}`)
+                    .transition()
+                    .duration(500 * delay)
+                    .style("transform", "translate(0, 0)");
+
+                // write buffer in MS
+                this.updateBlockInMS(i, currBlock);
+
+                await sleep(2000);
+            }
+
+            lastBlock.enregs.pop(); // in reality just an extra instruction
+            lastBlock.nb--;
+            this.blocks[this.nbBlocks - 1] = lastBlock;
+            writeTimes++;
 
             // if the last enreg is the only enreg in the block
             if (indexOfLastEnreg === 0) {
-                this.blocks[this.blocks.length - 1].enregs.pop(); // in reality just an extra instruction
                 this.blocks.pop();
                 this.nbBlocks--;
-            } else {
-                this.blocks[this.blocks.length - 1].enregs.pop();
-                this.blocks[this.blocks.length - 1].nb--;
+            }
+
+            if (animate) {
+                lastElement.remove();
+                buffer2Element.select(".bloc .bloc-header .bloc-nb")
+                                .text(`NB=${lastBlock.nb}`);
+
+                if (lastBlock.nb > 0) {
+                    this.updateBlockInMS(this.nbBlocks - 1, lastBlock);
+                }
             }
 
             this.nbInsertions--;
+
+            if (animate) {
+                this.updateIOTimes(readTimes, writeTimes);
+                this.updateMCDescription("Removing physically was successful", "success");
+            }
+
             return true;
         } else {
             return false;
         }
     }
 
-     editEnreg(key, field1, field2, removed) {
-        let {found, pos, readTimes} =  this.search(key);
-        let {i, j} = pos;
+    async editEnreg(key, field1, field2, removed = false, animate = false) {
+        let {found, pos, readTimes} = await this.search(key, animate);
+        let {i, j} = pos
         let writeTimes;
 
+        let block;
+
         if (found) {
-            let block = this.blocks[i];
+            block = this.blocks[i];
             block.enregs[j].field1 = field1;
             block.enregs[j].field2 = field2;
             block.enregs[j].removed = removed;
+
+            this.blocks[i] = block;
             writeTimes = 1;
+
+            if (animate) {
+                this.buff
+                    .select(`.bloc .bloc-body ul li:nth-child(${j + 1})`)
+                    .transition()
+                    .duration(500 * delay)
+                    .style("background", ENREG_HIGHLIGHT_GREEN);
+
+                await sleep(1000);
+
+                this.updateBlockInMS(i, block);
+
+                this.updateIOTimes(readTimes, writeTimes);
+                this.updateMCDescription("Editing was successful", "success");
+            }
 
             return true;
         } else {
             return false;
-        }
-
-    }
-
-    setBlockAddress(index) {
-
-        if (index === 0) {
-            if (this.blocks.length === 0) {
-                return Math.floor(Math.random() * 10000000000).toString(16);
-            } else {
-                return Number((ENREG_SIZE + 1) + parseInt(this.blocks[0].blockAddress, 16)).toString(16)
-            }
-        } else {
-            return Number(index * ENREG_SIZE + parseInt(this.blocks[0].blockAddress, 16)).toString(16)
         }
     }
 }

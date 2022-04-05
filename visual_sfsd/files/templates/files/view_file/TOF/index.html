@@ -11,8 +11,7 @@
     <script>
         let fileData = {{ data|safe }};
     </script>
-    <script type="module" src="{% static 'js/files/view_file/TnOF/index.js'%}"></script>
-<!--    <script type="module" src="{% static 'js/files/view_file/TOF/index.js' %}"></script>-->
+    <script type="module" src="{% static 'js/files/view_file/TOF/index.js' %}"></script>
 {% endblock %}
 
 
@@ -117,12 +116,12 @@
     <br>
 
     <label for="animation-speed-bar">Animation speed : </label>
-    Slow<input type="range" id="animation-speed-bar" min="0" value="190" max="190"/>Fast
+    Slow<input type="range" id="animation-speed-bar" min="0" max="190"/>Fast
     <br>
 
     <div class="flex flex-row items-center justify-between">
-        {% include "files/view_file/components/toolsbar.html" %}
-        {% include "files/view_file/components/ms.html" %}
+        {% include "files/view_file/TOF/components/toolsbar.html" %}
+        {% include "files/view_file/TOF/components/ms.html" %}
         {% include "files/view_file/components/mc.html" %}
     </div>
 
