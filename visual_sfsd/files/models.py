@@ -5,10 +5,14 @@ import json
 
 TOF = 'TOF'
 TnOF = 'TnOF'
+LOF = 'LOF'
+LnOF = 'LnOF'
 
 FILE_TYPE_CHOICES = [
     (TOF, 'TOF'),
     (TnOF, 'TnOF'),
+    (LOF, 'LOF'),
+    (LnOF, 'LnOF'),
 ]
 
 

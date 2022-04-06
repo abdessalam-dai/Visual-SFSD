@@ -13,6 +13,11 @@ const MAX_NB_ENREGS_DEFAULT = 8,
     ENREG_HIGHLIGHT_RED = "#fd5564",
     ENREG_HIGHLIGHT_PURPLE = "#9043ef";
 
+const LnOF_INFO = {
+        head_block: -1,
+        tail_block: -1,
+    };
+
 export {
     MAX_NB_ENREGS_DEFAULT,
     ENREG_SIZE,
@@ -28,4 +33,6 @@ export {
     ENREG_HIGHLIGHT_ORANGE,
     ENREG_HIGHLIGHT_RED,
     ENREG_HIGHLIGHT_PURPLE,
+
+    LnOF_INFO
 }
