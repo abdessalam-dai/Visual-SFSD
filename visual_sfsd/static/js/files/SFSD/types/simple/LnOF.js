@@ -1,7 +1,7 @@
 import ListFile from '../../structres/ListFile.js';
 import Enreg from '../../structres/Enreg.js';
 import Block from '../../structres/Block.js';
-import {MAX_NB_BLOCKS, MAX_NB_ENREGS_DEFAULT} from "../../../constants.js";
+import {ENREG_HIGHLIGHT_GREEN, MAX_NB_BLOCKS, MAX_NB_ENREGS_DEFAULT} from "../../../constants.js";
 
 const print = (s) => console.log(s);
 
@@ -96,7 +96,7 @@ export default class LnOF extends ListFile {
                 this.nbBlocks++;
 
                 this.headIndex = i;
-
+                this.tailIndex = i;
                 return true;
             }
             currBlock = this.blocks[i];
@@ -116,57 +116,91 @@ export default class LnOF extends ListFile {
                 // create new block
                 let address = this.setBlockAddress(newIndex);
                 this.blocks[newIndex] = new Block([newEnreg], 1, address, -1);
+                this.tailIndex = newIndex;
                 writeTimes++;
                 this.nbBlocks++;
             }
 
             this.nbInsertions++;
-
             return true;
         }
     }
 
 
-    // removeLogically(key) {
-    //     let {found, pos, readTimes} =  this.search(key);
-    //     let {i, j} = pos;
-    //     let writeTimes;
-    //
-    //     if (found) {
-    //         this.blocks[i].enregs[j].removed = true;
-    //         writeTimes = 1;
-    //         return true;
-    //     }
-    //     else {
-    //         return false;
-    //     }
-    // }
+    removeLogically(key , animate) {
+        let {found , pos , readTimes} = this.search(key);
+        let {i , j} = pos;
+        console.log(found , pos)
+        let writeTimes;
+        if (found) {
+            this.blocks[i].enregs[j].removed = true;
+            writeTimes = 1;
+            return true;
+        }else {
+            return false;
+        }
+    }
 
-    // removePhysically(key) {
-    //     let {found , pos , readTimes} = this.search(key);
-    //     let {i , j} = pos;
-    //     let indexOfLastEnreg = this.blocks[this.blocks.length - 1].nb -1;
-    //     let lastEnreg = this.blocks[this.blocks.length - 1].enregs[indexOfLastEnreg]
-    //     if (found) {
-    //         // we replace the enreg to delete physically with the last enreg;
-    //         this.blocks[i].enregs[j] = lastEnreg;
-    //
-    //         // if the last enreg is the only enreg in the block
-    //         if (indexOfLastEnreg === 0) {
-    //             this.blocks[this.blocks.length - 1].enregs.pop(); // in reality just an extra instruction
-    //             this.blocks.pop();
-    //             this.nbBlocks--;
-    //         } else {
-    //             this.blocks[this.blocks.length - 1].enregs.pop();
-    //             this.blocks[this.blocks.length - 1].nb--;
-    //         }
-    //
-    //         this.nbInsertions--;
-    //         return true;
-    //     } else {
-    //         return false;
-    //     }
-    // }
+     editEnreg(key, field1, field2, removed = false, animate = false) {
+        let {found, pos, readTimes} =  this.search(key, animate);
+        let {i, j} = pos
+        let writeTimes;
+        let block;
+        if (found) {
+            block = this.blocks[i];
+            block.enregs[j].field1 = field1;
+            block.enregs[j].field2 = field2;
+            block.enregs[j].removed = removed;
+            writeTimes = 1;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    removePhysically(key) {
+        let {found , pos , readTimes} = this.search(key);
+        let {i , j} = pos;
+
+        let indexOfLastEnreg = this.blocks[this.tailIndex].nb - 1;
+        let lastEnreg = this.blocks[this.tailIndex].enregs[indexOfLastEnreg];
+        let blockBeforeTailBlock = this.blocks
+            .filter((block) => block !== null)
+            .filter((block) => block.nextBlockIndex === this.tailIndex)[0];
+
+
+        console.log( blockBeforeTailBlock ,this.tailIndex , indexOfLastEnreg , lastEnreg)
+
+        if (found) {
+            // we replace the enreg to delete physically with the last enreg;
+            this.blocks[i].enregs[j] = lastEnreg;
+
+            // if we have the only one enreg in the headBlock so we delete it directly and set it to null
+             if (indexOfLastEnreg === 0 && this.blocks[this.headIndex].nextBlockIndex === -1) {
+                 this.blocks[this.headIndex] = null;
+                 this.headIndex = -1;
+                 this.tailIndex = -1;
+                 return true;
+             }
+
+            // if the last enreg is the only enreg in the block
+            if (indexOfLastEnreg === 0) {
+                this.blocks[this.tailIndex] = null;
+                blockBeforeTailBlock.nextBlockIndex  = -1;
+                this.tailIndex = this.blocks.indexOf(blockBeforeTailBlock);
+                this.nbBlocks--;
+            } else {
+                this.blocks[this.tailIndex].enregs.pop();
+                this.blocks[this.tailIndex].nb--;
+            }
+
+            this.nbInsertions--;
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 
     // editEnreg(key, field1, field2, removed) {
     //     let {found, pos, readTimes} =  this.search(key);
