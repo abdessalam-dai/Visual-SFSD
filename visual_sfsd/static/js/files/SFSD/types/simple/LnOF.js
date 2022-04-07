@@ -3,22 +3,8 @@ import Enreg from '../../structres/Enreg.js';
 import Block from '../../structres/Block.js';
 import {ENREG_HIGHLIGHT_GREEN, MAX_NB_BLOCKS, MAX_NB_ENREGS_DEFAULT} from "../../../constants.js";
 
-const print = (s) => console.log(s);
 
 export default class LnOF extends ListFile {
-    randomBlockIndex() {
-        let randomBlockIndex = Math.floor(Math.random() * MAX_NB_BLOCKS);
-
-        if (this.blocks.every((block) => block !== null)) return -1;
-
-        while (this.blocks[randomBlockIndex] !== null) {
-            randomBlockIndex = Math.floor(Math.random() * MAX_NB_BLOCKS);
-            // console.log(randomBlockIndex)
-        }
-
-        return randomBlockIndex;
-    }
-
     search(key, animate=false) {
         let i = this.headIndex;
         let iPrev;

@@ -53,6 +53,18 @@ export default class ListFile {
         }
     }
 
+    randomBlockIndex() {
+        let randomBlockIndex = Math.floor(Math.random() * MAX_NB_BLOCKS);
+
+        if (this.blocks.every((block) => block !== null)) return -1;
+
+        while (this.blocks[randomBlockIndex] !== null) {
+            randomBlockIndex = Math.floor(Math.random() * MAX_NB_BLOCKS);
+        }
+
+        return randomBlockIndex;
+    }
+
     createBoardsDOM() {
         this.MSBoard.selectAll("*").remove();
 

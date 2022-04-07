@@ -114,6 +114,8 @@ def file_view(request, pk):
             template_path = 'files/view_file/TOF/index.html'
         elif file.file_type == 'TnOF':
             template_path = 'files/view_file/TnOF/index.html'
+        elif file.file_type == 'LOF':
+            template_path = 'files/view_file/LOF/index.html'
         elif file.file_type == 'LnOF':
             template_path = 'files/view_file/LnOF/index.html'
 

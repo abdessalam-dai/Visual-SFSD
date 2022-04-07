@@ -1,0 +1,130 @@
+{% extends "main.html" %}
+
+{% load static %}
+
+{% block title %}
+    {{ file.name }} -
+{% endblock title %}
+
+{% block scripts %}
+    <script src="{% static 'js/files/lib/d3.v7.min.js' %}"></script>
+    <script>
+        let fileData = {{ data|safe }};
+    </script>
+    <script type="module" src="{% static 'js/files/view_file/LOF/index.js'%}"></script>
+{% endblock %}
+
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{% static 'css/view_file/output.css' %}">
+
+    <style>
+        /* width */
+        .ms-container::-webkit-scrollbar {
+            width: 20px;
+        }
+
+        /* Track */
+        .ms-container::-webkit-scrollbar-track {
+            box-shadow: inset 0 0 5px grey;
+            border-radius: 10px;
+        }
+
+        /* Handle */
+        .ms-container::-webkit-scrollbar-thumb {
+            background: #93C5FD;
+            border-radius: 10px;
+        }
+
+        .ms-container {
+            scroll-behavior: smooth;
+            padding: 45px 10px;
+        }
+
+        .algorithm {
+            position: absolute;
+            width: 700px;
+            height: 400px;
+            top: 0;
+            left: calc(50% - 350px);
+            padding: 20px 0;
+            background: #9ca3af;
+            overflow-y: scroll;
+        }
+
+        .algorithm div {
+            padding: 1px 25px 0 5px;
+            font-size: 1.2em;
+        }
+
+        .algorithm div div {
+            width: 40px;
+            display: inline-block;
+            color: #374151;
+        }
+
+        .algorithm .highlight-instruction {
+            background: #eee !important;
+        }
+
+        .algorithm .no-highlight-instruction {
+            background: none !important;
+        }
+
+    </style>
+{% endblock %}
+
+{#{% block domready %}#}
+{##}
+{#{% endblock %}#}
+
+
+{% block navbar %}
+    {% include 'components/navbar/navbar_view_file.html' %}
+{% endblock %}
+
+
+{% block content %}
+    <label for="key-to-search">Key to search</label>
+    <input type="text" style="border: 1px solid red" id="key-to-search">
+    <button id="search-btn">Search enreg.</button>
+    <br>
+    <label for="key-to-remove">Key to remove</label>
+    <input type="text" style="border: 1px solid red" id="key-to-remove">
+    <button id="remove-btn">Remove enreg.</button>
+    <br>
+    <label for="key-to-insert">Key</label>
+    <input type="text" style="border: 1px solid red" id="key-to-insert">
+    <label for="field1-to-insert">Field1</label>
+    <input type="text" style="border: 1px solid red" id="field1-to-insert">
+    <label for="field2-to-insert">Field2</label>
+    <input type="text" style="border: 1px solid red" id="field2-to-insert">
+    <button id="insert-btn">Insert enreg.</button>
+    <br>
+    <label for="key-to-remove-physically">Key to remove Physically</label>
+    <input type="text" style="border: 1px solid red" id="key-to-remove-physically">
+    <button id="remove-physically-btn">Remove enreg. physically</button>
+    <br>
+
+    <label for="key-to-edit">Key</label>
+    <input type="text" style="border: 1px solid red" id="key-to-edit">
+    <label for="field1-to-edit">Field1</label>
+    <input type="text" style="border: 1px solid red" id="field1-to-edit">
+    <label for="field2-to-edit">Field2</label>
+    <input type="text" style="border: 1px solid red" id="field2-to-edit">
+    <button id="edit-btn">Edit enreg.</button>
+    <br>
+
+    <label for="animation-speed-bar">Animation speed : </label>
+    Slow<input type="range" id="animation-speed-bar" min="0" max="190"/>Fast
+    <br>
+
+    <div class="flex flex-row items-center justify-between">
+        {% include "files/view_file/LOF/components/toolsbar.html" %}
+        {% include "files/view_file/LOF/components/ms.html" %}
+        {% include "files/view_file/components/mc.html" %}
+    </div>
+
+    {#    {{ data }}#}
+
+{% endblock content %}
