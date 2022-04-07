@@ -48,11 +48,6 @@ const changeButtonsState = (state) => {
     editBtn.disabled = state
     removePhysicallyBtn.disabled = state
 }
-// testing area
-
-newFile.init();
-
-// end  test area
 
 
 // END - DOM Elements
@@ -139,6 +134,8 @@ for (const enreg of data) {
     )
 }
 
+console.log(newFile.blocks)
+console.log(newFile.headIndex)
 newFile.createBoardsDOM()
 
 // END - Fill with dummy data
