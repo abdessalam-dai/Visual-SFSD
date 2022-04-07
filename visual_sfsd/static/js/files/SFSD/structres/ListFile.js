@@ -32,6 +32,7 @@ export default class ListFile {
         nbInsertions = NB_INSERTIONS_DEFAULT,
         blocks = BLOCKS_DEFAULT,
         headIndex = -1,
+        tailIndex = -1,
     ) {
         this.name = name;
         this.buff = buff;
@@ -42,7 +43,7 @@ export default class ListFile {
         this.nbInsertions = nbInsertions;
         this.blocks = blocks;
         this.headIndex = headIndex;
-
+        this.tailIndex = tailIndex;
         this.init();
     }
 
