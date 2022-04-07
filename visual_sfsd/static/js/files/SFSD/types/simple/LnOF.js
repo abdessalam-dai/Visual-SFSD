@@ -5,7 +5,7 @@ import {ENREG_HIGHLIGHT_GREEN, MAX_NB_BLOCKS, MAX_NB_ENREGS_DEFAULT} from "../..
 
 
 export default class LnOF extends ListFile {
-    search(key, animate=false) {
+    search(key, animate = false) {
         let i = this.headIndex;
         let iPrev;
         let j = 0;
@@ -113,110 +113,96 @@ export default class LnOF extends ListFile {
     }
 
 
-    removeLogically(key , animate) {
-        let {found , pos , readTimes} = this.search(key);
-        let {i , j} = pos;
-        console.log(found , pos)
+    removeLogically(key, animate = false) {
+        let {found, pos, readTimes} = this.search(key, animate);
+        let {i, j} = pos;
         let writeTimes;
+
         if (found) {
             this.blocks[i].enregs[j].removed = true;
             writeTimes = 1;
-            return true;
-        }else {
-            return false;
-        }
-    }
 
-     editEnreg(key, field1, field2, removed = false, animate = false) {
-        let {found, pos, readTimes} =  this.search(key, animate);
-        let {i, j} = pos
-        let writeTimes;
-        let block;
-        if (found) {
-            block = this.blocks[i];
-            block.enregs[j].field1 = field1;
-            block.enregs[j].field2 = field2;
-            block.enregs[j].removed = removed;
-            writeTimes = 1;
+            this.createBoardsDOM();
+
             return true;
         } else {
             return false;
         }
     }
 
-    removePhysically(key) {
-        let {found , pos , readTimes} = this.search(key);
-        let {i , j} = pos;
+    editEnreg(key, field1, field2, removed = false, animate = false) {
+        let {found, pos, readTimes} = this.search(key, animate);
+        let {i, j} = pos
+        let writeTimes;
+        let block;
 
-        let indexOfLastEnreg = this.blocks[this.tailIndex].nb - 1;
-        let lastEnreg = this.blocks[this.tailIndex].enregs[indexOfLastEnreg];
+        if (found) {
+            block = this.blocks[i];
+            block.enregs[j].field1 = field1;
+            block.enregs[j].field2 = field2;
+            block.enregs[j].removed = removed;
+            writeTimes = 1;
+
+            this.createBoardsDOM();
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    removePhysically(key, animate) {
+        let {found, pos, readTimes} = this.search(key, animate);
+        let {i, j} = pos;
+        let writeTimes;
+
+        let tailBlock = this.blocks[this.tailIndex];
+        readTimes++;
+
+        let indexOfLastEnreg = tailBlock.nb - 1;
+        let lastEnreg = tailBlock.enregs[indexOfLastEnreg];
+
         let blockBeforeTailBlock = this.blocks
             .filter((block) => block !== null)
             .filter((block) => block.nextBlockIndex === this.tailIndex)[0];
-
-
-        console.log( blockBeforeTailBlock ,this.tailIndex , indexOfLastEnreg , lastEnreg)
+        readTimes++;
 
         if (found) {
             // we replace the enreg to delete physically with the last enreg;
             this.blocks[i].enregs[j] = lastEnreg;
 
-            // if we have the only one enreg in the headBlock so we delete it directly and set it to null
-             if (indexOfLastEnreg === 0 && this.blocks[this.headIndex].nextBlockIndex === -1) {
-                 this.blocks[this.headIndex] = null;
-                 this.headIndex = -1;
-                 this.tailIndex = -1;
-                 return true;
-             }
+            // if we have the only one enreg in the headBlock, so we delete it directly and set it to null
+            if (indexOfLastEnreg === 0 && this.headIndex === this.tailIndex) {
+                this.blocks[this.headIndex] = null;
+                this.headIndex = -1;
+                this.tailIndex = -1;
+                return true;
+            }
 
             // if the last enreg is the only enreg in the block
             if (indexOfLastEnreg === 0) {
-                this.blocks[this.tailIndex] = null;
-                blockBeforeTailBlock.nextBlockIndex  = -1;
+                tailBlock = null;
+                this.blocks[this.tailIndex] = tailBlock;
+                writeTimes++;
+
+                blockBeforeTailBlock.nextBlockIndex = -1;
                 this.tailIndex = this.blocks.indexOf(blockBeforeTailBlock);
+                this.blocks[this.tailIndex] = blockBeforeTailBlock;
+                writeTimes++;
+
                 this.nbBlocks--;
             } else {
-                this.blocks[this.tailIndex].enregs.pop();
-                this.blocks[this.tailIndex].nb--;
+                tailBlock.enregs.pop();
+                tailBlock.nb--;
+                this.blocks[this.tailIndex] = tailBlock;
+                writeTimes++;
             }
 
+            this.createBoardsDOM();
             this.nbInsertions--;
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
-
-    // editEnreg(key, field1, field2, removed) {
-    //     let {found, pos, readTimes} =  this.search(key);
-    //     let {i, j} = pos;
-    //     let writeTimes;
-    //
-    //     if (found) {
-    //         let block = this.blocks[i];
-    //         block.enregs[j].field1 = field1;
-    //         block.enregs[j].field2 = field2;
-    //         block.enregs[j].removed = removed;
-    //         writeTimes = 1;
-    //
-    //         return true;
-    //     } else {
-    //         return false;
-    //     }
-    //
-    // }
-
-    // setBlockAddress(index) {
-    //
-    //     if (index === 0) {
-    //         if (this.blocks.length === 0) {
-    //             return Math.floor(Math.random() * 10000000000).toString(16);
-    //         } else {
-    //             return Number((ENREG_SIZE + 1) + parseInt(this.blocks[0].blockAddress, 16)).toString(16)
-    //         }
-    //     } else {
-    //         return Number(index * ENREG_SIZE + parseInt(this.blocks[0].blockAddress, 16)).toString(16)
-    //     }
-    // }
 }

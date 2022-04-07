@@ -54,7 +54,7 @@ const changeButtonsState = (state) => {
 
 
 // START - Fill with dummy data
-const n = 18;
+const n = 8;
 const min = 0;
 const max = 100;
 

@@ -1,13 +1,7 @@
 import ListFile from '../../structres/ListFile.js';
 import Enreg from '../../structres/Enreg.js';
 import Block from '../../structres/Block.js';
-import {
-    ENREG_HIGHLIGHT_GREEN,
-    ENREG_HIGHLIGHT_GREY,
-    ENREG_HIGHLIGHT_PURPLE,
-    MAX_NB_BLOCKS,
-    MAX_NB_ENREGS_DEFAULT
-} from "../../../constants.js";
+import {MAX_NB_BLOCKS, MAX_NB_ENREGS_DEFAULT} from "../../../constants.js";
 
 
 export default class LOF extends ListFile {
@@ -108,7 +102,7 @@ export default class LOF extends ListFile {
         } else {
             let newEnreg = new Enreg(key, field1, field2, removed); // create a new enreg.
 
-            if (this.blocks[i] === null) {
+            if (this.blocks.filter((block) => block === null).length === MAX_NB_BLOCKS) {
                 // create new block
                 let address = this.setBlockAddress(i);
                 this.blocks[i] = new Block([newEnreg], 1, address, -1);
@@ -116,6 +110,7 @@ export default class LOF extends ListFile {
                 this.nbBlocks++;
 
                 this.headIndex = i;
+                this.tailIndex = i;
 
                 return true;
             }
@@ -123,7 +118,7 @@ export default class LOF extends ListFile {
             let continueShifting = true;
             let currBlock, lastIndex, lastEnreg, k;
 
-            while (continueShifting && i !== -1) {
+            while (continueShifting && this.blocks[i] !== null) {
                 currBlock = this.blocks[i];
                 readTimes++;
 
@@ -234,55 +229,46 @@ export default class LOF extends ListFile {
                         //     // write buffer in MS
                         //     this.updateBlockInMS(i, currBlock);
                         // }
-                        i = this.randomBlockIndex();
-                        j = 0;
-                        newEnreg = lastEnreg;
-
-                        currBlock.nextBlockIndex = i;
-                        console.log(currBlock)
+                        if (currBlock.nextBlockIndex === -1) { // in case there is no next block, create one
+                            currBlock.nextBlockIndex = this.randomBlockIndex()
+                            this.tailIndex = currBlock.nextBlockIndex; // update the tail index
+                            console.log("test")
+                        }
                         this.blocks[i] = currBlock;  // save current block in the blocks array
                         writeTimes++;
+
+                        i = currBlock.nextBlockIndex;
+                        j = 0;
+                        newEnreg = lastEnreg;
                     }
                 }
             }
-            //
-            // if (i > this.nbBlocks - 1) {
-            //     let address = this.setBlockAddress(this.blocks.length - 1);
-            //     let newBlock = new Block([newEnreg], 1, address);
-            //     this.blocks.push(newBlock);
-            //     writeTimes++;
-            //     this.nbBlocks += 1;
-            //
-            //     if (animate) {
-            //         this.createNewBlockInBuff(newEnreg);
-            //
-            //         await sleep(1000);
-            //
-            //         // write buffer in MS
-            //         this.updateBlockInMS(i, newBlock);
-            //     }
-            // }
-            //
-            // if (currBlock.nb < MAX_NB_ENREGS_DEFAULT) { // if there is space in the block
-            //     currBlock.nb++;
-            //     currBlock.enregs[j] = newEnreg;
-            //     this.blocks[i] = currBlock;
-            //     writeTimes++;
-            // } else {
-            //     let newIndex = this.randomBlockIndex();
-            //     currBlock.nextBlockIndex = newIndex;
-            //     this.blocks[i] = currBlock;
-            //     writeTimes++;
-            //
-            //     // create new block
-            //     let address = this.setBlockAddress(newIndex);
-            //     this.blocks[newIndex] = new Block([newEnreg], 1, address, -1);
-            //     writeTimes++;
-            //     this.nbBlocks++;
-            // }
+
+            if (this.blocks[i] === null) {
+                let tailBlock = this.blocks[this.tailIndex];
+                if (tailBlock) {
+                    tailBlock.nextBlockIndex = i;
+                    this.blocks[this.tailIndex] = tailBlock;
+                    writeTimes++
+                }
+
+                let address = this.setBlockAddress(i);
+                this.blocks[i] = new Block([newEnreg], 1, address, -1);
+                writeTimes++;
+                this.nbBlocks += 1;
+
+                // if (animate) {
+                //     this.createNewBlockInBuff(newEnreg);
+                //
+                //     await sleep(1000);
+                //
+                //     // write buffer in MS
+                //     this.updateBlockInMS(i, newBlock);
+                // }
+            }
 
             this.nbInsertions++;
-
+            console.log(this.blocks)
             return true;
         }
     }
