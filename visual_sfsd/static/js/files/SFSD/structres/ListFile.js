@@ -15,13 +15,13 @@ import {
 
 export default class ListFile {
     /*
-        name :          file name [String]
-        maxNbEnregs :   max. number of enregs. in a block [Int]
-        nbBlocks :      number of blocks [Int]
-        nbInsertions :  number of inserted enregs. [Int]
-        blocks :        array of blocks [class Block]
-    */
 
+    This is class is used for LOF and LnOF files
+    methods in common between LOF and LnOF :
+        - removeLogically
+        - editEnreg
+
+     */
     constructor(
         name,
         buff,
@@ -45,6 +45,44 @@ export default class ListFile {
         this.headIndex = headIndex;
         this.tailIndex = tailIndex;
         this.init();
+    }
+
+    removeLogically(key, animate = false) {
+        let {found, pos, readTimes} = this.search(key, animate);
+        let {i, j} = pos;
+        let writeTimes;
+
+        if (found) {
+            this.blocks[i].enregs[j].removed = true;
+            writeTimes = 1;
+
+            this.createBoardsDOM();
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    editEnreg(key, field1, field2, removed = false, animate = false) {
+        let {found, pos, readTimes} = this.search(key, animate);
+        let {i, j} = pos
+        let writeTimes;
+        let block;
+
+        if (found) {
+            block = this.blocks[i];
+            block.enregs[j].field1 = field1;
+            block.enregs[j].field2 = field2;
+            block.enregs[j].removed = removed;
+            writeTimes = 1;
+
+            this.createBoardsDOM();
+
+            return true;
+        } else {
+            return false;
+        }
     }
 
     init() {

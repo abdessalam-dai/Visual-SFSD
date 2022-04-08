@@ -7,7 +7,21 @@
             <a href="" class="items-center">
                 <div class="bg-sky-400 h-6 sm:h-10 sm:w-10 w-6 rounded-lg"></div>
             </a>
-            <span class="text-2xl font-semibold text-white">File : <span class=" font-bold ">TP1</span></span>
+            <div class="m-0 p-0">
+                <span class="text-2xl font-semibold text-white">File : <span class=" font-bold ">TP1</span></span>
+                <div class="w-full rounded-b-md bg-gray-800"> <!--Hna yabda ta3 file caractest-->
+                    <ul>
+                        <li class="flex flex-row justify-between px-2 py-1 border-b-2 items-center space-x-2">
+                            <span class="text-sm text-blue-300">Number of blocks </span>
+                            <span class="text-white">2</span>
+                        </li>
+                        <li class="flex rounded-b-md text-center flex-row justify-between px-2 py-1 border-b-2 items-center space-x-2">
+                            <span class="text-sm text-blue-300">Number of enregs. </span>
+                            <span class="text-white">2</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
         <button data-collapse-toggle="mobile-menu" type="button"
                 class="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
@@ -27,7 +41,8 @@
         <div class="hidden w-full md:block md:w-auto">
             <ul class="flex flex-col mt-4 md:flex-row md:space-x-5 md:mt-0 md:text-sm md:font-medium">
                 <li>
-                    <img src="{% static 'imgs/ci_settings-filledsettings.svg' %}" class="w-10 hover:rotate-45 transition-all"
+                    <img src="{% static 'imgs/ci_settings-filledsettings.svg' %}"
+                         class="w-10 hover:rotate-45 transition-all"
                          alt="">
                 </li>
                 <li class="">

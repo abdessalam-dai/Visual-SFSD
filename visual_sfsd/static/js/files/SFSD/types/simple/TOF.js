@@ -1,49 +1,18 @@
-import File from '../../structres/File.js';
+import TableFile from '../../structres/TableFile.js';
 import Enreg from '../../structres/Enreg.js';
 import Block from '../../structres/Block.js';
 import {
-    ENREG_SIZE, MAX_NB_ENREGS_DEFAULT,
-    MAX_NB_BLOCKS,
-    ERROR_BG,
-    WARNING_BG,
-    SUCCESS_BG,
+    MAX_NB_ENREGS_DEFAULT,
     ENREG_HIGHLIGHT_GREY,
     ENREG_HIGHLIGHT_GREEN,
     ENREG_HIGHLIGHT_ORANGE,
     ENREG_HIGHLIGHT_RED,
     ENREG_HIGHLIGHT_PURPLE
 } from "../../../constants.js";
+import {delay, sleep} from "../../../view_file/shared/animationSpeed.js";
 
-let delay = 0.5;
 
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms * delay));
-}
-
-// START - Change animation speed.
-const animationSpeedBar = document.querySelector("#animation-speed-bar");
-
-function handleChangeAnimationSpeed() {
-    animationSpeedBar.addEventListener("change", function () {
-        delay = (200 - animationSpeedBar.value) / 100;
-        console.log(delay);
-    });
-}
-
-handleChangeAnimationSpeed();
-// END - Change animation speed.
-
-export default class TOF extends File {
-    async highlightInstruction(i) {
-        // d3.selectAll(`.algorithm div`)
-        //     .attr("class", "no-highlight-instruction");
-        //
-        // d3.select(".algorithm")
-        //     .select(`div:nth-child(${i + 1})`)
-        //     .attr("class", "highlight-instruction");
-        // await sleep(1000);
-    }
-
+export default class TOF extends TableFile {
     async search(key, animate = false) {
         let blocks = this.blocks;
         let nbBlocks = this.blocks.length;
@@ -479,43 +448,6 @@ export default class TOF extends File {
         }
     }
 
-    async removeLogically(key, animate = false) {
-        let {found, pos, readTimes} = await this.search(key, animate);
-        let {i, j} = pos
-        let writeTimes;
-
-        if (found) {
-            this.blocks[i].enregs[j].removed = true;
-            writeTimes = 1;
-
-            if (animate) {
-                this.buff
-                    .select(`.bloc .bloc-body ul li:nth-child(${j + 1})`)
-                    .transition()
-                    .duration(500 * delay)
-                    .style("color", "#a70000");
-
-                await sleep(1000);
-
-                this.MSBoard
-                    .select(`.bloc:nth-child(${i + 1})`)
-                    .select(`.bloc-body ul li:nth-child(${j + 1})`)
-                    .transition()
-                    .duration(500 * delay)
-                    .style("color", "#a70000");
-
-                this.updateIOTimes(readTimes, writeTimes);
-                this.updateMCDescription("Removing was successful", "success");
-
-                this.createBoardsDOM();
-            }
-
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     async removePhysically(key, animate = false) {
         let {found, pos, readTimes} = await this.search(key, animate);
         let {i, j} = pos;
@@ -678,43 +610,6 @@ export default class TOF extends File {
             if (animate) {
                 this.updateIOTimes(readTimes, writeTimes);
                 this.updateMCDescription("Removing physically was successful", "success");
-            }
-
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    async editEnreg(key, field1, field2, removed = false, animate = false) {
-        let {found, pos, readTimes} = await this.search(key, animate);
-        let {i, j} = pos
-        let writeTimes;
-
-        let block;
-
-        if (found) {
-            block = this.blocks[i];
-            block.enregs[j].field1 = field1;
-            block.enregs[j].field2 = field2;
-            block.enregs[j].removed = removed;
-
-            this.blocks[i] = block;
-            writeTimes = 1;
-
-            if (animate) {
-                this.buff
-                    .select(`.bloc .bloc-body ul li:nth-child(${j + 1})`)
-                    .transition()
-                    .duration(500 * delay)
-                    .style("background", ENREG_HIGHLIGHT_GREEN);
-
-                await sleep(1000);
-
-                this.updateBlockInMS(i, block);
-
-                this.updateIOTimes(readTimes, writeTimes);
-                this.updateMCDescription("Editing was successful", "success");
             }
 
             return true;

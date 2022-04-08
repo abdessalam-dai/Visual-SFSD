@@ -1,7 +1,13 @@
 import ListFile from '../../structres/ListFile.js';
 import Enreg from '../../structres/Enreg.js';
 import Block from '../../structres/Block.js';
-import {MAX_NB_BLOCKS, MAX_NB_ENREGS_DEFAULT} from "../../../constants.js";
+import {
+    ENREG_HIGHLIGHT_GREEN,
+    ENREG_HIGHLIGHT_GREY,
+    ENREG_HIGHLIGHT_PURPLE,
+    MAX_NB_BLOCKS,
+    MAX_NB_ENREGS_DEFAULT
+} from "../../../constants.js";
 
 
 export default class LOF extends ListFile {
@@ -232,7 +238,6 @@ export default class LOF extends ListFile {
                         if (currBlock.nextBlockIndex === -1) { // in case there is no next block, create one
                             currBlock.nextBlockIndex = this.randomBlockIndex()
                             this.tailIndex = currBlock.nextBlockIndex; // update the tail index
-                            console.log("test")
                         }
                         this.blocks[i] = currBlock;  // save current block in the blocks array
                         writeTimes++;
@@ -273,77 +278,200 @@ export default class LOF extends ListFile {
         }
     }
 
+    removePhysically(key, animate = false) {
+        let {found, pos, readTimes} = this.search(key, animate);
+        let {i, j} = pos;
+        let writeTimes = 0;
 
-    // removeLogically(key) {
-    //     let {found, pos, readTimes} =  this.search(key);
-    //     let {i, j} = pos;
-    //     let writeTimes;
-    //
-    //     if (found) {
-    //         this.blocks[i].enregs[j].removed = true;
-    //         writeTimes = 1;
-    //         return true;
-    //     }
-    //     else {
-    //         return false;
-    //     }
-    // }
+        let midBlockElement;
+        let bufferElement;
+        let buffer2Element;
+        let jthElement;
+        let currElement;
+        let nextBlockElement;
+        let nextFirstElement;
 
-    // removePhysically(key) {
-    //     let {found , pos , readTimes} = this.search(key);
-    //     let {i , j} = pos;
-    //     let indexOfLastEnreg = this.blocks[this.blocks.length - 1].nb -1;
-    //     let lastEnreg = this.blocks[this.blocks.length - 1].enregs[indexOfLastEnreg]
-    //     if (found) {
-    //         // we replace the enreg to delete physically with the last enreg;
-    //         this.blocks[i].enregs[j] = lastEnreg;
-    //
-    //         // if the last enreg is the only enreg in the block
-    //         if (indexOfLastEnreg === 0) {
-    //             this.blocks[this.blocks.length - 1].enregs.pop(); // in reality just an extra instruction
-    //             this.blocks.pop();
-    //             this.nbBlocks--;
-    //         } else {
-    //             this.blocks[this.blocks.length - 1].enregs.pop();
-    //             this.blocks[this.blocks.length - 1].nb--;
-    //         }
-    //
-    //         this.nbInsertions--;
-    //         return true;
-    //     } else {
-    //         return false;
-    //     }
-    // }
+        if (found) {
+            let continueShifting = true;
 
-    // editEnreg(key, field1, field2, removed) {
-    //     let {found, pos, readTimes} =  this.search(key);
-    //     let {i, j} = pos;
-    //     let writeTimes;
-    //
-    //     if (found) {
-    //         let block = this.blocks[i];
-    //         block.enregs[j].field1 = field1;
-    //         block.enregs[j].field2 = field2;
-    //         block.enregs[j].removed = removed;
-    //         writeTimes = 1;
-    //
-    //         return true;
-    //     } else {
-    //         return false;
-    //     }
-    //
-    // }
+            while (continueShifting) {
+                let currBlock = this.blocks[i];
+                readTimes++;
 
-    // setBlockAddress(index) {
-    //
-    //     if (index === 0) {
-    //         if (this.blocks.length === 0) {
-    //             return Math.floor(Math.random() * 10000000000).toString(16);
-    //         } else {
-    //             return Number((ENREG_SIZE + 1) + parseInt(this.blocks[0].blockAddress, 16)).toString(16)
-    //         }
-    //     } else {
-    //         return Number(index * ENREG_SIZE + parseInt(this.blocks[0].blockAddress, 16)).toString(16)
-    //     }
-    // }
+                // if (animate) {
+                //     this.updateIOTimes(readTimes, writeTimes);
+                //
+                //     midBlockElement = this.MSBoard.select(`.bloc:nth-child(${i + 1})`)
+                //
+                //     await this.traverseBlockAnimation(i, delay);
+                //
+                //     bufferElement = this.updateBufferElement(midBlockElement, 1);
+                //
+                //     jthElement = bufferElement
+                //         .select(`.bloc-body ul li:nth-child(${j + 1})`)
+                //         .style("background", ENREG_HIGHLIGHT_PURPLE);
+                //
+                //     await sleep(1000);
+                // }
+
+                if (currBlock.nb === 1) { // if this is the only element in the last block
+                    // update the tail block index
+                    let x = this.headIndex;
+                    let xPrev = x;
+                    let block = this.blocks[x];
+                    readTimes++;
+
+                    while (block.nextBlockIndex !== i) {
+                        xPrev = x;
+                        x = block.nextBlockIndex;
+                        block = this.blocks[x];
+                        readTimes++;
+                        if (!block) {
+                            break;
+                        }
+                    }
+
+                    this.tailIndex = x;
+
+                    if (block) {
+                        block.nextBlockIndex = -1;
+                        this.blocks[xPrev] = block;
+                        writeTimes++;
+                    } else { // when the enreg. is the only in the file
+                        this.headIndex = -1;
+                        this.tailIndex = -1;
+                    }
+
+                    this.blocks[i] = null;
+                    this.nbBlocks -= 1;
+                    continueShifting = false;
+                } else {
+                    let k = j;
+                    while (k <= currBlock.nb - 2) {
+                        currBlock.enregs[k] = currBlock.enregs[k + 1];
+
+                        // if (animate) {
+                        //     currElement = bufferElement
+                        //         .select(`.bloc-body ul li:nth-child(${k + 1})`)
+                        //         .style("background", ENREG_HIGHLIGHT_GREEN);
+                        //
+                        //     currElement.select("span")
+                        //         .transition()
+                        //         .ease(d3.easeLinear)
+                        //         .duration(300 * delay)
+                        //         .style("transform", "translate(0, -40px)")
+                        //         .transition()
+                        //         .duration(0)
+                        //         .style("transform", "translate(0, +40px)")
+                        //         .text(`${currBlock.enregs[k + 1].key}`)
+                        //         .transition()
+                        //         .duration(300 * delay)
+                        //         .style("transform", "translate(0, 0)");
+                        //
+                        //     await sleep(600);
+                        //
+                        //     currElement
+                        //         .style("background", ENREG_HIGHLIGHT_GREY);
+                        // }
+
+                        k++;
+                    }
+
+                    // the block is not full (nb < B) OR (i) is the last block
+                    if ((currBlock.nb !== MAX_NB_ENREGS_DEFAULT) || (i === this.tailIndex)) {
+                        continueShifting = false;
+                        currBlock.enregs.pop();
+                        currBlock.nb -= 1;
+
+                        // if (animate) {
+                        //     currElement = bufferElement
+                        //         .select(`.bloc-body ul li:nth-child(${currBlock.nb + 1})`)
+                        //         .style("background", ENREG_HIGHLIGHT_PURPLE);
+                        //
+                        //     currElement.select("span")
+                        //         .transition()
+                        //         .ease(d3.easeLinear)
+                        //         .duration(300 * delay)
+                        //         .style("transform", "translate(-150px, 0)");
+                        //
+                        //     await sleep(300);
+                        //
+                        //     currElement.remove();
+                        //
+                        //     bufferElement.select(".bloc .bloc-header .bloc-nb")
+                        //         .text(`NB=${currBlock.nb}`);
+                        //
+                        //     // write buffer in MS
+                        //     this.updateBlockInMS(i, currBlock);
+                        // }
+
+                        this.blocks[i] = currBlock; // write dir
+                        writeTimes++;
+                    } else {
+                        let nextBlock = this.blocks[currBlock.nextBlockIndex];
+                        readTimes++;
+
+                        // if (animate) {
+                        //     this.updateIOTimes(readTimes, writeTimes);
+                        //
+                        //     nextBlockElement = this.MSBoard.select(`.bloc:nth-child(${i + 2})`);
+                        //
+                        //     await this.traverseBlockAnimation(i + 1, delay);
+                        //
+                        //     buffer2Element = this.updateBufferElement(nextBlockElement, 2);
+                        //
+                        //     nextFirstElement = buffer2Element
+                        //         .select(`.bloc-body ul li:nth-child(1)`)
+                        //         .transition()
+                        //         .ease(d3.easeLinear)
+                        //         .duration(300 * delay)
+                        //         .style("background", ENREG_HIGHLIGHT_PURPLE);
+                        //
+                        //     await sleep(2000);
+                        //
+                        //     currElement = bufferElement
+                        //         .select(`.bloc-body ul li:nth-child(${currBlock.nb})`)
+                        //         .style("background", ENREG_HIGHLIGHT_GREEN);
+                        //
+                        //     currElement.select("span")
+                        //         .transition()
+                        //         .ease(d3.easeLinear)
+                        //         .duration(300 * delay)
+                        //         .style("transform", "translate(0, -40px)")
+                        //         .transition()
+                        //         .duration(0)
+                        //         .style("transform", "translate(0, +40px)")
+                        //         .text(`${nextBlock.enregs[0].key}`)
+                        //         .transition()
+                        //         .duration(300 * delay)
+                        //         .style("transform", "translate(0, 0)");
+                        //
+                        //     // write buffer in MS
+                        //     this.updateBlockInMS(i, currBlock);
+                        //
+                        //     await sleep(1500);
+                        // }
+
+                        // replace the last enreg. of current block with the first enreg. of the next block
+                        currBlock.enregs[currBlock.nb - 1] = nextBlock.enregs[0];
+                        this.blocks[i] = currBlock; // write dir
+                        writeTimes++;
+                        j = 0;
+                        i = currBlock.nextBlockIndex;
+                    }
+                }
+            }
+
+            this.nbInsertions -= 1;
+
+            // if (animate) {
+            //     this.updateIOTimes(readTimes, writeTimes);
+            //     this.updateMCDescription("Removing physically was successful", "success");
+            // }
+
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
