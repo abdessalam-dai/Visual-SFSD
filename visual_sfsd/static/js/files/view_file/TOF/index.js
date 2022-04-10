@@ -14,6 +14,8 @@ function isNumeric(value) {
 const buff = d3.select(".buf");
 const buff2 = d3.select(".buf2");
 const MSBoard = d3.select(".ms-container");
+let toolTipIsVisible = false;
+let ToolTipToHide;
 
 let newFile = new TOF(
     'file.txt',
@@ -41,6 +43,53 @@ const changeButtonsState = (state) => {
 
 
 // START - Handle toolbar
+
+
+const toolbarIcons = document.querySelectorAll(".toolbar-icon");
+const toolbarTips = document.querySelectorAll(".toolbar-tooltip");
+const toolbarOptions = document.querySelector('.toolbar-options');
+
+Array.from(toolbarIcons).forEach(option => {
+    option.addEventListener('click', (e) => {
+        let tooltip = option.parentNode.children[1];
+
+        if (toolTipIsVisible) {
+                console.log("test3")
+                document.querySelectorAll('.tooltip-visible').forEach(tooltip => {
+                    tooltip.classList.remove('tooltip-visible');
+                    toolTipIsVisible = false;
+                    tooltip.classList.add('hidden');
+                })
+        }
+
+        if (tooltip.classList.contains("hidden")) {
+            console.log("test")
+            tooltip.classList.remove(("hidden"));
+            tooltip.classList.add("tooltip-visible");
+            ToolTipToHide = tooltip;
+            toolTipIsVisible = true;
+        }
+        else{
+            tooltip.classList.add(("hidden"));
+            console.log("test2")
+            tooltip.classList.remove("tooltip-visible");
+            toolTipIsVisible = false;
+            ToolTipToHide = "";
+        }
+    })
+})
+
+
+document.addEventListener('click'  , (e) => {
+    if (!e.target.classList.contains("toolbar-icon") && e.target.tagName !== 'INPUT' && toolTipIsVisible) {
+        ToolTipToHide.classList.add("hidden");
+        ToolTipToHide.classList.remove("tooltip-visible");
+        toolTipIsVisible = false;
+    }
+})
+
+
+
 // make sure that the z-index for toolbar tooltips is higher
 document.querySelectorAll(".toolbar-tooltip").forEach((tooltip) => {
     tooltip.style.zIndex = "101";
@@ -152,9 +201,9 @@ newFile.createBoardsDOM();
 // START - Search for element
 
 // handle key validity
-keyToSearch.addEventListener("keyup", function () {
-    let key = keyToSearch.value.trim();
-    searchBtn.disabled = !isNumeric(key);
+DomElements.keyToSearch.addEventListener("keyup", function () {
+    let key = DomElements.keyToSearch.value.trim();
+    DomElements.searchBtn.disabled = !isNumeric(key);
 });
 
 
