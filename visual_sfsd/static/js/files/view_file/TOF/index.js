@@ -1,7 +1,13 @@
-
-import {SFSD, Block, Enreg} from '../../SFSD/SFSD.js';
 import TOF from "../../SFSD/types/simple/TOF.js";
 import * as DomElements  from "./../DomElements.js"
+
+
+// START - useful functions
+function isNumeric(value) {
+    return /^-?\d+$/.test(value);
+}
+
+// END - useful functions
 
 
 // START - Create file
@@ -18,7 +24,12 @@ let newFile = new TOF(
 
 // END - Create file
 
+
+
 const changeButtonsState = (state) => {
+    if (state) { // if an option is clicked, hide all tooltips
+        hideAllToolbarTooltips();
+    }
     DomElements.generateDataBtn.disabled = state
     DomElements.searchBtn.disabled = state
     DomElements.removeBtn.disabled = state
@@ -27,7 +38,30 @@ const changeButtonsState = (state) => {
     DomElements.removePhysicallyBtn.disabled = state
 }
 
-// END - DOM Elements
+
+
+// START - Handle toolbar
+// make sure that the z-index for toolbar tooltips is higher
+document.querySelectorAll(".toolbar-tooltip").forEach((tooltip) => {
+    tooltip.style.zIndex = "101";
+});
+
+const hideAllToolbarTooltips = () => {
+    toolbarOptions.forEach((option) => {
+        let tooltip = option.querySelector(".toolbar-tooltip");
+        tooltip.classList.add("hidden");
+    });
+}
+
+for (let i = 0; i < toolbarOptions.length; i++) {
+    let option = toolbarOptions[i];
+    let tooltip = option.querySelector(".toolbar-tooltip");
+    option.querySelector(".toolbar-icon").addEventListener('click', function () {
+        hideAllToolbarTooltips();
+        tooltip.classList.remove("hidden");
+    });
+}
+// END - Handle toolbar
 
 
 // START - Fill with dummy data
@@ -68,12 +102,12 @@ function generateData(n, min, max) {
         }
     }
 
-    return arr.sort((a, b) => a.key - b.key) // return sorted array according to key
+    return arr.sort((a, b) => a.key - b.key); // return sorted array according to key
 }
 
 function handleGenerateData() {
     DomElements.generateDataBtn.addEventListener('click', () => {
-        changeButtonsState(true)
+        changeButtonsState(true);
 
         let data = generateData(n, min, max)
 
@@ -98,7 +132,6 @@ function handleGenerateData() {
 handleGenerateData()
 
 
-
 let data = generateData(n, min, max);
 
 for (const enreg of data) {
@@ -111,15 +144,23 @@ for (const enreg of data) {
     )
 }
 
-newFile.createBoardsDOM()
+newFile.createBoardsDOM();
 
 // END - Fill with dummy data
 
 
 // START - Search for element
+
+// handle key validity
+keyToSearch.addEventListener("keyup", function () {
+    let key = keyToSearch.value.trim();
+    searchBtn.disabled = !isNumeric(key);
+});
+
+
 function handleSearch() {
     DomElements.searchBtn.addEventListener("click", async function () {
-        changeButtonsState(true)
+        changeButtonsState(true);
 
         let key = parseInt(DomElements.keyToSearch.value);
 
@@ -201,7 +242,6 @@ function handleInsert() {
 handleInsert()
 
 // END - Inert Enreg.
-
 
 
 // START - Inert Enreg.

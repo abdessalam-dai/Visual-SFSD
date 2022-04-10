@@ -1,4 +1,3 @@
-import {SFSD, Block, Enreg} from '../../SFSD/SFSD.js';
 import LOF from "../../SFSD/types/simple/LOF.js";
 import * as DomElements  from "./../DomElements.js"
 
