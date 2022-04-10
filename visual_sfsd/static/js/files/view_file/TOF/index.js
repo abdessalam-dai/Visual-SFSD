@@ -46,15 +46,13 @@ const changeButtonsState = (state) => {
 
 
 const toolbarIcons = document.querySelectorAll(".toolbar-icon");
-const toolbarTips = document.querySelectorAll(".toolbar-tooltip");
-const toolbarOptions = document.querySelector('.toolbar-options');
+const toolbarOptions = document.querySelectorAll('.toolbar-tool');
 
 Array.from(toolbarIcons).forEach(option => {
     option.addEventListener('click', (e) => {
         let tooltip = option.parentNode.children[1];
 
         if (toolTipIsVisible) {
-                console.log("test3")
                 document.querySelectorAll('.tooltip-visible').forEach(tooltip => {
                     tooltip.classList.remove('tooltip-visible');
                     toolTipIsVisible = false;
@@ -63,7 +61,6 @@ Array.from(toolbarIcons).forEach(option => {
         }
 
         if (tooltip.classList.contains("hidden")) {
-            console.log("test")
             tooltip.classList.remove(("hidden"));
             tooltip.classList.add("tooltip-visible");
             ToolTipToHide = tooltip;
@@ -71,7 +68,6 @@ Array.from(toolbarIcons).forEach(option => {
         }
         else{
             tooltip.classList.add(("hidden"));
-            console.log("test2")
             tooltip.classList.remove("tooltip-visible");
             toolTipIsVisible = false;
             ToolTipToHide = "";
