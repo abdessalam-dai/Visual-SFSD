@@ -1,4 +1,5 @@
 import TOF from "../../SFSD/types/simple/TOF.js";
+import * as DomElements  from "./../DomElements.js"
 
 
 // START - useful functions
@@ -24,45 +25,19 @@ let newFile = new TOF(
 // END - Create file
 
 
-// START - DOM Elements
-const toolbarOptions = document.querySelectorAll(".toolbar-options .toolbar-tool");
-
-const generateDataBtn = document.querySelector('#generate-data-btn');
-
-const keyToSearch = document.querySelector("#key-to-search");
-const searchBtn = document.querySelector("#search-btn");
-
-const keyToRemove = document.querySelector("#key-to-remove");
-const removeBtn = document.querySelector("#remove-btn");
-
-const keyToRemovePhysically = document.querySelector("#key-to-remove-physically");
-const removePhysicallyBtn = document.querySelector("#remove-physically-btn");
-
-const keyToInsert = document.querySelector("#key-to-insert");
-const field1ToInsert = document.querySelector("#field1-to-insert");
-const field2ToInsert = document.querySelector("#field2-to-insert");
-const insertBtn = document.querySelector("#insert-btn");
-
-
-const keyToEdit = document.querySelector("#key-to-edit");
-const field1ToEdit = document.querySelector("#field1-to-edit");
-const field2ToEdit = document.querySelector("#field2-to-edit");
-const editBtn = document.querySelector("#edit-btn");
-
 
 const changeButtonsState = (state) => {
     if (state) { // if an option is clicked, hide all tooltips
         hideAllToolbarTooltips();
     }
-    generateDataBtn.disabled = state;
-    searchBtn.disabled = state;
-    removeBtn.disabled = state;
-    insertBtn.disabled = state;
-    editBtn.disabled = state;
-    removePhysicallyBtn.disabled = state;
+    DomElements.generateDataBtn.disabled = state
+    DomElements.searchBtn.disabled = state
+    DomElements.removeBtn.disabled = state
+    DomElements.insertBtn.disabled = state
+    DomElements.editBtn.disabled = state
+    DomElements.removePhysicallyBtn.disabled = state
 }
 
-// END - DOM Elements
 
 
 // START - Handle toolbar
@@ -90,7 +65,7 @@ for (let i = 0; i < toolbarOptions.length; i++) {
 
 
 // START - Fill with dummy data
-const n = 16;
+const n = 46;
 const min = 0;
 const max = 100;
 
@@ -131,7 +106,7 @@ function generateData(n, min, max) {
 }
 
 function handleGenerateData() {
-    generateDataBtn.addEventListener('click', () => {
+    DomElements.generateDataBtn.addEventListener('click', () => {
         changeButtonsState(true);
 
         let data = generateData(n, min, max)
@@ -184,11 +159,10 @@ keyToSearch.addEventListener("keyup", function () {
 
 
 function handleSearch() {
-    searchBtn.addEventListener("click", async function () {
+    DomElements.searchBtn.addEventListener("click", async function () {
         changeButtonsState(true);
-        hideAllToolbarTooltips();
 
-        let key = parseInt(keyToSearch.value);
+        let key = parseInt(DomElements.keyToSearch.value);
 
         let {
             found: found,
@@ -206,10 +180,10 @@ handleSearch()
 
 // START - Remove element
 function handleRemove() {
-    removeBtn.addEventListener("click", async function () {
+    DomElements.removeBtn.addEventListener("click", async function () {
         changeButtonsState(true)
 
-        let key = parseInt(keyToRemove.value);
+        let key = parseInt(DomElements.keyToRemove.value);
 
         let removeSuccess = await newFile.removeLogically(key, true);
 
@@ -226,10 +200,10 @@ handleRemove()
 
 // START - Remove element physically
 function handleRemovePhysically() {
-    removePhysicallyBtn.addEventListener("click", async function () {
+    DomElements.removePhysicallyBtn.addEventListener("click", async function () {
         changeButtonsState(true)
 
-        let key = parseInt(keyToRemovePhysically.value);
+        let key = parseInt(DomElements.keyToRemovePhysically.value);
 
         let removeSuccess = await newFile.removePhysically(key, true);
 
@@ -248,12 +222,12 @@ handleRemovePhysically()
 
 // START - Inert Enreg.
 function handleInsert() {
-    insertBtn.addEventListener("click", async function () {
+    DomElements.insertBtn.addEventListener("click", async function () {
         changeButtonsState(true)
 
-        let key = parseInt(keyToInsert.value);
-        let field1 = field1ToInsert.value;
-        let field2 = field2ToInsert.value;
+        let key = parseInt(DomElements.keyToInsert.value);
+        let field1 = DomElements.field1ToInsert.value;
+        let field2 = DomElements.field2ToInsert.value;
 
         let insertingResult = await newFile.insert(key, field1, field2, false, true);
 
@@ -272,12 +246,12 @@ handleInsert()
 
 // START - Inert Enreg.
 function handleEdit() {
-    editBtn.addEventListener("click", async function () {
+    DomElements.editBtn.addEventListener("click", async function () {
         changeButtonsState(true)
 
-        let key = parseInt(keyToEdit.value);
-        let field1 = field1ToEdit.value;
-        let field2 = field2ToEdit.value;
+        let key = parseInt(DomElements.keyToEdit.value);
+        let field1 = DomElements.field1ToEdit.value;
+        let field2 = DomElements.field2ToEdit.value;
 
         let editingResults = await newFile.editEnreg(key, field1, field2, false, true);
 
@@ -295,16 +269,15 @@ handleEdit()
 
 
 // START - Scroll buttons
-const scrollLeftBtn = document.querySelector("#scroll-left-btn");
-const scrollRightBtn = document.querySelector("#scroll-right-btn");
+
 
 function handleScrollButtons() {
-    scrollLeftBtn.addEventListener('click', function () {
-        MSBoard.node().scrollLeft -= 224
+    DomElements.scrollLeftBtn.addEventListener('click', function () {
+        MSBoard.node().DomElements.scrollLeft -= 224
     });
 
-    scrollRightBtn.addEventListener('click', function () {
-        MSBoard.node().scrollLeft += 224
+    DomElements.scrollRightBtn.addEventListener('click', function () {
+        MSBoard.node().DomElements.scrollLeft += 224
     });
 }
 
