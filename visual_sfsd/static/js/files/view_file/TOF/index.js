@@ -5,6 +5,8 @@ import TOF from "../../SFSD/types/simple/TOF.js";
 const buff = d3.select(".buf");
 const buff2 = d3.select(".buf2");
 const MSBoard = d3.select(".ms-container");
+let toolTipIsVisible = false;
+let ToolTipToHide;
 
 let newFile = new TOF(
     'file.txt',
@@ -17,16 +19,59 @@ let newFile = new TOF(
 
 
 // START - Handle toolbar
-const toolbarOptions = document.querySelectorAll(".toolbar-options .toolbar-tool");
+const toolbarIcons = document.querySelectorAll(".toolbar-icon");
+const toolbarTips = document.querySelectorAll(".toolbar-tooltip");
+const toolBarOptions = document.querySelector('.toolbar-options');
+console.log(toolbarIcons);
+
+Array.from(toolbarIcons).forEach(option => {
+    option.addEventListener('click', (e) => {
+        let tooltip = option.parentNode.children[1];
+
+        if (toolTipIsVisible) {
+                console.log("test3")
+                document.querySelectorAll('.tooltip-visible').forEach(tooltip => {
+                    tooltip.classList.remove('tooltip-visible');
+                    toolTipIsVisible = false;
+                    tooltip.classList.add('hidden');
+                })
+        }
+
+        if (tooltip.classList.contains("hidden")) {
+            console.log("test")
+            tooltip.classList.remove(("hidden"));
+            tooltip.classList.add("tooltip-visible");
+            ToolTipToHide = tooltip;
+            toolTipIsVisible = true;
+        }
+        else{
+            tooltip.classList.add(("hidden"));
+            console.log("test2")
+            tooltip.classList.remove("tooltip-visible");
+            toolTipIsVisible = false;
+            ToolTipToHide = "";
+        }
+    })
+})
+
+
+document.addEventListener('click'  , (e) => {
+    if (!e.target.classList.contains("toolbar-icon") && e.target.tagName !== 'INPUT' && toolTipIsVisible) {
+        ToolTipToHide.classList.add("hidden");
+        ToolTipToHide.classList.remove("tooltip-visible");
+        toolTipIsVisible = false;
+    }
+})
+
 //
 //
-const hideAllToolbarTooltips = () => {
-    toolbarOptions.forEach((otherOption) => {
-        let tooltip = otherOption.querySelector(".toolbar-tooltip");
-        tooltip.classList.add("hidden");
-        tooltip.classList.remove("active-tooltip");
-    });
-}
+// const hideAllToolbarTooltips = () => {
+//     toolbarOptions.forEach((otherOption) => {
+//         let tooltip = otherOption.querySelector(".toolbar-tooltip");
+//         tooltip.classList.add("hidden");
+//         tooltip.classList.remove("active-tooltip");
+//     });
+// }
 
 //
 // for (let i = 0; i < toolbarOptions.length; i++) {
@@ -40,20 +85,20 @@ const hideAllToolbarTooltips = () => {
 // }
 //
 // // hide all toolbar tooltips when user clicks outside
-document.addEventListener('click', function (e) {
-    // let activeTooltip = document.querySelector(".active-tooltip");
-    // if (activeTooltip) {
-    //     if (!e.target.classList.contains("toolbar-tool")) {
-    //         activeTooltip.classList.add("hidden");
-    //     }
-    // }
-
-    toolbarOptions.forEach((option) => {
-        if (!e.target.classList.contains("toolbar-tooltip") && !e.target.classList.contains("toolbar-icon")) {
-            hideAllToolbarTooltips();
-        }
-    });
-});
+// document.addEventListener('click', function (e) {
+//     // let activeTooltip = document.querySelector(".active-tooltip");
+//     // if (activeTooltip) {
+//     //     if (!e.target.classList.contains("toolbar-tool")) {
+//     //         activeTooltip.classList.add("hidden");
+//     //     }
+//     // }
+//
+//     toolbarOptions.forEach((option) => {
+//         if (!e.target.classList.contains("toolbar-tooltip") && !e.target.classList.contains("toolbar-icon")) {
+//             hideAllToolbarTooltips();
+//         }
+//     });
+// });
 
 // const toolbarOptions = d3.selectAll(".toolbar-options .toolbar-tool");
 //
