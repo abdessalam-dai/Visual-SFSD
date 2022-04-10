@@ -1,4 +1,3 @@
-import {SFSD, Block, Enreg} from '../../SFSD/SFSD.js';
 import LnOF from "../../SFSD/types/simple/LnOF.js";
 
 // START - Create file

@@ -1,4 +1,3 @@
-import {SFSD, Block, Enreg} from '../../SFSD/SFSD.js';
 import TOF from "../../SFSD/types/simple/TOF.js";
 
 
@@ -15,6 +14,60 @@ let newFile = new TOF(
 );
 
 // END - Create file
+
+
+// START - Handle toolbar
+const toolbarOptions = document.querySelectorAll(".toolbar-options .toolbar-tool");
+//
+//
+const hideAllToolbarTooltips = () => {
+    toolbarOptions.forEach((otherOption) => {
+        let tooltip = otherOption.querySelector(".toolbar-tooltip");
+        tooltip.classList.add("hidden");
+        tooltip.classList.remove("active-tooltip");
+    });
+}
+
+//
+// for (let i = 0; i < toolbarOptions.length; i++) {
+//     let option = toolbarOptions[i];
+//     let tooltip = option.querySelector(".toolbar-tooltip");
+//     option.addEventListener('click', function () {
+//         hideAllToolbarTooltips();
+//         tooltip.classList.remove("hidden");
+//         tooltip.classList.add("active-tooltip");
+//     });
+// }
+//
+// // hide all toolbar tooltips when user clicks outside
+document.addEventListener('click', function (e) {
+    // let activeTooltip = document.querySelector(".active-tooltip");
+    // if (activeTooltip) {
+    //     if (!e.target.classList.contains("toolbar-tool")) {
+    //         activeTooltip.classList.add("hidden");
+    //     }
+    // }
+
+    toolbarOptions.forEach((option) => {
+        if (!e.target.classList.contains("toolbar-tooltip") && !e.target.classList.contains("toolbar-icon")) {
+            hideAllToolbarTooltips();
+        }
+    });
+});
+
+// const toolbarOptions = d3.selectAll(".toolbar-options .toolbar-tool");
+//
+// toolbarOptions.on("click", function () {
+//     // hide other tooltips
+//     d3.selectAll(".toolbar-options .toolbar-tool .toolbar-tooltip")
+//         .classed("hidden", true);
+//
+//     // show clicked tooltip
+//     d3.select(this).select(".toolbar-tooltip")
+//         .classed("hidden", false);
+// })
+
+// END - Handle toolbar
 
 
 // START - DOM Elements
@@ -121,7 +174,6 @@ function handleGenerateData() {
 handleGenerateData()
 
 
-
 let data = generateData(n, min, max);
 
 for (const enreg of data) {
@@ -224,7 +276,6 @@ function handleInsert() {
 handleInsert()
 
 // END - Inert Enreg.
-
 
 
 // START - Inert Enreg.
