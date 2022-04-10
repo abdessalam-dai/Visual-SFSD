@@ -1,6 +1,14 @@
 import TOF from "../../SFSD/types/simple/TOF.js";
 
 
+// START - useful functions
+function isNumeric(value) {
+    return /^-?\d+$/.test(value);
+}
+
+// END - useful functions
+
+
 // START - Create file
 const buff = d3.select(".buf");
 const buff2 = d3.select(".buf2");
@@ -16,61 +24,9 @@ let newFile = new TOF(
 // END - Create file
 
 
-// START - Handle toolbar
-const toolbarOptions = document.querySelectorAll(".toolbar-options .toolbar-tool");
-//
-//
-const hideAllToolbarTooltips = () => {
-    toolbarOptions.forEach((otherOption) => {
-        let tooltip = otherOption.querySelector(".toolbar-tooltip");
-        tooltip.classList.add("hidden");
-        tooltip.classList.remove("active-tooltip");
-    });
-}
-
-//
-// for (let i = 0; i < toolbarOptions.length; i++) {
-//     let option = toolbarOptions[i];
-//     let tooltip = option.querySelector(".toolbar-tooltip");
-//     option.addEventListener('click', function () {
-//         hideAllToolbarTooltips();
-//         tooltip.classList.remove("hidden");
-//         tooltip.classList.add("active-tooltip");
-//     });
-// }
-//
-// // hide all toolbar tooltips when user clicks outside
-document.addEventListener('click', function (e) {
-    // let activeTooltip = document.querySelector(".active-tooltip");
-    // if (activeTooltip) {
-    //     if (!e.target.classList.contains("toolbar-tool")) {
-    //         activeTooltip.classList.add("hidden");
-    //     }
-    // }
-
-    toolbarOptions.forEach((option) => {
-        if (!e.target.classList.contains("toolbar-tooltip") && !e.target.classList.contains("toolbar-icon")) {
-            hideAllToolbarTooltips();
-        }
-    });
-});
-
-// const toolbarOptions = d3.selectAll(".toolbar-options .toolbar-tool");
-//
-// toolbarOptions.on("click", function () {
-//     // hide other tooltips
-//     d3.selectAll(".toolbar-options .toolbar-tool .toolbar-tooltip")
-//         .classed("hidden", true);
-//
-//     // show clicked tooltip
-//     d3.select(this).select(".toolbar-tooltip")
-//         .classed("hidden", false);
-// })
-
-// END - Handle toolbar
-
-
 // START - DOM Elements
+const toolbarOptions = document.querySelectorAll(".toolbar-options .toolbar-tool");
+
 const generateDataBtn = document.querySelector('#generate-data-btn');
 
 const keyToSearch = document.querySelector("#key-to-search");
@@ -95,15 +51,42 @@ const editBtn = document.querySelector("#edit-btn");
 
 
 const changeButtonsState = (state) => {
-    generateDataBtn.disabled = state
-    searchBtn.disabled = state
-    removeBtn.disabled = state
-    insertBtn.disabled = state
-    editBtn.disabled = state
-    removePhysicallyBtn.disabled = state
+    if (state) { // if an option is clicked, hide all tooltips
+        hideAllToolbarTooltips();
+    }
+    generateDataBtn.disabled = state;
+    searchBtn.disabled = state;
+    removeBtn.disabled = state;
+    insertBtn.disabled = state;
+    editBtn.disabled = state;
+    removePhysicallyBtn.disabled = state;
 }
 
 // END - DOM Elements
+
+
+// START - Handle toolbar
+// make sure that the z-index for toolbar tooltips is higher
+document.querySelectorAll(".toolbar-tooltip").forEach((tooltip) => {
+    tooltip.style.zIndex = "101";
+});
+
+const hideAllToolbarTooltips = () => {
+    toolbarOptions.forEach((option) => {
+        let tooltip = option.querySelector(".toolbar-tooltip");
+        tooltip.classList.add("hidden");
+    });
+}
+
+for (let i = 0; i < toolbarOptions.length; i++) {
+    let option = toolbarOptions[i];
+    let tooltip = option.querySelector(".toolbar-tooltip");
+    option.querySelector(".toolbar-icon").addEventListener('click', function () {
+        hideAllToolbarTooltips();
+        tooltip.classList.remove("hidden");
+    });
+}
+// END - Handle toolbar
 
 
 // START - Fill with dummy data
@@ -144,12 +127,12 @@ function generateData(n, min, max) {
         }
     }
 
-    return arr.sort((a, b) => a.key - b.key) // return sorted array according to key
+    return arr.sort((a, b) => a.key - b.key); // return sorted array according to key
 }
 
 function handleGenerateData() {
     generateDataBtn.addEventListener('click', () => {
-        changeButtonsState(true)
+        changeButtonsState(true);
 
         let data = generateData(n, min, max)
 
@@ -186,15 +169,24 @@ for (const enreg of data) {
     )
 }
 
-newFile.createBoardsDOM()
+newFile.createBoardsDOM();
 
 // END - Fill with dummy data
 
 
 // START - Search for element
+
+// handle key validity
+keyToSearch.addEventListener("keyup", function () {
+    let key = keyToSearch.value.trim();
+    searchBtn.disabled = !isNumeric(key);
+});
+
+
 function handleSearch() {
     searchBtn.addEventListener("click", async function () {
-        changeButtonsState(true)
+        changeButtonsState(true);
+        hideAllToolbarTooltips();
 
         let key = parseInt(keyToSearch.value);
 
