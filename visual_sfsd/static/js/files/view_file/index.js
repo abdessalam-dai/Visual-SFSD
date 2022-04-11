@@ -280,7 +280,7 @@ validateEdit();
 
 
 // START - Fill with dummy data
-const n = 10;
+const n = 20;
 const min = 0;
 const max = 100;
 

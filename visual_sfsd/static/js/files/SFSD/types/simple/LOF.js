@@ -273,7 +273,7 @@ export default class LOF extends ListFile {
             }
 
             this.nbInsertions++;
-            console.log(this.blocks)
+            // console.log(this.blocks)
             return true;
         }
     }

@@ -134,7 +134,7 @@ export default class TableFile {
         this.MSBoard.selectAll("*").remove();
 
         const blocDiv = `
-        <div class="bloc w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0" style="height: 352px;">
+        <div class="bloc no-select w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0" style="height: 352px;">
             <div
                 class="bloc-header text-white px-3 items-center font-medium h-8 rounded-t-lg w-full flex flex-row justify-between bg-slate-900">
                 <span class="bloc-index no-select" style="position: relative"></span>
@@ -153,14 +153,14 @@ export default class TableFile {
             .append("span")
             .style("cursor", "pointer")
             .text(function (block, index) {
-                return index
+                return index;
             });
 
         this.MSBoard.selectAll('.bloc')
             .data(this.blocks)
             .select(".bloc-nb")
             .text(function (block) {
-                return `NB=${block.nb}`
+                return `NB=${block.nb}`;
             });
 
         // CREATING THE TOOL TIP FOR INDEX
