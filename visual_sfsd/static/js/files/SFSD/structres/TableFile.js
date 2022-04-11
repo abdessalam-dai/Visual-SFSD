@@ -126,6 +126,8 @@ export default class TableFile {
 
     createBoardsDOM() {
         // set number of blocks and number of elements in header
+        let toolTipEnregHidden = true;
+        let lastElementShown;
         d3.select("#nb-blocks")
             .text(this.nbBlocks);
         d3.select("#nb-elements")
@@ -159,6 +161,7 @@ export default class TableFile {
         this.MSBoard.selectAll('.bloc')
             .data(this.blocks)
             .select(".bloc-nb")
+            .style("z-index" , "103")
             .text(function (block) {
                 return `NB=${block.nb}`
             });
@@ -184,6 +187,7 @@ export default class TableFile {
                     .select(".tool-tip-index")
                     .style("transition", "visibility 0s linear 50ms")
                     .style("visibility", "visible");
+
             })
             .on("mouseout", function (e) {
                 d3.select(this)
@@ -268,13 +272,34 @@ export default class TableFile {
                         return enreg.removed ? "#a70000" : "black"
                     })
                     .style("cursor", "pointer")
-                    .style("overflow-y", "hidden")
-                    .style("overflow-x", "hidden")
+                    .style("position" , "relative")
                     .on("click", function (e, enreg) {
-                        alert(`key: ${enreg.key}
-                            field1: ${enreg.field1}
-                            field2: ${enreg.field2}
-                            removed: ${enreg.removed}`)
+                        console.log(`before if and else`, toolTipEnregHidden , e.target)
+                        if(toolTipEnregHidden) {
+                            let html = `
+                                <div id="last-element-shown" class="fixed no-select" style="position: absolute; top: 40px; width: 192px; z-index: 102">
+                                    <ul class="rounded-md text-center bg-gray-800 " style="z-index: 12;">
+                                        <li class="flex flex-row justify-between  border-b-2 px-2 py-1 text-sm text-white">
+                                            <span class="text-sm text-blue-300">key</span>
+                                            <span>${enreg.key}</span>
+                                        </li>
+                                        <li class="flex flex-row justify-between  border-b-2 px-2 py-1 text-sm text-white">
+                                            <span class="text-sm text-blue-300">field1</span>
+                                            <span style="word-wrap: anywhere">${enreg.field1}</span>
+                                        </li>
+                                        <li class="flex flex-row justify-between  border-b-2 px-2 py-1 text-sm text-white">
+                                            <span class="text-sm text-blue-300">field2</span>
+                                            <span style="word-wrap: anywhere">${enreg.field2}</span>
+                                        </li>
+                                    </ul>
+                                </div>`
+                            this.children[0].insertAdjacentHTML('afterend', html)
+                            toolTipEnregHidden = false;
+                        }else {
+
+                            document.querySelector('#last-element-shown').remove();
+                            toolTipEnregHidden = true;
+                        }
                     })
                     .on("mouseover", function () {
                         d3.select(this)
