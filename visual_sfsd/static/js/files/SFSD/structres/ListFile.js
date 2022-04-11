@@ -74,7 +74,9 @@ export default class ListFile {
             block = this.blocks[i];
             block.enregs[j].field1 = field1;
             block.enregs[j].field2 = field2;
-            block.enregs[j].removed = removed;
+            // block.enregs[j].removed = removed; // no need to edit removed
+
+            this.blocks[i] = block;
             writeTimes = 1;
 
             this.createBoardsDOM();

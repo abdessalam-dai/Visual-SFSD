@@ -1,6 +1,9 @@
-import TOF from "../../SFSD/types/simple/TOF.js";
-import * as DomElements from "./../DomElements.js";
-import {MAX_NB_BLOCKS, MAX_NB_ENREGS_DEFAULT} from "../../constants.js";
+import TOF from "../SFSD/types/simple/TOF.js";
+import TnOF from "../SFSD/types/simple/TnOF.js";
+import LOF from "../SFSD/types/simple/LOF.js";
+import LnOF from "../SFSD/types/simple/LnOF.js";
+import * as DomElements from "./DomElements.js";
+import {MAX_NB_BLOCKS, MAX_NB_ENREGS_DEFAULT} from "../constants.js";
 
 
 // START - useful functions
@@ -23,12 +26,37 @@ const MSBoard = d3.select(".ms-container");
 let toolTipIsVisible = false;
 let ToolTipToHide;
 
-let newFile = new TOF(
-    'file.txt',
-    buff,
-    buff2,
-    MSBoard,
-);
+
+let newFile;
+if (FILE_TYPE === "TOF") {
+    newFile = new TOF(
+        'file.txt',
+        buff,
+        buff2,
+        MSBoard,
+    );
+} else if (FILE_TYPE === "TnOF") {
+    newFile = new TnOF(
+        'file.txt',
+        buff,
+        buff2,
+        MSBoard,
+    );
+} else if (FILE_TYPE === "LOF") {
+    newFile = new LOF(
+        'file.txt',
+        buff,
+        buff2,
+        MSBoard,
+    );
+} else {
+    newFile = new LnOF(
+        'file.txt',
+        buff,
+        buff2,
+        MSBoard,
+    );
+}
 
 // END - Create file
 

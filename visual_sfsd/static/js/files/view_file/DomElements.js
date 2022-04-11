@@ -1,5 +1,10 @@
 // grabbing common dom elements
+export const toolbarIcons = document.querySelectorAll(".toolbar-icon");
+export const toolbarOptions = document.querySelectorAll('.toolbar-tool');
 
+export const elementsNumber = document.querySelector("#elements-number");
+export const minKey = document.querySelector("#min-key");
+export const maxKey = document.querySelector("#max-key");
 export const generateDataBtn = document.querySelector('#generate-data-btn');
 
 export const keyToSearch = document.querySelector("#key-to-search");

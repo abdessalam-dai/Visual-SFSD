@@ -110,14 +110,16 @@ def file_view(request, pk):
             'data': file.data
         }
 
-        if file.file_type == 'TOF':
-            template_path = 'files/view_file/TOF/index.html'
-        elif file.file_type == 'TnOF':
-            template_path = 'files/view_file/TnOF/index.html'
-        elif file.file_type == 'LOF':
-            template_path = 'files/view_file/LOF/index.html'
-        elif file.file_type == 'LnOF':
-            template_path = 'files/view_file/LnOF/index.html'
+        # if file.file_type == 'TOF':
+        #     template_path = 'files/view_file/TOF/index.html'
+        # elif file.file_type == 'TnOF':
+        #     template_path = 'files/view_file/TnOF/index.html'
+        # elif file.file_type == 'LOF':
+        #     template_path = 'files/view_file/LOF/index.html'
+        # elif file.file_type == 'LnOF':
+        #     template_path = 'files/view_file/LnOF/index.html'
+
+        template_path = 'files/view_file/index.html'
 
         return render(request, template_path, context)
     except:

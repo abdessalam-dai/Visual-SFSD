@@ -43,6 +43,13 @@ export default class TableFile {
         this.blocks = blocks;
     }
 
+    reset() {
+        this.nbBlocks = 0;
+        this.nbInsertions = 0;
+        this.blocks = [];
+        this.createBoardsDOM();
+    }
+
     async removeLogically(key, animate = false) {
         let {found, pos, readTimes} = await this.search(key, animate);
         let {i, j} = pos
@@ -91,7 +98,7 @@ export default class TableFile {
             block = this.blocks[i];
             block.enregs[j].field1 = field1;
             block.enregs[j].field2 = field2;
-            block.enregs[j].removed = removed;
+            // block.enregs[j].removed = removed; // no need to edit removed
 
             this.blocks[i] = block;
             writeTimes = 1;
@@ -118,13 +125,19 @@ export default class TableFile {
     }
 
     createBoardsDOM() {
+        // set number of blocks and number of elements in header
+        d3.select("#nb-blocks")
+            .text(this.nbBlocks);
+        d3.select("#nb-elements")
+            .text(this.nbInsertions);
+
         this.MSBoard.selectAll("*").remove();
 
         const blocDiv = `
         <div class="bloc w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0" style="height: 352px;">
             <div
                 class="bloc-header text-white px-3 items-center font-medium h-8 rounded-t-lg w-full flex flex-row justify-between bg-slate-900">
-                <span class="bloc-index" style="position: relative"></span>
+                <span class="bloc-index no-select" style="position: relative"></span>
                 <span class="bloc-address" style="position: relative"></span>
                 <span class="bloc-nb" style="position: relative">NB=0</span>
             </div>
