@@ -25,6 +25,7 @@ const buff2 = d3.select(".buf2");
 const MSBoard = d3.select(".ms-container");
 let toolTipIsVisible = false;
 let ToolTipToHide;
+let goDown = true;
 
 
 let newFile;
@@ -72,6 +73,35 @@ const changeButtonsState = (state) => {
     DomElements.editBtn.disabled = state
     DomElements.removePhysicallyBtn.disabled = state
 }
+
+
+// handle buffer
+const upImage = document.querySelector(".mc-footer img");
+const mcFooter = document.querySelector(".mc-footer");
+const mcSection = document.querySelector(".mc");
+const mcDescription = document.querySelector(".mc-description")
+const complexitySection = document.querySelector(".complexity-section");
+const buffers = document.querySelector(".buffers");
+console.log(mcFooter.offsetHeight)
+
+upImage.addEventListener('click', (e) => {
+    if (!goDown) {
+        complexitySection.style.visibility = 'hidden';
+        mcDescription.style.visibility = 'hidden';
+        buffers.style.visibility = 'hidden';
+        mcSection.style.backgroundColor = 'white';
+        mcFooter.style.backgroundColor = '#93C5FD'
+        upImage.style.transform = 'rotate(0deg)'
+        goDown = true;
+    } else {
+        mcSection.style.backgroundColor = '#93C5FD';
+        complexitySection.style.visibility = 'initial'
+        mcDescription.style.visibility = 'initial'
+        buffers.style.visibility = 'initial'
+        upImage.style.transform = 'rotate(-180deg)'
+        goDown = false;
+    }
+});
 
 
 // START - Handle toolbar

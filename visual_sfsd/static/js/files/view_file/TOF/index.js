@@ -73,7 +73,7 @@ upImage.addEventListener('click' , (e) => {
         upImage.style.transform = 'rotate(-180deg)'
         goDown = false;
   }
-})
+});
 
 
 // START - Handle toolbar

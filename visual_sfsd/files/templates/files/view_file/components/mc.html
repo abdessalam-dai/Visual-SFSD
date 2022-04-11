@@ -5,32 +5,32 @@
     {% include "files/view_file/components/complexity.html" %}
     <div class="buffers flex flex-row space-x-4 justify-center">
         <div class="buf flex flex-row justify-center">
-        <div class="bloc w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0" style="height: 352px;">
-            <div class="bloc-header text-white px-3 items-center font-medium  h-8 rounded-t-lg w-full flex flex-row justify-between bg-slate-900">
-                <span class="bloc-index">Buffer 1</span>
-                <span class="bloc-nb">NB=0</span>
-            </div>
-            <div class="bloc-body w-full h-80 bg-gray-400 rounded-b-lg">
-                <ul class="text-lg font-medium text-center">
-                </ul>
-            </div>
-        </div>
-    </div>
-    <div class="buf2 flex flex-row justify-center">
-        <div class="bloc w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0" style="height: 352px;">
-            <div class="bloc-header text-white px-3 items-center font-medium  h-8 rounded-t-lg w-full flex flex-row justify-between bg-slate-900">
-                <span class="bloc-index">Buffer 2</span>
-                <span class="bloc-nb">NB=0</span>
-            </div>
-            <div class="bloc-body w-full h-80 bg-gray-400 rounded-b-lg">
-                <ul class="text-lg font-medium text-center">
-                </ul>
+            <div class="bloc w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0" style="height: 352px;">
+                <div class="bloc-header text-white px-3 items-center font-medium  h-8 rounded-t-lg w-full flex flex-row justify-between bg-slate-900">
+                    <span class="bloc-index">Buffer 1</span>
+                    <span class="bloc-nb">NB=0</span>
+                </div>
+                <div class="bloc-body w-full h-80 bg-gray-400 rounded-b-lg">
+                    <ul class="text-lg font-medium text-center">
+                    </ul>
+                </div>
             </div>
         </div>
-    </div>
+        <div class="buf2 flex flex-row justify-center">
+            <div class="bloc w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0" style="height: 352px;">
+                <div class="bloc-header text-white px-3 items-center font-medium  h-8 rounded-t-lg w-full flex flex-row justify-between bg-slate-900">
+                    <span class="bloc-index">Buffer 2</span>
+                    <span class="bloc-nb">NB=0</span>
+                </div>
+                <div class="bloc-body w-full h-80 bg-gray-400 rounded-b-lg">
+                    <ul class="text-lg font-medium text-center">
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="mc-footer flex px-2 flex-row justify-between items-center">
-        <img src="{% static 'imgs/upMS.svg' %}" class="w-6" alt="" style="transform: rotate(180deg)">
+        <img src="{% static 'imgs/upMS.svg' %}" class="w-6" alt="" style="transform: rotate(180deg); cursor:pointer;">
         <span class="text-sm font-semibold text-gray-800 bottom-0">MC</span>
     </div>
 </div>
@@ -39,8 +39,8 @@
 <script>
     let nbInstructions = d3.selectAll(".algorithm > div")
         .nodes().length;
-    for (let i=0; i<nbInstructions; i++) {
-        d3.select(`.algorithm > div:nth-child(${i+1})`)
+    for (let i = 0; i < nbInstructions; i++) {
+        d3.select(`.algorithm > div:nth-child(${i + 1})`)
             .select("div")
             .text(i);
     }
