@@ -1,9 +1,9 @@
 {% load static %}
-<div class="mc bg-blue-300 flex flex-col justify-between" style="width: 27rem">
+<div class="mc bg-blue-300 flex flex-col justify-between" style="width: 27rem;">
     <div class="mc-description text-center font-medium"
          style="padding: 10px 10px; ; color: #fff; font-size: 1.2em"></div>
     {% include "files/view_file/components/complexity.html" %}
-    <div class="flex flex-row space-x-4 justify-center">
+    <div class="buffers flex flex-row space-x-4 justify-center">
         <div class="buf flex flex-row justify-center">
         <div class="bloc w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0" style="height: 352px;">
             <div class="bloc-header text-white px-3 items-center font-medium  h-8 rounded-t-lg w-full flex flex-row justify-between bg-slate-900">
@@ -30,7 +30,7 @@
     </div>
     </div>
     <div class="mc-footer flex px-2 flex-row justify-between items-center">
-        <img src="{% static 'imgs/upMS.svg' %}" class="w-6" alt="">
+        <img src="{% static 'imgs/upMS.svg' %}" class="w-6" alt="" style="transform: rotate(180deg)">
         <span class="text-sm font-semibold text-gray-800 bottom-0">MC</span>
     </div>
 </div>
