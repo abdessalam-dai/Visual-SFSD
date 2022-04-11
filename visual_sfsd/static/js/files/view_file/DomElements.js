@@ -1,4 +1,7 @@
 // grabbing common dom elements
+export const fileName = document.querySelector("#file-name");
+export const fileHeadDropDown = document.querySelector("#file-head-dropdown");
+
 export const toolbarIcons = document.querySelectorAll(".toolbar-icon");
 export const toolbarOptions = document.querySelectorAll('.toolbar-tool');
 

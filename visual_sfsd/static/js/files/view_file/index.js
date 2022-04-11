@@ -4,6 +4,7 @@ import LOF from "../SFSD/types/simple/LOF.js";
 import LnOF from "../SFSD/types/simple/LnOF.js";
 import * as DomElements from "./DomElements.js";
 import {MAX_NB_BLOCKS, MAX_NB_ENREGS_DEFAULT} from "../constants.js";
+import {fileHeadDropDown} from "./DomElements.js";
 
 
 // START - useful functions
@@ -62,6 +63,25 @@ if (FILE_TYPE === "TOF") {
 // END - Create file
 
 
+// START - Handle file head drop down
+DomElements.fileName.addEventListener("click", function () {
+    const fileHeadDropDown = DomElements.fileHeadDropDown;
+
+    if (fileHeadDropDown.classList.contains("hidden")) {
+        fileHeadDropDown.classList.remove("hidden");
+    } else {
+        fileHeadDropDown.classList.add("hidden");
+    }
+});
+
+document.addEventListener('click', (e) => {
+    if (!e.target.classList.contains("file-head-dropdown") && !e.target.classList.contains("file-name-all") && !e.target.classList.contains("file-name")) {
+        DomElements.fileHeadDropDown.classList.add("hidden");
+    }
+})
+// END - Handle file head drop down
+
+
 const changeButtonsState = (state) => {
     if (state) { // if an option is clicked, hide all tooltips
         hideAllToolbarTooltips();
@@ -107,7 +127,7 @@ upImage.addEventListener('click', (e) => {
 // START - Handle toolbar
 Array.from(DomElements.toolbarIcons).forEach(option => {
     option.addEventListener('click', (e) => {
-        let tooltip = option.parentNode.children[1];
+        let tooltip = option.parentNode.parentNode.children[1];
 
         if (toolTipIsVisible) {
             document.querySelectorAll('.tooltip-visible').forEach(tooltip => {

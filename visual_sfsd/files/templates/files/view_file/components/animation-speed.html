@@ -1,17 +1,31 @@
-<div class="animation-speed">
-    <label for="animation-speed-bar">Animation speed : </label>
-    Slow<input type="range" id="animation-speed-bar" min="0" max="190"/>Fast
-    <br>
+<div class="animation-speed-container">
+    <div class="animation-speed rounded-t-lg shadow-lg">
+        <label for="animation-speed-bar">Animation speed : </label>
+        Slow<input type="range" id="animation-speed-bar" min="0" max="190"/>Fast
+        <br>
+    </div>
 </div>
 
 <style>
-    .animation-speed {
+    .animation-speed-container {
+        width: 100%;
+        display: flex;
+        justify-content: center;
         position: absolute;
         bottom: 0;
+        z-index: 1;
+    }
+
+    .animation-speed-container:hover .animation-speed {
+        visibility: initial;
+    }
+
+    .animation-speed {
+        visibility: hidden;
         width: 400px;
         padding: 20px 0;
         text-align: center;
         background: #eee;
-        left: calc(50% - 200px);
+        transition: all 0.6s ease;
     }
 </style>
