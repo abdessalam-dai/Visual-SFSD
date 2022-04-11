@@ -317,7 +317,11 @@ const generateData = (n, min, max) => {
         }
     }
 
-    return arr.sort((a, b) => a.key - b.key); // return sorted array according to key
+    if (FILE_TYPE === "TOF") {
+        return arr.sort((a, b) => a.key - b.key); // return sorted array according to key
+    } else {
+        return arr;
+    }
 }
 
 const handleGenerateData = () => {
