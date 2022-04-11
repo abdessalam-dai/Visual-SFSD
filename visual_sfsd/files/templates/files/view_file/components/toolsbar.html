@@ -1,27 +1,35 @@
+{% load static %}
+
 <div class="items-center tools rounded-r-lg mt-8 bg-gray-600 shadow-2xl w-auto">
     <ul class="toolbar-options flex flex-col space-y-5 items-center w-14 py-3">
         <li class="toolbar-tool">
-            <div class="toolbar-icon w-9 h-9 rounded-md bg-gray-300 hover:h-11 hover:w-11 transition-all"></div>
+            <img class="toolbar-icon w-9 h-9 rounded-md hover:h-11 hover:w-11 transition-all"
+                 src="{% static 'imgs/view_file/toolbar/fillDummyData.png' %}" alt="" title="Fill with dummy data">
             {% include "files/view_file/components/tooltip-form-generate-data.html" %}
         </li>
         <li class="toolbar-tool">
-            <div class="toolbar-icon w-9 h-9 rounded-md bg-gray-300 hover:h-11 hover:w-11 transition-all"></div>
+            <img class="toolbar-icon w-9 h-9 rounded-md hover:h-11 hover:w-11 transition-all"
+                 src="{% static 'imgs/view_file/toolbar/searchElement.svg' %}" alt=""  title="Search element">
             {% include "files/view_file/components/tooltip-form-search.html" %}
         </li>
         <li class="toolbar-tool">
-            <div class="toolbar-icon w-9 h-9 rounded-md bg-gray-300 hover:h-11 hover:w-11 transition-all"></div>
+            <img class="toolbar-icon w-9 h-9 rounded-md hover:h-11 hover:w-11 transition-all"
+                 src="{% static 'imgs/view_file/toolbar/removeLogically.png' %}" alt=""  title="Remove logically">
             {% include "files/view_file/components/tooltip-form-remove-logically.html" %}
         </li>
         <li class="toolbar-tool">
-            <div class="toolbar-icon w-9 h-9 rounded-md bg-gray-300 hover:h-11 hover:w-11 transition-all"></div>
+            <img class="toolbar-icon w-9 h-9 rounded-md hover:h-11 hover:w-11 transition-all"
+                 src="{% static 'imgs/view_file/toolbar/removePhysically.svg' %}" alt=""  title="Remove physically">
             {% include "files/view_file/components/tooltip-form-remove-physically.html" %}
         </li>
         <li class="toolbar-tool">
-            <div class="toolbar-icon w-9 h-9 rounded-md bg-gray-300 hover:h-11 hover:w-11 transition-all"></div>
+            <img class="toolbar-icon w-9 h-9 rounded-md hover:h-11 hover:w-11 transition-all"
+                 src="{% static 'imgs/view_file/toolbar/addElement.svg' %}" alt=""  title="Add element">
             {% include "files/view_file/components/tooltip-form-insert.html" %}
         </li>
         <li class="toolbar-tool">
-            <div class="toolbar-icon w-9 h-9 rounded-md bg-gray-300 hover:h-11 hover:w-11 transition-all"></div>
+            <img class="toolbar-icon w-9 h-9 rounded-md hover:h-11 hover:w-11 transition-all"
+                 src="{% static 'imgs/view_file/toolbar/editElement.svg' %}" alt=""  title="Edit element">
             {% include "files/view_file/components/tooltip-form-edit.html" %}
         </li>
     </ul>
@@ -38,6 +46,10 @@
 
     .toolbar-tooltip {
         position: absolute;
+    }
+
+    .toolbar-icon {
+        text-align: center;
     }
 
     .rect {

@@ -1,6 +1,9 @@
-import TOF from "../../SFSD/types/simple/TOF.js";
-import * as DomElements from "./../DomElements.js";
-import {MAX_NB_BLOCKS, MAX_NB_ENREGS_DEFAULT} from "../../constants.js";
+import TOF from "../SFSD/types/simple/TOF.js";
+import TnOF from "../SFSD/types/simple/TnOF.js";
+import LOF from "../SFSD/types/simple/LOF.js";
+import LnOF from "../SFSD/types/simple/LnOF.js";
+import * as DomElements from "./DomElements.js";
+import {MAX_NB_BLOCKS, MAX_NB_ENREGS_DEFAULT} from "../constants.js";
 
 
 // START - useful functions
@@ -22,14 +25,38 @@ const buff2 = d3.select(".buf2");
 const MSBoard = d3.select(".ms-container");
 let toolTipIsVisible = false;
 let ToolTipToHide;
-let goDown = true;
 
-let newFile = new TOF(
-    'file.txt',
-    buff,
-    buff2,
-    MSBoard,
-);
+
+let newFile;
+if (FILE_TYPE === "TOF") {
+    newFile = new TOF(
+        'file.txt',
+        buff,
+        buff2,
+        MSBoard,
+    );
+} else if (FILE_TYPE === "TnOF") {
+    newFile = new TnOF(
+        'file.txt',
+        buff,
+        buff2,
+        MSBoard,
+    );
+} else if (FILE_TYPE === "LOF") {
+    newFile = new LOF(
+        'file.txt',
+        buff,
+        buff2,
+        MSBoard,
+    );
+} else {
+    newFile = new LnOF(
+        'file.txt',
+        buff,
+        buff2,
+        MSBoard,
+    );
+}
 
 // END - Create file
 
@@ -47,40 +74,7 @@ const changeButtonsState = (state) => {
 }
 
 
-// handle buffer
-const upImage = document.querySelector(".mc-footer img");
-const mcFooter = document.querySelector(".mc-footer");
-const mcSection = document.querySelector(".mc");
-const mcDescription = document.querySelector(".mc-description")
-const complexitySection =  document.querySelector(".complexity-section");
-const buffers = document.querySelector(".buffers");
-console.log(mcFooter.offsetHeight)
-
-upImage.addEventListener('click' , (e) => {
-    if (!goDown) {
-        complexitySection.style.visibility = 'hidden';
-        mcDescription.style.visibility = 'hidden';
-        buffers.style.visibility = 'hidden';
-        mcSection.style.backgroundColor = 'white';
-        mcFooter.style.backgroundColor = '#93C5FD'
-        upImage.style.transform = 'rotate(0deg)'
-        goDown = true;
-  } else{
-        mcSection.style.backgroundColor = '#93C5FD';
-        complexitySection.style.visibility = 'initial'
-        mcDescription.style.visibility = 'initial'
-        buffers.style.visibility = 'initial'
-        upImage.style.transform = 'rotate(-180deg)'
-        goDown = false;
-  }
-})
-
-
 // START - Handle toolbar
-
-const toolbarIcons = document.querySelectorAll(".toolbar-icon");
-const toolbarOptions = document.querySelectorAll('.toolbar-tool');
-
 Array.from(DomElements.toolbarIcons).forEach(option => {
     option.addEventListener('click', (e) => {
         let tooltip = option.parentNode.children[1];

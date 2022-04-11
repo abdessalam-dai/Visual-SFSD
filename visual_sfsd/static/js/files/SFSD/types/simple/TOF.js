@@ -36,7 +36,6 @@ export default class TOF extends TableFile {
 
         let midBlockElement;
         let bufferElement;
-        let MCDescription;
         let midElement;
         let elementBGColor;
         let isBlocksLengthExceeded = false;
