@@ -26,7 +26,7 @@ const buff2 = d3.select(".buf2");
 const MSBoard = d3.select(".ms-container");
 let toolTipIsVisible = false;
 let ToolTipToHide;
-let goDown = true;
+let goDown = false;
 
 
 let newFile;
