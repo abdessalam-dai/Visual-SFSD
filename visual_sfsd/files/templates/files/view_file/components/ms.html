@@ -1,8 +1,13 @@
+{% load static %}
 <div class="ms w-2/3">
     <div class="ms-container overflow-x-scroll flex flex-row space-x-8 flex-shrink-0">
     </div>
-    <div class="flex flex-row justify-between">
-        <button id="scroll-left-btn" style="background: #eee; padding: 10px 15px"><-</button>
-        <button id="scroll-right-btn" style="background: #eee; padding: 10px 15px">-></button>
+    <div class="flex flex-row justify-between mt-4">
+        <button id="scroll-left-btn">
+            <img src="{% static 'imgs/scroll-bar/left-arrow.png' %}" alt="" style="width: 35px; height: 35px">
+        </button>
+        <button id="scroll-right-btn">
+            <img src="{% static 'imgs/scroll-bar/right-arrow.png' %}" alt="" style="width: 35px; height: 35px">
+        </button>
     </div>
 </div>
