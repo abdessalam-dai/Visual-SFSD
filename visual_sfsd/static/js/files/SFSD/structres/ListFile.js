@@ -11,6 +11,7 @@ import {
     ENREG_HIGHLIGHT_GREEN,
     ENREG_HIGHLIGHT_GREY,
 } from '../../constants.js';
+import {delay, sleep} from "../../view_file/shared/animationSpeed.js";
 
 
 export default class ListFile {
@@ -57,16 +58,36 @@ export default class ListFile {
         this.init();
     }
 
-    removeLogically(key, animate = false) {
-        let {found, pos, readTimes} = this.search(key, animate);
-        let {i, j} = pos;
+    async removeLogically(key, animate = false) {
+        let {found, pos, readTimes} = await this.search(key, animate);
+        let {i, j} = pos
         let writeTimes;
 
         if (found) {
             this.blocks[i].enregs[j].removed = true;
             writeTimes = 1;
 
-            this.createBoardsDOM();
+            if (animate) {
+                this.buff
+                    .select(`.bloc .bloc-body ul li:nth-child(${j + 1})`)
+                    .transition()
+                    .duration(500 * delay)
+                    .style("color", "#a70000");
+
+                await sleep(1000);
+
+                this.MSBoard
+                    .select(`.bloc:nth-child(${i + 1})`)
+                    .select(`.bloc-body ul li:nth-child(${j + 1})`)
+                    .transition()
+                    .duration(500 * delay)
+                    .style("color", "#a70000");
+
+                this.updateIOTimes(readTimes, writeTimes);
+                this.updateMCDescription("Removing was successful", "success");
+
+                this.createBoardsDOM();
+            }
 
             return true;
         } else {
@@ -74,10 +95,11 @@ export default class ListFile {
         }
     }
 
-    editEnreg(key, field1, field2, removed = false, animate = false) {
-        let {found, pos, readTimes} = this.search(key, animate);
+    async editEnreg(key, field1, field2, removed = false, animate = false) {
+        let {found, pos, readTimes} = await this.search(key, animate);
         let {i, j} = pos
         let writeTimes;
+
         let block;
 
         if (found) {
@@ -89,7 +111,20 @@ export default class ListFile {
             this.blocks[i] = block;
             writeTimes = 1;
 
-            this.createBoardsDOM();
+            if (animate) {
+                this.buff
+                    .select(`.bloc .bloc-body ul li:nth-child(${j + 1})`)
+                    .transition()
+                    .duration(500 * delay)
+                    .style("background", ENREG_HIGHLIGHT_GREEN);
+
+                await sleep(1000);
+
+                this.updateBlockInMS(i, block);
+
+                this.updateIOTimes(readTimes, writeTimes);
+                this.updateMCDescription("Editing was successful", "success");
+            }
 
             return true;
         } else {
@@ -275,19 +310,7 @@ export default class ListFile {
         }
 
         // make the bg color of the head index and the tail index different
-        this.MSBoard.selectAll(".bloc")
-            .data(this.blocks)
-            .select(".bloc-header")
-            .transition()
-            .delay(1000)
-            .duration(600)
-            .style("background", function (block, index) {
-                if (index === headIndex) {
-                    return "#329466";
-                } else if (index === tailIndex) {
-                    return "#cf6f18";
-                }
-            });
+        this.changeHeadAndTailBgs();
 
         // Add blocks bodies and fill them with data
         let cpt = 1;
@@ -407,6 +430,22 @@ export default class ListFile {
             });
     }
 
+    changeHeadAndTailBgs() {
+        let headIndex = this.headIndex;
+        let tailIndex = this.tailIndex;
+        this.MSBoard.selectAll(".bloc")
+            .data(this.blocks)
+            .select(".bloc-header")
+            .transition()
+            .delay(1000)
+            .duration(600)
+            .style("background", function (block, index) {
+                if (index === headIndex) return "#329466";
+                if (index === tailIndex) return "#cf6f18";
+                // return "#0F172A";
+            });
+    }
+
     scrollToBlockElement(index, msBoard) {
         let blockElement = msBoard.select(`.bloc:nth-child(${index + 1})`);
         // scroll to blockElement
@@ -435,11 +474,13 @@ export default class ListFile {
 
     isInsertionAllowed() {
         // allow insertion only if the maximum capacity of blocks isn't reached
-        if (this.blocks.length === 0) {
+        let usedBlocks = this.blocks.filter((block) => block !== null);
+
+        if (usedBlocks.length === 0) {
             return true;
-        } else if (this.blocks[this.blocks.length - 1].enregs.length < MAX_NB_ENREGS_DEFAULT) {
+        } else if (this.blocks[this.tailIndex].enregs.length < MAX_NB_ENREGS_DEFAULT) {
             return true;
-        } else if (this.blocks.length < MAX_NB_BLOCKS) {
+        } else if (usedBlocks.length < MAX_NB_BLOCKS) {
             return true;
         }
 
@@ -608,6 +649,15 @@ export default class ListFile {
             .attr("class", "border-b-2 h-10 flex justify-center flex-col")
             .append("span")
             .text(`${newEnreg.key}`);
+
+
+        bufferElement.append("div")
+            .attr("class", "bloc-footer bg-slate-900 text-white px-3 items-center font-medium h-8 rounded-b-lg w-full flex flex-row justify-between")
+            .append("span")
+            .attr("class", "bloc-next")
+            .text("next=")
+            .append("span")
+            .text("-1");
     }
 
     getJsonFormat() {
