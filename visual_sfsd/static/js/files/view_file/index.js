@@ -80,7 +80,7 @@ const buff2 = d3.select(".buf2");
 const MSBoard = d3.select(".ms-container");
 let toolTipIsVisible = false;
 let ToolTipToHide;
-let goDown = true;
+let goDown = false;
 
 
 let newFile;
@@ -333,7 +333,7 @@ validateEdit();
 
 
 // START - Fill with dummy data
-const n = 10;
+const n = 6;
 const min = 0;
 const max = 100;
 
@@ -370,7 +370,7 @@ const generateData = (n, min, max) => {
         }
     }
 
-    if (FILE_TYPE === "TOF") {
+    if (FILE_TYPE === "TOF" || FILE_TYPE === "LOF") {
         return arr.sort((a, b) => a.key - b.key); // return sorted array according to key
     } else {
         return arr;
@@ -494,7 +494,9 @@ const handleRemovePhysically = () => {
     });
 }
 
-handleRemovePhysically();
+if (FILE_TYPE !== 'LOF' && FILE_TYPE !== 'LnOF') {
+    handleRemovePhysically();
+}
 // END - Remove element physically
 
 

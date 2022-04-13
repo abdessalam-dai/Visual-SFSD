@@ -11,6 +11,7 @@ import {
     ENREG_HIGHLIGHT_GREEN,
     ENREG_HIGHLIGHT_GREY,
 } from '../../constants.js';
+import {delay, sleep} from "../../view_file/shared/animationSpeed.js";
 
 
 export default class ListFile {
@@ -47,16 +48,46 @@ export default class ListFile {
         this.init();
     }
 
-    removeLogically(key, animate = false) {
-        let {found, pos, readTimes} = this.search(key, animate);
-        let {i, j} = pos;
+    reset() {
+        this.nbBlocks = 0;
+        this.nbInsertions = 0;
+        this.blocks = [];
+        this.headIndex = -1;
+        this.tailIndex = -1;
+        this.createBoardsDOM();
+        this.init();
+    }
+
+    async removeLogically(key, animate = false) {
+        let {found, pos, readTimes} = await this.search(key, animate);
+        let {i, j} = pos
         let writeTimes;
 
         if (found) {
             this.blocks[i].enregs[j].removed = true;
             writeTimes = 1;
 
-            this.createBoardsDOM();
+            if (animate) {
+                this.buff
+                    .select(`.bloc .bloc-body ul li:nth-child(${j + 1})`)
+                    .transition()
+                    .duration(500 * delay)
+                    .style("color", "#a70000");
+
+                await sleep(1000);
+
+                this.MSBoard
+                    .select(`.bloc:nth-child(${i + 1})`)
+                    .select(`.bloc-body ul li:nth-child(${j + 1})`)
+                    .transition()
+                    .duration(500 * delay)
+                    .style("color", "#a70000");
+
+                this.updateIOTimes(readTimes, writeTimes);
+                this.updateMCDescription("Removing was successful", "success");
+
+                this.createBoardsDOM();
+            }
 
             return true;
         } else {
@@ -64,10 +95,11 @@ export default class ListFile {
         }
     }
 
-    editEnreg(key, field1, field2, removed = false, animate = false) {
-        let {found, pos, readTimes} = this.search(key, animate);
+    async editEnreg(key, field1, field2, removed = false, animate = false) {
+        let {found, pos, readTimes} = await this.search(key, animate);
         let {i, j} = pos
         let writeTimes;
+
         let block;
 
         if (found) {
@@ -79,7 +111,20 @@ export default class ListFile {
             this.blocks[i] = block;
             writeTimes = 1;
 
-            this.createBoardsDOM();
+            if (animate) {
+                this.buff
+                    .select(`.bloc .bloc-body ul li:nth-child(${j + 1})`)
+                    .transition()
+                    .duration(500 * delay)
+                    .style("background", ENREG_HIGHLIGHT_GREEN);
+
+                await sleep(1000);
+
+                this.updateBlockInMS(i, block);
+
+                this.updateIOTimes(readTimes, writeTimes);
+                this.updateMCDescription("Editing was successful", "success");
+            }
 
             return true;
         } else {
@@ -106,28 +151,22 @@ export default class ListFile {
     }
 
     createBoardsDOM() {
+        // set number of blocks and number of elements in header
+        d3.select("#nb-blocks")
+            .text(this.nbBlocks);
+        d3.select("#nb-elements")
+            .text(this.nbInsertions);
+
         this.MSBoard.selectAll("*").remove();
 
         const blocDiv = `
-        <div class="bloc w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0" style="height: 352px;">
+        <div class="bloc no-select w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0" style="height: 352px;">
             <div
                 class="bloc-header text-white px-3 items-center font-medium h-8 rounded-t-lg w-full flex flex-row justify-between bg-slate-900">
-                <span class="bloc-index" style="position: relative">0</span>
+                <span class="bloc-index" style="position: relative"></span>
                 <span class="bloc-address" style="position: relative"></span>
                 <span class="bloc-nb" style="position: relative">NB=0</span>
             </div>
-<!--            <div class="bloc-body w-full h-80 bg-gray-400 rounded-b-lg">-->
-<!--                <ul class="text-lg font-medium text-center">-->
-<!--&lt;!&ndash;                    <li class="border-b-2 h-10 flex justify-center flex-col">5464</li>&ndash;&gt;-->
-<!--&lt;!&ndash;                    <li class="border-b-2 h-10 flex justify-center flex-col">5464</li>&ndash;&gt;-->
-<!--&lt;!&ndash;                    <li class="border-b-2 h-10 flex justify-center flex-col">5464</li>&ndash;&gt;-->
-<!--&lt;!&ndash;                    <li class="border-b-2 h-10 flex justify-center flex-col">5464</li>&ndash;&gt;-->
-<!--&lt;!&ndash;                    <li class="border-b-2 h-10 flex justify-center flex-col">5464</li>&ndash;&gt;-->
-<!--&lt;!&ndash;                    <li class="border-b-2 h-10 flex justify-center flex-col">5464</li>&ndash;&gt;-->
-<!--&lt;!&ndash;                    <li class="border-b-2 h-10 flex justify-center flex-col">5464</li>&ndash;&gt;-->
-<!--&lt;!&ndash;                    <li class=" h-10 flex justify-center flex-col">5464</li>&ndash;&gt;-->
-<!--                </ul>-->
-<!--            </div>-->
         </div>`
 
         for (let block of this.blocks) {
@@ -136,132 +175,150 @@ export default class ListFile {
 
         this.MSBoard.selectAll('.bloc')
             .data(this.blocks)
-            .select(".bloc-index")
-            .text(function (block, index) {
-                if (block !== null) return `next=${block.nextBlockIndex}`
-                return '#'
-            });
-
-        let headIndex = this.headIndex;
-
-        this.MSBoard.selectAll(".bloc")
-            .data(this.blocks)
-            .select(".bloc-header")
-            .style("background", function (block, index) {
-                if (index === headIndex) {
-                    return "#9361ff"
-                }
-            });
+        // .classed("w-48", function (block) {
+        //     return block !== null;
+        // })
+        // .classed("w-20", function (block) {
+        //     return block === null;
+        // });
 
         this.MSBoard.selectAll('.bloc')
             .data(this.blocks)
-            .select(".bloc-address")
-            .style("color", "#38BDF8")
+            .select(".bloc-index")
+            .append("span")
+            .style("cursor", function (block) {
+                if (block !== null) return "pointer";
+                return "";
+            })
             .text(function (block, index) {
-
-                if (block !== null) return `0x${block.blockAddress}`;
-
-                return '...'
+                if (block !== null) return index;
+                return "#";
             });
 
         this.MSBoard.selectAll('.bloc')
             .data(this.blocks)
             .select(".bloc-nb")
             .text(function (block) {
-                if (block !== null) return `NB=${block.nb}`
-
-                return '0'
+                if (block !== null) return `NB=${block.nb}`;
+                return "#";
             });
 
         // CREATING THE TOOL TIP FOR INDEX
         this.MSBoard.selectAll(".bloc-index")
-            .append("div")
-            .attr("class", "tool-tip-index")
-            .style("position", "absolute")
-            .style("width", "160px")
-            .style("z-index", "10")
-            .style("visibility", "hidden")
-            .style("background", "#38BDF8")
-            .style("color", "#9333EA")
-            .style("padding", "5px")
-            .text("Index")
+            .data(this.blocks)
+            .each(function (block) {
+                if (block !== null) {
+                    d3.select(this)
+                        .append("div")
+                        .attr("class", "tool-tip-index")
+                        .style("position", "absolute")
+                        .style("width", "180px")
+                        .style("z-index", "10")
+                        .style("visibility", "hidden")
+                        .style("background", "#38BDF8")
+                        .style("color", "#9333EA")
+                        .style("padding", "5px")
+                        .style("z-index", "99")
+                        .text("Logical address");
+                }
+            })
 
         this.MSBoard.selectAll(".bloc-index")
+            .data(this.blocks)
             .on("mouseover", function (e) {
                 d3.select(this)
                     .select(".tool-tip-index")
                     .style("transition", "visibility 0s linear 50ms")
-                    .style("visibility", "visible")
+                    .style("visibility", "visible");
             })
             .on("mouseout", function (e) {
                 d3.select(this)
                     .select(".tool-tip-index")
                     .style("transition", "visibility 0s linear 100ms")
-                    .style("visibility", "hidden")
+                    .style("visibility", "hidden");
             })
+            .on("click", function (e, block) {
+                if (block !== null) {
+                    let index = d3.select(this)
+                        .select("span")
+                        .text();
 
-        this.MSBoard.selectAll(".bloc-address")
-            .append("div")
-            .attr("class", "tool-tip-address")
-            .style("position", "absolute")
-            .style("width", "160px")
-            .style("z-index", "10")
-            .style("visibility", "hidden")
-            .style("background", "#38BDF8")
-            .style("color", "#9333EA")
-            .style("padding", "5px")
-            .text("Physical address")
-        // CREATING THE TOOL TIP FOR INDEX
-        this.MSBoard.selectAll(".bloc-address")
-            .on("mouseover", function (e) {
-                d3.select(this)
-                    .select(".tool-tip-address")
-                    .style("transition", "visibility 0s linear 50ms")
-                    .style("visibility", "visible")
-            })
-            .on("mouseout", function (e) {
-                d3.select(this)
-                    .select(".tool-tip-address")
-                    .style("transition", "visibility 0s linear 100ms")
-                    .style("visibility", "hidden")
-            })
+                    index = parseInt(index);
+
+                    d3.select(this)
+                        .select("span")
+                        .text(function (block, blockIndex) {
+                            if (index <= MAX_NB_BLOCKS && index >= 0) {
+                                return `0x${block.blockAddress}`;
+                            } else {
+                                return blockIndex;
+                            }
+                        });
+
+                    d3.select(this)
+                        .select("div")
+                        .text(function (block, blockIndex) {
+                            if (index <= MAX_NB_BLOCKS && index >= 0) {
+                                return "Physical address (real)";
+                            } else {
+                                return "Logical address";
+                            }
+                        });
+                }
+            });
 
         // CREATING THE TOOL TIP FOR NB
-
         this.MSBoard.selectAll(".bloc-nb")
-            .append("div")
-            .attr("class", "tool-tip-nb")
-            .style("position", "absolute")
-            .style("width", "160px")
-            .style("z-index", "10")
-            .style("visibility", "hidden")
-            .style("background", "#38BDF8")
-            .style("color", "#9333EA")
-            .style("padding", "5px")
-            .text("Number of Enregs.");
+            .data(this.blocks)
+            .each(function (block) {
+                if (block !== null) {
+                    d3.select(this)
+                        .append("div")
+                        .attr("class", "tool-tip-nb")
+                        .style("position", "absolute")
+                        .style("left", "-115px")
+                        .style("width", "160px")
+                        .style("visibility", "hidden")
+                        .style("background", "#38BDF8")
+                        .style("color", "#9333EA")
+                        .style("padding", "5px")
+                        .text("Number of Enregs.");
+                }
+            });
 
-        // CREATING THE TOOL TIP FOR INDEX
         this.MSBoard.selectAll(".bloc-nb")
             .on("mouseover", function (e) {
                 d3.select(this)
                     .select(".tool-tip-nb")
                     .style("transition", "visibility 0s linear 50ms")
-                    .style("visibility", "visible")
+                    .style("visibility", "visible");
             })
             .on("mouseout", function (e) {
                 d3.select(this)
                     .select(".tool-tip-nb")
                     .style("transition", "visibility 0s linear 100ms")
-                    .style("visibility", "hidden")
-            })
+                    .style("visibility", "hidden");
+            });
 
 
+        // scroll to the head index (if it exists)
+        let headIndex = this.headIndex;
+        let tailIndex = this.tailIndex;
+
+        if (headIndex !== -1) {
+            this.scrollToBlockElement(this.headIndex, this.MSBoard);
+        }
+
+        // make the bg color of the head index and the tail index different
+        this.changeHeadAndTailBgs();
+
+        // Add blocks bodies and fill them with data
         let cpt = 1;
 
         this.MSBoard.selectAll('.bloc')
             .data(this.blocks)
             .append("div")
-            .attr("class", "bloc-body w-full h-80 bg-gray-400 rounded-b-lg")
+            .attr("class", "bloc-body w-full h-80 bg-gray-400")
             .append("ul")
             .attr("class", "text-lg font-medium text-center")
             .each(function (block) {
@@ -306,16 +363,124 @@ export default class ListFile {
                             return enreg.key
                         });
                 }
+            });
+
+
+        // Add blocks footers (to display next block index)
+        this.MSBoard.selectAll(".bloc")
+            .data(this.blocks)
+            .append("div")
+            .attr("class", "bloc-footer text-white px-3 items-center font-medium h-8 rounded-b-lg w-full flex flex-row justify-between")
+            .classed("bg-slate-900", function (block) {
+                return block !== null;
             })
+            .classed("bg-slate-600", function (block) {
+                return block === null;
+            })
+            .style("cursor", function (block) {
+                if (block === null || block.nextBlockIndex === -1) return "not-allowed";
+                return "pointer";
+            })
+            .append("span")
+            .attr("class", "bloc-next")
+            .text(function (block) {
+                if (block !== null) return "next=";
+                return "#";
+            })
+            .append("span")
+            .each(function (block) {
+                d3.select(this).text(function () {
+                    if (block !== null) return `${block.nextBlockIndex}`;
+                    return "";
+                });
+            });
+
+        let msBoard = this.MSBoard; // this is needed for the event listener, because the keyword "this" is used for d3
+        let scrollToBlockElement = this.scrollToBlockElement;
+        this.MSBoard.selectAll(".bloc-next")
+            .data(this.blocks)
+            .on("click", function (e, block) {
+                if (block !== null) {
+                    if (block.nextBlockIndex !== -1) {
+                        scrollToBlockElement(block.nextBlockIndex, msBoard);
+                    }
+                }
+            });
+
+
+        // Set different bg colors for blocks that are null
+        this.MSBoard.selectAll(".bloc")
+            .data(this.blocks)
+            .select(".bloc-header")
+            .classed("bg-slate-900", function (block) {
+                return block !== null;
+            })
+            .classed("bg-slate-600", function (block) {
+                return block === null;
+            });
+
+        this.MSBoard.selectAll(".bloc")
+            .data(this.blocks)
+            .select(".bloc-body")
+            .classed("bg-gray-400", function (block) {
+                return block !== null;
+            })
+            .classed("bg-gray-300", function (block) {
+                return block === null;
+            });
+    }
+
+    changeHeadAndTailBgs() {
+        let headIndex = this.headIndex;
+        let tailIndex = this.tailIndex;
+        this.MSBoard.selectAll(".bloc")
+            .data(this.blocks)
+            .select(".bloc-header")
+            .transition()
+            .delay(1000)
+            .duration(600)
+            .style("background", function (block, index) {
+                if (index === headIndex) return "#329466";
+                if (index === tailIndex) return "#cf6f18";
+                // return "#0F172A";
+            });
+    }
+
+    scrollToBlockElement(index, msBoard) {
+        let blockElement = msBoard.select(`.bloc:nth-child(${index + 1})`);
+        // scroll to blockElement
+        let msLeft = msBoard.node().offsetLeft;
+        let blockLeft = blockElement.node().offsetLeft;
+
+        msBoard.node().scroll({
+            left: blockLeft - msLeft - 240,
+            behavior: "smooth",
+        });
+
+        // highlight the blockElement
+        blockElement.transition()
+            .duration(600)
+            .style("transform", "translate(0, -10px)")
+            .select('.bloc-header')
+            .style('background', "#1765ba");
+
+        blockElement.transition()
+            .delay(1000)
+            .duration(600)
+            .style("transform", "translate(0, 0)")
+            .select('.bloc-header')
+            .style('background', "#0F172A");
     }
 
     isInsertionAllowed() {
         // allow insertion only if the maximum capacity of blocks isn't reached
-        if (this.blocks.length === 0) {
+        let usedBlocks = this.blocks.filter((block) => block !== null);
+
+        if (usedBlocks.length === 0) {
             return true;
-        } else if (this.blocks[this.blocks.length - 1].enregs.length < MAX_NB_ENREGS_DEFAULT) {
+        } else if (this.blocks[this.tailIndex].enregs.length < MAX_NB_ENREGS_DEFAULT) {
             return true;
-        } else if (this.blocks.length < MAX_NB_BLOCKS) {
+        } else if (usedBlocks.length < MAX_NB_BLOCKS) {
             return true;
         }
 
@@ -484,6 +649,15 @@ export default class ListFile {
             .attr("class", "border-b-2 h-10 flex justify-center flex-col")
             .append("span")
             .text(`${newEnreg.key}`);
+
+
+        bufferElement.append("div")
+            .attr("class", "bloc-footer bg-slate-900 text-white px-3 items-center font-medium h-8 rounded-b-lg w-full flex flex-row justify-between")
+            .append("span")
+            .attr("class", "bloc-next")
+            .text("next=")
+            .append("span")
+            .text("-1");
     }
 
     getJsonFormat() {

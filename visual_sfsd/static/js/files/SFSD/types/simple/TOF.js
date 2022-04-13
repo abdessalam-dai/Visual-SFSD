@@ -72,7 +72,7 @@ export default class TOF extends TableFile {
             if (animate) await this.highlightInstruction(6);
             if (key >= firstKey && key <= lastKey) {
                 if (animate) {
-                    this.updateMCDescription(`${key} ∈ [${lastKey}, ${firstKey}]`, "success");
+                    this.updateMCDescription(`${key} ∈ ${firstKey}, ${lastKey}`, "success");
                     await sleep(1000);
 
                     await this.highlightInstruction(7);
@@ -145,7 +145,7 @@ export default class TOF extends TableFile {
             } else if (key < firstKey) {
                 if (animate) await this.highlightInstruction(26);
                 if (animate) {
-                    this.updateMCDescription(`${key} ∉ [${lastKey}, ${firstKey}]`, "error");
+                    this.updateMCDescription(`${key} ∉ ${firstKey}, ${lastKey}`, "error");
                     await sleep(1000);
                 }
                 high = i - 1;
@@ -153,7 +153,7 @@ export default class TOF extends TableFile {
             } else {  // key > lastKey
                 if (animate) await this.highlightInstruction(28);
                 if (animate) {
-                    this.updateMCDescription(`${key} ∉ [${lastKey}, ${firstKey}]`, "error");
+                    this.updateMCDescription(`${key} ∉ ${firstKey}, ${lastKey}`, "error");
                     await sleep(1000);
                 }
                 low = i + 1;

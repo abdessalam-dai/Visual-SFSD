@@ -1,5 +1,5 @@
 {% load static %}
-<div class="mc bg-blue-300 flex flex-col justify-between" style="width: 27rem; z-index: 2">
+<div class="mc no-select bg-blue-300 flex flex-col justify-between" style="width: 27rem; z-index: 2">
     <div class="mc-description text-center font-medium"
          style="padding: 10px 10px; ; color: #fff; font-size: 1.2em"></div>
     {% include "files/view_file/components/complexity.html" %}
@@ -29,7 +29,7 @@
             </div>
         </div>
     </div>
-    <div class="mc-footer flex px-2 flex-row justify-between items-center">
+    <div class="mc-footer flex py-3 px-2 flex-row justify-between items-center">
         <img title="Show or hide MC" src="{% static 'imgs/upMS.svg' %}" class="w-6" alt="" style="transform: rotate(180deg); cursor:pointer;">
         <span title="Random Access Memory" class="text-sm font-semibold text-gray-800 bottom-0" style="font-size: 2rem">MC</span>
     </div>
