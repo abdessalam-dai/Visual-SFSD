@@ -1,6 +1,6 @@
 // grabbing common dom elements
 export const fileName = document.querySelector("#file-name");
-export const fileNameSpan = document.querySelector(".file-name--v2");
+export const fileNameSpan = document.querySelector(".file-name");
 
 export const fileHeadDropDown = document.querySelector("#file-head-dropdown");
 
