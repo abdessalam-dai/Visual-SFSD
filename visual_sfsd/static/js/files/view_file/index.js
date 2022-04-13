@@ -4,7 +4,61 @@ import LOF from "../SFSD/types/simple/LOF.js";
 import LnOF from "../SFSD/types/simple/LnOF.js";
 import * as DomElements from "./DomElements.js";
 import {MAX_NB_BLOCKS, MAX_NB_ENREGS_DEFAULT} from "../constants.js";
-import {fileHeadDropDown} from "./DomElements.js";
+import {fileHeadDropDown, fileNameSpan} from "./DomElements.js";
+
+// handeling the function to change the file name
+let formIsHidden = true;
+const logoInfoFileName = document.querySelector(".logo-info");
+const changeFileNameSection = document.querySelector(".change-file-name-section");
+const EditFileNameBtn = document.querySelector(".edit-file-name-button");
+const formForFileName = document.querySelector(".from-for-file-name");
+const editFileNameInput = document.querySelector(".edit-file-name-input");
+const editFileNameSubmitBtn = document.querySelector(".submit-file-name-input");
+const spanValidation = document.querySelector(".error-validation");
+
+console.log(logoInfoFileName);
+
+logoInfoFileName.addEventListener('mouseover' , (e) => {
+    e.preventDefault();
+    changeFileNameSection.classList.remove('hidden');
+})
+
+logoInfoFileName.addEventListener('mouseout' , (e) => {
+    e.preventDefault();
+    if (formIsHidden) {
+        changeFileNameSection.classList.add('hidden');
+        formForFileName.classList.add("hidden")
+    }
+
+})
+
+EditFileNameBtn.addEventListener('click' , (e) => {
+    e.preventDefault();
+    if (formIsHidden) {
+        formForFileName.classList.remove("hidden")
+        editFileNameInput.value = DomElements.fileNameSpan.textContent;
+        formIsHidden = false;
+    } else {
+        formForFileName.classList.add("hidden")
+        spanValidation.textContent = "";
+        formIsHidden = true;
+    }
+    editFileNameInput.focus()
+})
+
+editFileNameSubmitBtn.addEventListener('click' , (e) => {
+    e.preventDefault();
+    if (editFileNameInput.value.length > 100) {
+        spanValidation.textContent = "NO more than 100 char";
+        editFileNameInput.value = "";
+        editFileNameInput.focus();
+    }
+    else {
+        DomElements.fileNameSpan.textContent = editFileNameInput.value;
+        formForFileName.classList.add("hidden");
+        formIsHidden = true;
+    }
+})
 
 
 // START - useful functions
@@ -66,7 +120,6 @@ if (FILE_TYPE === "TOF") {
 // START - Handle file head drop down
 DomElements.fileName.addEventListener("click", function () {
     const fileHeadDropDown = DomElements.fileHeadDropDown;
-
     if (fileHeadDropDown.classList.contains("hidden")) {
         fileHeadDropDown.classList.remove("hidden");
     } else {

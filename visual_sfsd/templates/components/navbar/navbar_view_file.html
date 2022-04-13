@@ -3,12 +3,14 @@
 
 <nav class="bg-purple-600 px-2 sm:px-4 py-2.5 no-select">
     <div class="container flex flex-wrap items-center mx-auto justify-between">
-        <div class="flex flex-row space-x-10 items-center">
+        <div class="logo-info flex flex-row space-x-10 items-center">
             <a href="" class="items-center">
                 <div class="bg-sky-400 h-6 sm:h-10 sm:w-10 w-6 rounded-lg"></div>
             </a>
             <div class="m-0 p-0" style="position: relative;">
-                <span class="file-name-all text-2xl font-semibold text-white" id="file-name" style="cursor: pointer;">File : <span class="file-name font-bold ">TP1</span></span>
+                <span class="file-name-all text-2xl font-semibold text-white" id="file-name" style="cursor: pointer;">
+                    File : <span class="file-name--v2 font-bold">TP1</span>
+                </span>
                 <div id="file-head-dropdown" class="hidden file-head-dropdown shadow-lg w-full rounded-b-md bg-gray-800"> <!--Hna yabda ta3 file caractest-->
                     <ul>
                         <li class="flex flex-row justify-between px-2 py-1 border-b-2 items-center space-x-2">
@@ -20,6 +22,18 @@
                             <span id="nb-elements" class="text-white">2</span>
                         </li>
                     </ul>
+                </div>
+            </div>
+            <div class="change-file-name-section hidden flex items-center justify-start">
+                <div class="edit-file-name flex">
+                    <button class="edit-file-name-button" style="padding-right: 30px">
+                        <img src="{% static 'imgs/navbar/icons-edit.png'%}" style="height: 20px; width: 20px">
+                    </button>
+                    <form class="hidden from-for-file-name">
+                        <input class="edit-file-name-input" placeholder="new file Name" type="text">
+                        <button class="submit-file-name-input rounded ml-3" style="background-color: white; padding: 3px" type="submit">submit</button>
+                    </form>
+                    <span class="error-validation" style="color: white; margin-left: 10px"></span>
                 </div>
             </div>
         </div>
