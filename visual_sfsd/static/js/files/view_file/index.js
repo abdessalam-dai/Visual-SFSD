@@ -317,7 +317,7 @@ const generateData = (n, min, max) => {
         }
     }
 
-    if (FILE_TYPE === "TOF") {
+    if (FILE_TYPE === "TOF" || FILE_TYPE === "LOF") {
         return arr.sort((a, b) => a.key - b.key); // return sorted array according to key
     } else {
         return arr;
@@ -441,7 +441,9 @@ const handleRemovePhysically = () => {
     });
 }
 
-handleRemovePhysically();
+if (FILE_TYPE !== 'LOF' && FILE_TYPE !== 'LnOF') {
+    handleRemovePhysically();
+}
 // END - Remove element physically
 
 

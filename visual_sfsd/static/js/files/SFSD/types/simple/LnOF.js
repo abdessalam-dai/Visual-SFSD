@@ -252,58 +252,58 @@ export default class LnOF extends ListFile {
     }
 
     // to be set later (this is not the ideal function)
-    async removePhysically(key, animate) {
-        let {found, pos, readTimes} = await this.search(key, animate);
-        let {i, j} = pos;
-        let writeTimes;
-
-        let tailBlock = this.blocks[this.tailIndex];
-        readTimes++;
-
-        let indexOfLastEnreg = tailBlock.nb - 1;
-        let lastEnreg = tailBlock.enregs[indexOfLastEnreg];
-
-        let blockBeforeTailBlock = this.blocks
-            .filter((block) => block !== null)
-            .filter((block) => block.nextBlockIndex === this.tailIndex)[0];
-        readTimes++;
-
-        if (found) {
-            // we replace the enreg to delete physically with the last enreg;
-            this.blocks[i].enregs[j] = lastEnreg;
-
-            // if we have the only one enreg in the headBlock, so we delete it directly and set it to null
-            if (indexOfLastEnreg === 0 && this.headIndex === this.tailIndex) {
-                this.blocks[this.headIndex] = null;
-                this.headIndex = -1;
-                this.tailIndex = -1;
-                return true;
-            }
-
-            // if the last enreg is the only enreg in the block
-            if (indexOfLastEnreg === 0) {
-                tailBlock = null;
-                this.blocks[this.tailIndex] = tailBlock;
-                writeTimes++;
-
-                blockBeforeTailBlock.nextBlockIndex = -1;
-                this.tailIndex = this.blocks.indexOf(blockBeforeTailBlock);
-                this.blocks[this.tailIndex] = blockBeforeTailBlock;
-                writeTimes++;
-
-                this.nbBlocks--;
-            } else {
-                tailBlock.enregs.pop();
-                tailBlock.nb--;
-                this.blocks[this.tailIndex] = tailBlock;
-                writeTimes++;
-            }
-
-            this.createBoardsDOM();
-            this.nbInsertions--;
-            return true;
-        } else {
-            return false;
-        }
-    }
+    // async removePhysically(key, animate) {
+    //     let {found, pos, readTimes} = await this.search(key, animate);
+    //     let {i, j} = pos;
+    //     let writeTimes;
+    //
+    //     let tailBlock = this.blocks[this.tailIndex];
+    //     readTimes++;
+    //
+    //     let indexOfLastEnreg = tailBlock.nb - 1;
+    //     let lastEnreg = tailBlock.enregs[indexOfLastEnreg];
+    //
+    //     let blockBeforeTailBlock = this.blocks
+    //         .filter((block) => block !== null)
+    //         .filter((block) => block.nextBlockIndex === this.tailIndex)[0];
+    //     readTimes++;
+    //
+    //     if (found) {
+    //         // we replace the enreg to delete physically with the last enreg;
+    //         this.blocks[i].enregs[j] = lastEnreg;
+    //
+    //         // if we have the only one enreg in the headBlock, so we delete it directly and set it to null
+    //         if (indexOfLastEnreg === 0 && this.headIndex === this.tailIndex) {
+    //             this.blocks[this.headIndex] = null;
+    //             this.headIndex = -1;
+    //             this.tailIndex = -1;
+    //             return true;
+    //         }
+    //
+    //         // if the last enreg is the only enreg in the block
+    //         if (indexOfLastEnreg === 0) {
+    //             tailBlock = null;
+    //             this.blocks[this.tailIndex] = tailBlock;
+    //             writeTimes++;
+    //
+    //             blockBeforeTailBlock.nextBlockIndex = -1;
+    //             this.tailIndex = this.blocks.indexOf(blockBeforeTailBlock);
+    //             this.blocks[this.tailIndex] = blockBeforeTailBlock;
+    //             writeTimes++;
+    //
+    //             this.nbBlocks--;
+    //         } else {
+    //             tailBlock.enregs.pop();
+    //             tailBlock.nb--;
+    //             this.blocks[this.tailIndex] = tailBlock;
+    //             writeTimes++;
+    //         }
+    //
+    //         this.createBoardsDOM();
+    //         this.nbInsertions--;
+    //         return true;
+    //     } else {
+    //         return false;
+    //     }
+    // }
 }

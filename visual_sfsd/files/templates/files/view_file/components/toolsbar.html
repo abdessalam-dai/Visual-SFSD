@@ -23,7 +23,8 @@
             </div>
             {% include "files/view_file/components/tooltip-form-remove-logically.html" %}
         </li>
-        <li class="toolbar-tool  no-select">
+
+        <li class="toolbar-tool {% if file.file_type == 'LOF' or file.file_type == 'LnOF' %} hidden {% endif %}  no-select">
             <div class="w-9 h-9 rounded-md bg-gray-300 hover:h-11 hover:w-11 transition-all">
                 <img class="toolbar-icon"
                      src="{% static 'imgs/view_file/toolbar/removePhysically.png' %}" alt="" title="Remove physically">
