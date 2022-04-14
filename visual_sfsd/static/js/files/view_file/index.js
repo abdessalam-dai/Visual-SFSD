@@ -4,7 +4,7 @@ import LOF from "../SFSD/types/simple/LOF.js";
 import LnOF from "../SFSD/types/simple/LnOF.js";
 import * as DomElements from "./DomElements.js";
 import {MAX_NB_BLOCKS, MAX_NB_ENREGS_DEFAULT} from "../constants.js";
-import {fileHeadDropDown, fileNameSpan, imageDropDown} from "./DomElements.js";
+import {entete, fileHeadDropDown, fileNameSpan, imageDropDown} from "./DomElements.js";
 import {Block, Enreg} from "../SFSD/SFSD.js";
 
 
@@ -22,19 +22,22 @@ let currentFileName = DomElements.fileNameSpan.textContent;
 console.log(currentFileName)
 
 fileNameAndFileTypeSpan.addEventListener('dblclick', (e) => {
+    DomElements.entete.classList.add("hidden");
     DomElements.fileNameSpan.classList.add("hidden");
     DomElements.fileTypeSpan.classList.add("hidden");
     DomElements.formForFileName.classList.remove("hidden");
     editFileNameInput.value = currentFileName;
     editFileNameInput.focus();
+    editFileNameInput.select();
     formIsHidden = false;
     console.log(changeFileNameSection)
 })
 
-editFileNameSubmitBtn.addEventListener('click' , (e) => {
-    e.preventDefault()
+formForFileName.addEventListener('submit' , (e) => {
+    e.preventDefault();
+    DomElements.entete.classList.remove("hidden");
     console.log(editFileNameInput.value.length)
-    if (editFileNameInput.value.length > 40 || editFileNameInput.value.length === 0) {
+    if (editFileNameInput.value.length > 100 || editFileNameInput.value.length === 0) {
         editFileNameInput.value = "";
         editFileNameInput.focus();
         formIsHidden = false
@@ -56,6 +59,7 @@ editFileNameSubmitBtn.addEventListener('click' , (e) => {
 // handle the case if the user wants to undo rename file
 document.addEventListener('click', (e) => {
     if(!formIsHidden && e.target.tagName !== "BUTTON" && e.target.tagName !== "INPUT") {
+        DomElements.entete.classList.remove("hidden");
         DomElements.formForFileName.classList.add("hidden");
         DomElements.fileNameSpan.classList.remove("hidden");
         DomElements.fileTypeSpan.classList.remove("hidden");
@@ -164,7 +168,7 @@ if (FILE_TYPE === "TOF") {
 }
 
 console.log(newFile.getJsonFormat());
-// newFile.createBoardsDOM();
+newFile.createBoardsDOM();
 
 // END - Create file
 
