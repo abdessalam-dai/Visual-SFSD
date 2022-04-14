@@ -529,7 +529,6 @@ export default class TableFile {
 
     getJsonFormat() {
         let data = {
-            name: this.name,
             characteristics: {
                 maxNbEnregs: this.maxNbEnregs,
                 maxNbBlocks: this.maxNbBlocks,

@@ -9,103 +9,22 @@
 {% block scripts %}
     <script src="{% static 'js/lib/d3.v7.min.js' %}"></script>
 
-    <!-- jQuery -->
-    <script src="{% static 'js/lib/jquery-3.6.0.min.js' %}"></script>
-
     <script>
         let fileData = {{ data|safe }};
-        let FILE_TYPE = "{{ file.get_file_type_display }}";
-        let SAVE_FILE_URL = "{% url 'save_file' file.id %}";
+        const FILE_NAME = "{{ file.name }}";
+        const FILE_TYPE = "{{ file.get_file_type_display }}";
+        const SAVE_FILE_URL = "{% url 'save_file' file.id %}";
+        const EDIT_FILE_NAME_URL = "{% url 'save_file_name' file.id %}";
 
         console.log(fileData);
     </script>
     <script type="module" src="{% static 'js/files/view_file/index.js' %}"></script>
-
-    <!-- JS Cookie -->
-    <script src="{% static 'js/lib/js.cookie.min.js' %}"></script>
-    <script>
-        $(document).ready(function () {
-            let csrfToken = Cookies.get('csrftoken');
-
-            function csrfSafeMethod(method) {
-                // these HTTP methods do not require CSRF protection
-                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-            }
-
-            $.ajaxSetup({
-                beforeSend: function (xhr, settings) {
-                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                        xhr.setRequestHeader("X-CSRFToken", csrfToken);
-                    }
-                }
-            });
-        });
-    </script>
 {% endblock %}
 
 
 {% block stylesheets %}
     <link rel="stylesheet" href="{% static 'css/view_file/output.css' %}">
-
-    <style>
-        /* width */
-        .ms-container::-webkit-scrollbar {
-            width: 20px;
-        }
-
-        /* Track */
-        .ms-container::-webkit-scrollbar-track {
-            box-shadow: inset 0 0 5px grey;
-            border-radius: 10px;
-        }
-
-        /* Handle */
-        .ms-container::-webkit-scrollbar-thumb {
-            background: #93C5FD;
-            border-radius: 10px;
-        }
-
-        .ms-container {
-            scroll-behavior: smooth;
-            padding: 45px 10px;
-        }
-
-        .algorithm {
-            position: absolute;
-            width: 700px;
-            height: 400px;
-            top: 0;
-            left: calc(50% - 350px);
-            padding: 20px 0;
-            background: #9ca3af;
-            overflow-y: scroll;
-        }
-
-        .algorithm div {
-            padding: 1px 25px 0 5px;
-            font-size: 1.2em;
-        }
-
-        .algorithm div div {
-            width: 40px;
-            display: inline-block;
-            color: #374151;
-        }
-
-        .algorithm .highlight-instruction {
-            background: #eee !important;
-        }
-
-        .algorithm .no-highlight-instruction {
-            background: none !important;
-        }
-
-    </style>
 {% endblock %}
-
-{#{% block domready %}#}
-{#        console.log("dom is ready")#}
-{#{% endblock %}#}
 
 
 {% block navbar %}
@@ -116,9 +35,9 @@
 {% block content %}
     {% include "files/view_file/components/animation-speed.html" %}
 
-    <div>
-        <button id="save-file-btn" data-id="{{ file.id }}" class="bg-blue-300 p-5">Save</button>
-    </div>
+    <button id="save-file-btn" data-id="{{ file.id }}" class="save-file-btn" title="Save">
+        <img src="{% static 'imgs/view_file/saveBtn.svg' %}" alt="Save">
+    </button>
 
     <div class="flex flex-row items-center justify-between">
         {% include "files/view_file/components/toolsbar.html" %}

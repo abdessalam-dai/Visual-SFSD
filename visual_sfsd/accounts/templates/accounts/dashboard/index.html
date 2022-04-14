@@ -1,0 +1,29 @@
+{% extends "main.html" %}
+
+{% load static %}
+
+{% block title %}
+    Dashboard
+{% endblock title %}
+
+{% block scripts %}
+    <script>
+
+    </script>
+{#    <script type="module" src="{% static 'js/files/view_file/index.js' %}"></script>#}
+{% endblock %}
+
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{% static 'css/accounts/dashboard/dashboard.css' %}">
+{% endblock %}
+
+
+{% block navbar %}
+{#    {% include 'components/navbar/navbar_view_file.html' %}#}
+{% endblock %}
+
+
+{% block content %}
+    {% include 'accounts/dashboard/components/create_file.html' %}
+{% endblock content %}

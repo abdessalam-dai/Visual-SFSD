@@ -25,7 +25,6 @@ class File(models.Model):
         default=TOF,
     )
     data = models.TextField(null=True, blank=True)
-    nb_max_enregs = models.PositiveIntegerField(default=10)
     date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
