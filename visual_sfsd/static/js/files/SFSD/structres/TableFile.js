@@ -29,6 +29,7 @@ export default class TableFile {
         buff2,
         MSBoard,
         maxNbEnregs = MAX_NB_ENREGS_DEFAULT,
+        maxNbBlocks = MAX_NB_BLOCKS,
         nbBlocks = NB_BLOCKS_DEFAULT,
         nbInsertions = NB_INSERTIONS_DEFAULT,
         blocks = BLOCKS_DEFAULT,
@@ -38,6 +39,7 @@ export default class TableFile {
         this.buff2 = buff2;
         this.MSBoard = MSBoard;
         this.maxNbEnregs = maxNbEnregs;
+        this.maxNbBlocks = maxNbBlocks;
         this.nbBlocks = nbBlocks;
         this.nbInsertions = nbInsertions;
         this.blocks = blocks;
@@ -161,7 +163,7 @@ export default class TableFile {
         this.MSBoard.selectAll('.bloc')
             .data(this.blocks)
             .select(".bloc-nb")
-            .style("z-index" , "103")
+            .style("z-index", "103")
             .text(function (block) {
                 return `NB=${block.nb}`;
             });
@@ -272,10 +274,10 @@ export default class TableFile {
                         return enreg.removed ? "#a70000" : "black"
                     })
                     .style("cursor", "pointer")
-                    .style("position" , "relative")
+                    .style("position", "relative")
                     .on("click", function (e, enreg) {
-                        console.log(`before if and else`, toolTipEnregHidden , e.target)
-                        if(toolTipEnregHidden) {
+                        console.log(`before if and else`, toolTipEnregHidden, e.target);
+                        if (toolTipEnregHidden) {
                             let html = `
                                 <div id="last-element-shown" class="fixed no-select" style="position: absolute; top: 40px; width: 192px; z-index: 102">
                                     <ul class="rounded-md text-center bg-gray-800 " style="z-index: 12;">
@@ -295,7 +297,7 @@ export default class TableFile {
                                 </div>`
                             this.children[0].insertAdjacentHTML('afterend', html)
                             toolTipEnregHidden = false;
-                        }else {
+                        } else {
 
                             document.querySelector('#last-element-shown').remove();
                             toolTipEnregHidden = true;
@@ -390,6 +392,9 @@ export default class TableFile {
             buff.selectAll(".bloc-header span")
                 .select("div")
                 .remove();
+
+            buff.selectAll(".bloc-body ul li")
+                .style("overflow", "hidden");
             return buff;
         } else {
             this.buff2.selectAll("*").remove()
@@ -406,6 +411,9 @@ export default class TableFile {
             buff.selectAll(".bloc-header span")
                 .select("div")
                 .remove();
+
+            buff.selectAll(".bloc-body ul li")
+                .style("overflow", "hidden");
             return buff;
         }
     }
@@ -522,35 +530,38 @@ export default class TableFile {
     getJsonFormat() {
         let data = {
             name: this.name,
-            maxNbEnregs: this.maxNbEnregs,
-            nbBlocks: this.nbBlocks,
-            nbInsertions: this.nbInsertions,
+            characteristics: {
+                maxNbEnregs: this.maxNbEnregs,
+                maxNbBlocks: this.maxNbBlocks,
+                nbBlocks: this.nbBlocks,
+                nbInsertions: this.nbInsertions,
+            },
             blocks: []
-        }
+        };
 
         for (let block of this.blocks) {
             let blockData = {
                 enregs: [],
                 nb: block.nb,
+                blockAddress: block.blockAddress,
                 nextBlockIndex: block.nextBlockIndex
-            }
+            };
 
-            let enregsData = []
-
+            let enregsData = [];
             for (let enreg of block.enregs) {
                 enregsData.push({
                     key: enreg.key,
                     field1: enreg.field1,
                     field2: enreg.field2,
                     removed: enreg.removed
-                })
+                });
             }
 
-            blockData.enregs = enregsData
+            blockData.enregs = enregsData;
 
-            data.blocks.push(blockData)
+            data.blocks.push(blockData);
         }
 
-        return data
+        return data;
     }
 }

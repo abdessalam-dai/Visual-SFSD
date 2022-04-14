@@ -9,7 +9,7 @@
     {% load static %}
 
     <!-- Style sheets -->
-    <link rel="stylesheet" href="{% static 'css/main.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/main.css' %}"/>
     {% block stylesheets %}
     {% endblock %}
 
@@ -19,12 +19,11 @@
     {% endblock %}
 
 
-    <!-- jQuery -->
-{#    <script src="https://code.jquery.com/jquery-3.6.0.min.js"#}
-{#            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>#}
-
-    <!-- JS Cookie -->
-{#    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>#}
+{#    <!-- jQuery -->#}
+{#    <script src="{% static 'js/lib/jquery-3.6.0.min.js' %}"></script>#}
+{##}
+{#    <!-- JS Cookie -->#}
+{#    <script src="{% static 'js/lib/js.cookie.min.js' %}"></script>#}
 {#    <script>#}
 {#        let csrfToken = Cookies.get('csrftoken');#}
 {##}

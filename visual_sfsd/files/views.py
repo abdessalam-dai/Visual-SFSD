@@ -1,12 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.http import Http404
+from django.http import Http404, JsonResponse
+from django.views.decorators.http import require_POST
 from .models import File
 from .forms import CreateFileForm
 import json
 
 
-def file_view(request, pk):
+def view_file(request, pk):
     try:
         file = File.objects.get(id=int(pk))
 
@@ -107,23 +108,38 @@ def file_view(request, pk):
 
         context = {
             'file': file,
-            'data': file.data
+            'dataPy': json.loads(file.data),
+            'data': file.data,
         }
-
-        # if file.file_type == 'TOF':
-        #     template_path = 'files/view_file/TOF/index.html'
-        # elif file.file_type == 'TnOF':
-        #     template_path = 'files/view_file/TnOF/index.html'
-        # elif file.file_type == 'LOF':
-        #     template_path = 'files/view_file/LOF/index.html'
-        # elif file.file_type == 'LnOF':
-        #     template_path = 'files/view_file/LnOF/index.html'
 
         template_path = 'files/view_file/index.html'
 
         return render(request, template_path, context)
     except:
         raise Http404
+
+
+@require_POST
+def save_file(request, pk):
+    file_data = request.POST.get("fileData")
+
+    print("testing")
+
+    if file_data:
+        try:
+            file = File.objects.get(id=int(pk))
+
+            data = json.loads(file_data)
+
+            file.name = data["name"]
+            file.data = json.dumps(data)
+            file.save()
+
+            return JsonResponse({"status": "ok"})
+        except:
+            pass
+
+    return JsonResponse({"status": "error"})
 
 
 def create_file(request):

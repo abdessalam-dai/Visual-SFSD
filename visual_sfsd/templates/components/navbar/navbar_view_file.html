@@ -9,17 +9,25 @@
             </a>
             <div class="m-0 p-0" style="position: relative;">
             <span class="file-name-all text-2xl font-semibold text-white" id="file-name" style="cursor: pointer;">
-                    File : <span class="file-name font-bold ">{{ file.name }} - {{ file.file_type }}</span>
+                    File : <span class="file-name font-bold ">{{ dataPy.name }} - {{ file.file_type }}</span>
                 </span>
                 <div id="file-head-dropdown" class="hidden file-head-dropdown shadow-lg w-full rounded-b-md bg-gray-800"> <!--Hna yabda ta3 file caractest-->
                     <ul>
                         <li class="flex flex-row justify-between px-2 py-1 border-b-2 items-center space-x-2">
                             <span class="text-sm text-blue-300">Number of blocks </span>
-                            <span id="nb-blocks" class="text-white">2</span>
+                            <span id="nb-blocks" class="text-white">{{ dataPy.characteristics.nbBlocks }}</span>
+                        </li>
+                        <li class="flex text-center flex-row justify-between px-2 py-1 border-b-2 items-center space-x-2">
+                            <span class="text-sm text-blue-300">Number of elements </span>
+                            <span id="nb-elements" class="text-white">{{ dataPy.characteristics.nbInsertions }}</span>
+                        </li>
+                        <li class="flex text-center flex-row justify-between px-2 py-1 border-b-2 items-center space-x-2">
+                            <span class="text-sm text-blue-300">Max. number of blocks </span>
+                            <span id="nb-elements" class="text-white">{{ dataPy.characteristics.maxNbBlocks }}</span>
                         </li>
                         <li class="flex rounded-b-md text-center flex-row justify-between px-2 py-1 border-b-2 items-center space-x-2">
-                            <span class="text-sm text-blue-300">Number of enregs. </span>
-                            <span id="nb-elements" class="text-white">2</span>
+                            <span class="text-sm text-blue-300">Max. number of elements  </span>
+                            <span id="nb-elements" class="text-white">{{ dataPy.characteristics.maxNbEnregs }}</span>
                         </li>
                     </ul>
                 </div>

@@ -4,6 +4,8 @@ export const fileNameSpan = document.querySelector(".file-name");
 
 export const fileHeadDropDown = document.querySelector("#file-head-dropdown");
 
+export const saveFileBtn = document.querySelector("#save-file-btn");
+
 export const toolbarIcons = document.querySelectorAll(".toolbar-icon");
 export const toolbarOptions = document.querySelectorAll('.toolbar-tool');
 

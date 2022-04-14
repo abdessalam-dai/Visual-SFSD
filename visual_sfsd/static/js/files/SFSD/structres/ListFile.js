@@ -29,6 +29,7 @@ export default class ListFile {
         buff2,
         MSBoard,
         maxNbEnregs = MAX_NB_ENREGS_DEFAULT,
+        maxNbBlocks = MAX_NB_BLOCKS,
         nbBlocks = NB_BLOCKS_DEFAULT,
         nbInsertions = NB_INSERTIONS_DEFAULT,
         blocks = BLOCKS_DEFAULT,
@@ -40,6 +41,7 @@ export default class ListFile {
         this.buff2 = buff2;
         this.MSBoard = MSBoard;
         this.maxNbEnregs = maxNbEnregs;
+        this.maxNbBlocks = maxNbBlocks;
         this.nbBlocks = nbBlocks;
         this.nbInsertions = nbInsertions;
         this.blocks = blocks;
@@ -663,35 +665,45 @@ export default class ListFile {
     getJsonFormat() {
         let data = {
             name: this.name,
-            maxNbEnregs: this.maxNbEnregs,
-            nbBlocks: this.nbBlocks,
-            nbInsertions: this.nbInsertions,
+            characteristics: {
+                maxNbEnregs: this.maxNbEnregs,
+                maxNbBlocks: this.maxNbBlocks,
+                nbBlocks: this.nbBlocks,
+                nbInsertions: this.nbInsertions,
+                headIndex: this.headIndex,
+                tailIndex: this.tailIndex
+            },
             blocks: []
-        }
+        };
 
         for (let block of this.blocks) {
-            let blockData = {
-                enregs: [],
-                nb: block.nb,
-                nextBlockIndex: block.nextBlockIndex
+            let blockData;
+            if (block !== null) {
+                blockData = {
+                    enregs: [],
+                    nb: block.nb,
+                    blockAddress: block.blockAddress,
+                    nextBlockIndex: block.nextBlockIndex
+                };
+
+                let enregsData = [];
+                for (let enreg of block.enregs) {
+                    enregsData.push({
+                        key: enreg.key,
+                        field1: enreg.field1,
+                        field2: enreg.field2,
+                        removed: enreg.removed
+                    });
+                }
+
+                blockData.enregs = enregsData;
+            } else {
+                blockData = null;
             }
 
-            let enregsData = []
-
-            for (let enreg of block.enregs) {
-                enregsData.push({
-                    key: enreg.key,
-                    field1: enreg.field1,
-                    field2: enreg.field2,
-                    removed: enreg.removed
-                })
-            }
-
-            blockData.enregs = enregsData
-
-            data.blocks.push(blockData)
+            data.blocks.push(blockData);
         }
 
-        return data
+        return data;
     }
 }
