@@ -4,7 +4,7 @@ import LOF from "../SFSD/types/simple/LOF.js";
 import LnOF from "../SFSD/types/simple/LnOF.js";
 import * as DomElements from "./DomElements.js";
 import {MAX_NB_BLOCKS, MAX_NB_ENREGS_DEFAULT} from "../constants.js";
-import {fileHeadDropDown, fileNameSpan} from "./DomElements.js";
+import {fileHeadDropDown, fileNameSpan, imageDropDown} from "./DomElements.js";
 import {Block, Enreg} from "../SFSD/SFSD.js";
 
 
@@ -12,51 +12,53 @@ import {Block, Enreg} from "../SFSD/SFSD.js";
 let formIsHidden = true;
 const logoInfoFileName = document.querySelector(".logo-info");
 const changeFileNameSection = document.querySelector(".change-file-name-section");
+const fileNameAndFileTypeSpan = document.querySelector('.file-name-all');
 const EditFileNameBtn = document.querySelector(".edit-file-name-button");
-const formForFileName = document.querySelector(".from-for-file-name");
+const formForFileName = document.querySelector(".form-for-file-name");
 const editFileNameInput = document.querySelector(".edit-file-name-input");
 const editFileNameSubmitBtn = document.querySelector(".submit-file-name-input");
-const spanValidation = document.querySelector(".error-validation");
 
-console.log(logoInfoFileName);
+let currentFileName = DomElements.fileNameSpan.textContent;
+console.log(currentFileName)
 
-logoInfoFileName.addEventListener('mouseover', (e) => {
-    e.preventDefault();
-    changeFileNameSection.classList.remove('hidden');
+fileNameAndFileTypeSpan.addEventListener('dblclick', (e) => {
+    DomElements.fileNameSpan.classList.add("hidden");
+    DomElements.fileTypeSpan.classList.add("hidden");
+    DomElements.formForFileName.classList.remove("hidden");
+    editFileNameInput.value = currentFileName;
+    editFileNameInput.focus();
+    formIsHidden = false;
+    console.log(changeFileNameSection)
 })
 
-logoInfoFileName.addEventListener('mouseout', (e) => {
-    e.preventDefault();
-    if (formIsHidden) {
-        changeFileNameSection.classList.add('hidden');
-        formForFileName.classList.add("hidden")
-    }
-
-})
-
-EditFileNameBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    if (formIsHidden) {
-        formForFileName.classList.remove("hidden")
-        editFileNameInput.value = DomElements.fileNameSpan.textContent;
-        formIsHidden = false;
-    } else {
-        formForFileName.classList.add("hidden")
-        spanValidation.textContent = "";
-        formIsHidden = true;
-    }
-    editFileNameInput.focus()
-})
-
-editFileNameSubmitBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    if (editFileNameInput.value.length > 100) {
-        spanValidation.textContent = "NO more than 100 char";
+editFileNameSubmitBtn.addEventListener('click' , (e) => {
+    e.preventDefault()
+    console.log(editFileNameInput.value.length)
+    if (editFileNameInput.value.length > 40 || editFileNameInput.value.length === 0) {
         editFileNameInput.value = "";
         editFileNameInput.focus();
-    } else {
-        DomElements.fileNameSpan.textContent = editFileNameInput.value;
+        formIsHidden = false
+    }
+    else {
+        DomElements.fileNameSpan.classList.remove("hidden");
+        DomElements.fileTypeSpan.classList.remove("hidden");
+        let fileNameStr = Array.from(editFileNameInput.value.trim()).map((char ) => char === " " ? "_" : char).join("")
+        DomElements.fileNameSpan.textContent = fileNameStr;
+        currentFileName = fileNameStr;
+        console.log(editFileNameInput.value)
+
         formForFileName.classList.add("hidden");
+        formIsHidden = true;
+    }
+})
+
+
+// handle the case if the user wants to undo rename file
+document.addEventListener('click', (e) => {
+    if(!formIsHidden && e.target.tagName !== "BUTTON" && e.target.tagName !== "INPUT") {
+        DomElements.formForFileName.classList.add("hidden");
+        DomElements.fileNameSpan.classList.remove("hidden");
+        DomElements.fileTypeSpan.classList.remove("hidden");
         formIsHidden = true;
     }
 })
@@ -168,21 +170,32 @@ console.log(newFile.getJsonFormat());
 
 
 // START - Handle file head drop down
-DomElements.fileName.addEventListener("click", function () {
+let dropDowncharacteristicsIsVisible = false;
+DomElements.entete.addEventListener("click", function () {
+    console.log(DomElements.imageDropDown)
     const fileHeadDropDown = DomElements.fileHeadDropDown;
     if (fileHeadDropDown.classList.contains("hidden")) {
         fileHeadDropDown.classList.remove("hidden");
+        DomElements.imageDropDown.style.transform = 'rotate(0deg)'
+        dropDowncharacteristicsIsVisible = true;
     } else {
         fileHeadDropDown.classList.add("hidden");
+        dropDowncharacteristicsIsVisible = false;
+        DomElements.imageDropDown.style.transform = 'rotate(-180deg)'
     }
 });
 
+
 document.addEventListener('click', (e) => {
-    if (!e.target.classList.contains("file-head-dropdown") && !e.target.classList.contains("file-name-all") && !e.target.classList.contains("file-name")) {
+    if (!e.target.classList.contains("characteristics-image")) {
         DomElements.fileHeadDropDown.classList.add("hidden");
+        DomElements.imageDropDown.style.transform = 'rotate(-180deg)'
     }
-})
+});
+
 // END - Handle file head drop down
+
+
 
 
 const changeButtonsState = (state) => {
@@ -212,7 +225,7 @@ upImage.addEventListener('click', (e) => {
         complexitySection.style.visibility = 'hidden';
         mcDescription.style.visibility = 'hidden';
         buffers.style.visibility = 'hidden';
-        mcSection.style.backgroundColor = 'white';
+        mcSection.style.backgroundColor = 'inherit';
         mcFooter.style.backgroundColor = '#9EACF3'
         upImage.style.transform = 'rotate(0deg)'
         goDown = true;
