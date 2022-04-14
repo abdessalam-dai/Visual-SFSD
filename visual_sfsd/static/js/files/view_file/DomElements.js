@@ -3,9 +3,12 @@ export const entete = document.querySelector("#entete");
 export const fileNameSpan = document.querySelector(".file-name");
 export const fileTypeSpan = document.querySelector(".file-type");
 export const formForFileName = document.querySelector(".form-for-file-name");
+
 export const fileHeadDropDown = document.querySelector("#file-head-dropdown");
 export const imageDropDown = document.querySelector(".characteristics-image");
 
+
+export const saveFileBtn = document.querySelector("#save-file-btn");
 
 export const toolbarIcons = document.querySelectorAll(".toolbar-icon");
 export const toolbarOptions = document.querySelectorAll('.toolbar-tool');

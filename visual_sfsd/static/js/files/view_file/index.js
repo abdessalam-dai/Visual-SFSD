@@ -5,8 +5,10 @@ import LnOF from "../SFSD/types/simple/LnOF.js";
 import * as DomElements from "./DomElements.js";
 import {MAX_NB_BLOCKS, MAX_NB_ENREGS_DEFAULT} from "../constants.js";
 import {fileHeadDropDown, fileNameSpan, imageDropDown} from "./DomElements.js";
+import {Block, Enreg} from "../SFSD/SFSD.js";
 
-// handeling the function to change the file name
+
+// handling the function to change the file name
 let formIsHidden = true;
 const logoInfoFileName = document.querySelector(".logo-info");
 const changeFileNameSection = document.querySelector(".change-file-name-section");
@@ -15,6 +17,7 @@ const EditFileNameBtn = document.querySelector(".edit-file-name-button");
 const formForFileName = document.querySelector(".form-for-file-name");
 const editFileNameInput = document.querySelector(".edit-file-name-input");
 const editFileNameSubmitBtn = document.querySelector(".submit-file-name-input");
+
 let currentFileName = DomElements.fileNameSpan.textContent;
 console.log(currentFileName)
 
@@ -43,6 +46,7 @@ editFileNameSubmitBtn.addEventListener('click' , (e) => {
         DomElements.fileNameSpan.textContent = fileNameStr;
         currentFileName = fileNameStr;
         console.log(editFileNameInput.value)
+
         formForFileName.classList.add("hidden");
         formIsHidden = true;
     }
@@ -83,35 +87,84 @@ let goDown = false;
 
 
 let newFile;
+
+let blocks = [];
+
+for (let block of fileData["blocks"]) {
+    let b;
+    if (block !== null) {
+        let enregs = [];
+
+        for (let enreg of block["enregs"]) {
+            let e = new Enreg(enreg["key"], enreg["field1"], enreg["field2"], enreg["removed"]);
+            enregs.push(e);
+        }
+
+        b = new Block(enregs, block["nb"], block["blockAddress"], block["nextBlockIndex"]);
+    } else {
+        b = null;
+    }
+    blocks.push(b)
+}
+
+console.log(blocks)
+
 if (FILE_TYPE === "TOF") {
     newFile = new TOF(
-        'file.txt',
+        fileData["name"],
         buff,
         buff2,
         MSBoard,
+        fileData["characteristics"]["maxNbEnregs"],
+        fileData["characteristics"]["maxNbBlocks"],
+        fileData["characteristics"]["nbBlocks"],
+        fileData["characteristics"]["nbInsertions"],
+        blocks
     );
 } else if (FILE_TYPE === "TnOF") {
-    newFile = new TnOF(
-        'file.txt',
+    newFile = new TOF(
+        fileData["name"],
         buff,
         buff2,
         MSBoard,
+        fileData["characteristics"]["maxNbEnregs"],
+        fileData["characteristics"]["maxNbBlocks"],
+        fileData["characteristics"]["nbBlocks"],
+        fileData["characteristics"]["nbInsertions"],
+        blocks
     );
 } else if (FILE_TYPE === "LOF") {
     newFile = new LOF(
-        'file.txt',
+        fileData["name"],
         buff,
         buff2,
         MSBoard,
+        fileData["characteristics"]["maxNbEnregs"],
+        fileData["characteristics"]["maxNbBlocks"],
+        fileData["characteristics"]["nbBlocks"],
+        fileData["characteristics"]["nbInsertions"],
+        blocks,
+        fileData["characteristics"]["headIndex"],
+        fileData["characteristics"]["tailIndex"]
     );
 } else {
     newFile = new LnOF(
-        'file.txt',
+        fileData["name"],
         buff,
         buff2,
         MSBoard,
+        fileData["characteristics"]["maxNbEnregs"],
+        fileData["characteristics"]["maxNbBlocks"],
+        fileData["characteristics"]["nbBlocks"],
+        fileData["characteristics"]["nbInsertions"],
+        blocks,
+        fileData["characteristics"]["headIndex"],
+        fileData["characteristics"]["tailIndex"]
     );
 }
+
+console.log(newFile.getJsonFormat());
+// newFile.createBoardsDOM();
 
 // END - Create file
 
@@ -165,7 +218,7 @@ const mcSection = document.querySelector(".mc");
 const mcDescription = document.querySelector(".mc-description")
 const complexitySection = document.querySelector(".complexity-section");
 const buffers = document.querySelector(".buffers");
-console.log(mcFooter.offsetHeight)
+console.log(mcFooter.offsetHeight);
 
 upImage.addEventListener('click', (e) => {
     if (!goDown) {
@@ -173,11 +226,11 @@ upImage.addEventListener('click', (e) => {
         mcDescription.style.visibility = 'hidden';
         buffers.style.visibility = 'hidden';
         mcSection.style.backgroundColor = 'inherit';
-        mcFooter.style.backgroundColor = '#93C5FD'
+        mcFooter.style.backgroundColor = '#9EACF3'
         upImage.style.transform = 'rotate(0deg)'
         goDown = true;
     } else {
-        mcSection.style.backgroundColor = '#93C5FD';
+        mcSection.style.backgroundColor = '#9EACF3';
         complexitySection.style.visibility = 'initial'
         mcDescription.style.visibility = 'initial'
         buffers.style.visibility = 'initial'
@@ -425,19 +478,19 @@ const handleGenerateData = () => {
 handleGenerateData();
 
 
-let data = generateData(n, min, max);
-
-for (const enreg of data) {
-    await newFile.insert(
-        enreg.key,
-        enreg.field1,
-        enreg.field2,
-        false,
-        false
-    )
-}
-
-newFile.createBoardsDOM();
+// let data = generateData(n, min, max);
+//
+// for (const enreg of data) {
+//     await newFile.insert(
+//         enreg.key,
+//         enreg.field1,
+//         enreg.field2,
+//         false,
+//         false
+//     )
+// }
+//
+// newFile.createBoardsDOM();
 // END - Fill with dummy data
 
 
@@ -573,3 +626,29 @@ const handleScrollButtons = () => {
 
 handleScrollButtons();
 // END - Scroll buttons
+
+
+// START - Handle file saving
+const saveFileBtn = $("#save-file-btn");
+
+saveFileBtn.click(function (e) {
+    e.preventDefault();
+
+    let newFileData = newFile.getJsonFormat();
+
+    $.ajax({
+        type: 'POST',
+        url: SAVE_FILE_URL,
+        data: {
+            fileData: JSON.stringify(newFileData)
+        },
+        datatype: 'json',
+        success: function (response) {
+            console.log("OK !!");
+        },
+        error: function (response) {
+            console.log("Error");
+        }
+    })
+});
+// END - Handle file saving

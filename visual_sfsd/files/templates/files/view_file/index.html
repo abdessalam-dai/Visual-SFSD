@@ -7,12 +7,40 @@
 {% endblock title %}
 
 {% block scripts %}
-    <script src="{% static 'js/files/lib/d3.v7.min.js' %}"></script>
+    <script src="{% static 'js/lib/d3.v7.min.js' %}"></script>
+
+    <!-- jQuery -->
+    <script src="{% static 'js/lib/jquery-3.6.0.min.js' %}"></script>
+
     <script>
         let fileData = {{ data|safe }};
         let FILE_TYPE = "{{ file.get_file_type_display }}";
+        let SAVE_FILE_URL = "{% url 'save_file' file.id %}";
+
+        console.log(fileData);
     </script>
     <script type="module" src="{% static 'js/files/view_file/index.js' %}"></script>
+
+    <!-- JS Cookie -->
+    <script src="{% static 'js/lib/js.cookie.min.js' %}"></script>
+    <script>
+        $(document).ready(function () {
+            let csrfToken = Cookies.get('csrftoken');
+
+            function csrfSafeMethod(method) {
+                // these HTTP methods do not require CSRF protection
+                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+            }
+
+            $.ajaxSetup({
+                beforeSend: function (xhr, settings) {
+                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrfToken);
+                    }
+                }
+            });
+        });
+    </script>
 {% endblock %}
 
 
@@ -76,7 +104,7 @@
 {% endblock %}
 
 {#{% block domready %}#}
-{##}
+{#        console.log("dom is ready")#}
 {#{% endblock %}#}
 
 
@@ -87,6 +115,10 @@
 
 {% block content %}
     {% include "files/view_file/components/animation-speed.html" %}
+
+    <div>
+        <button id="save-file-btn" data-id="{{ file.id }}" class="bg-blue-300 p-5">Save</button>
+    </div>
 
     <div class="flex flex-row items-center justify-between">
         {% include "files/view_file/components/toolsbar.html" %}
