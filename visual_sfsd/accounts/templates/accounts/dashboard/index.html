@@ -10,20 +10,30 @@
     <script>
 
     </script>
-{#    <script type="module" src="{% static 'js/files/view_file/index.js' %}"></script>#}
+    <script type="module" src="{% static 'js/accounts/dashboard/index.js' %}"></script>
 {% endblock %}
 
 
 {% block stylesheets %}
     <link rel="stylesheet" href="{% static 'css/accounts/dashboard/dashboard.css' %}">
+    <style>
+        body {
+            padding-top: 100px;
+            padding-left: 300px;
+            background-color: #DFDDDD !important;
+            background-image: none !important;
+        }
+    </style>
 {% endblock %}
 
 
 {% block navbar %}
-{#    {% include 'components/navbar/navbar_view_file.html' %}#}
+    {#    {% include 'components/navbar/navbar_view_file.html' %}#}
 {% endblock %}
 
 
 {% block content %}
+    {% include 'components/navbar/navbar_dashboard.html' %}
+    {% include 'accounts/dashboard/components/files.html' %}
     {% include 'accounts/dashboard/components/create_file.html' %}
 {% endblock content %}

@@ -1,14 +1,16 @@
 {% load static %}
 
-<button id="open-create-file-modal">Create file</button>
+<button id="create-file-btn"
+        class="save-file-btn w-[100px] h-[100px] flex justify-center items-center hover:bg-[#eee] bg-white z-5 right-20 bottom-20"
+        title="Create file">
+    <img src="{% static 'imgs/dashboard/plus.svg' %}" alt="Create">
+</button>
 
-<div class="create-file-modal-overlay fixed top-0 left-0 w-full h-screen flex items-center justify-center z-10">
-    <div class="bg-white rounded-3xl  text-center">
-        <div class="flex justify-end pt-2 px-3">
-            <button id="close-create-file-modal" class="no-select p-1">
-                <img class="w-4" src="{% static 'imgs/dashboard/close.png' %}" alt="Close" title="Close">
-            </button>
-        </div>
+<div id="create-file-modal-overlay"
+     class="create-file-modal-overlay fixed hidden top-0 left-0 w-full h-screen z-10"></div>
+<div id="create-file-modal"
+     class="create-file-modal hidden fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] flex items-center justify-center z-20 rounded-full">
+    <div class="bg-white rounded-3xl text-center">
         <div class="p-20">
             <div id="step-1" class="">
                 <div>
@@ -27,34 +29,68 @@
                 </div>
             </div>
             <div id="step-2" class="hidden">
-                <h1 class="font-bold text-3xl">Choose the type of <span class="text-purple-600">file organization</span></h1>
+                <h1 class="font-bold text-3xl">Choose the type of <span class="text-purple-600">file organization</span>
+                </h1>
                 <ul class="flex flex-row justify-center mt-10">
-                    <li data-acces="sequential" class="bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer rounded-l-2xl">Sequential</li>
-                    <li data-acces="indexed" class="bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer">Indexed</li>
-                    <li data-acces="hashing" class="bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer rounded-r-2xl">Hashing</li>
+                    <li data-acces="sequential"
+                        class="bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer rounded-l-2xl">
+                        Sequential
+                    </li>
+                    <li data-acces="indexed"
+                        class="bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer">
+                        Indexed
+                    </li>
+                    <li data-acces="hashing"
+                        class="bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer rounded-r-2xl">
+                        Hashing
+                    </li>
                 </ul>
             </div>
             <div id="step-2-sequential" class="hidden">
                 <h1 class="font-bold text-3xl">Choose the type of <span class="text-purple-600">file</span></h1>
                 <ul class="flex flex-row justify-center mt-10">
-                    <li data-type="TOF" class="bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer rounded-l-2xl">TOF</li>
-                    <li data-type="TnOF" class="bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer">TnOF</li>
-                    <li data-type="LOF" class="bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer">LOF</li>
-                    <li data-type="LnOF" class="bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer rounded-r-2xl">LnOF</li>
+                    <li data-type="TOF"
+                        class="bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer rounded-l-2xl">
+                        TOF
+                    </li>
+                    <li data-type="TnOF"
+                        class="bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer">
+                        TnOF
+                    </li>
+                    <li data-type="LOF"
+                        class="bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer">
+                        LOF
+                    </li>
+                    <li data-type="LnOF"
+                        class="bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer rounded-r-2xl">
+                        LnOF
+                    </li>
                 </ul>
             </div>
             <div id="step-2-indexed" class="hidden">
                 <h1 class="font-bold text-3xl">Choose the type of <span class="text-purple-600">file</span></h1>
                 <ul class="flex flex-row justify-center mt-10">
-                    <li data-type="clustered" class="bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer rounded-l-2xl">Clustered</li>
-                    <li data-type="notClustered" class="bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer rounded-r-2xl">Not Clustered</li>
+                    <li data-type="clustered"
+                        class="bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer rounded-l-2xl">
+                        Clustered
+                    </li>
+                    <li data-type="notClustered"
+                        class="bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer rounded-r-2xl">
+                        Not Clustered
+                    </li>
                 </ul>
             </div>
             <div id="step-2-hashing" class="hidden">
                 <h1 class="font-bold text-3xl">Choose the type of <span class="text-purple-600">file</span></h1>
                 <ul class="flex flex-row justify-center mt-10">
-                    <li data-type="static" class="bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer rounded-l-2xl">Static</li>
-                    <li data-type="dynamic" class="bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer rounded-r-2xl">Dynamic</li>
+                    <li data-type="static"
+                        class="bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer rounded-l-2xl">
+                        Static
+                    </li>
+                    <li data-type="dynamic"
+                        class="bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer rounded-r-2xl">
+                        Dynamic
+                    </li>
                 </ul>
             </div>
         </div>
