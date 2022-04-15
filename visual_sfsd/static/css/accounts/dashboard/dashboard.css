@@ -1,3 +1,10 @@
+body {
+    padding-top: 100px;
+    padding-left: 300px;
+    background-color: #DFDDDD !important;
+    background-image: none !important;
+}
+
 .create-file-modal-overlay {
     background: rgba(196, 196, 196, 0.7);
     backdrop-filter: blur(5px);
