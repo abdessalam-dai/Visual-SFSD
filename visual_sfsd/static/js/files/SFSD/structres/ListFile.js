@@ -664,7 +664,6 @@ export default class ListFile {
 
     getJsonFormat() {
         let data = {
-            name: this.name,
             characteristics: {
                 maxNbEnregs: this.maxNbEnregs,
                 maxNbBlocks: this.maxNbBlocks,

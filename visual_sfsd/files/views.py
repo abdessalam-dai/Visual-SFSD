@@ -123,16 +123,31 @@ def view_file(request, pk):
 def save_file(request, pk):
     file_data = request.POST.get("fileData")
 
-    print("testing")
-
     if file_data:
         try:
             file = File.objects.get(id=int(pk))
 
             data = json.loads(file_data)
 
-            file.name = data["name"]
             file.data = json.dumps(data)
+            file.save()
+
+            return JsonResponse({"status": "ok"})
+        except:
+            pass
+
+    return JsonResponse({"status": "error"})
+
+
+@require_POST
+def save_file_name(request, pk):
+    name = request.POST.get("name")
+
+    if name:
+        try:
+            file = File.objects.get(id=int(pk))
+
+            file.name = name
             file.save()
 
             return JsonResponse({"status": "ok"})

@@ -10,4 +10,4 @@ def register(request):
 
 
 def dashboard(request):
-    return render(request, 'components/navbar/navbar_dashboard.html')
+    return render(request, 'accounts/dashboard/index.html')

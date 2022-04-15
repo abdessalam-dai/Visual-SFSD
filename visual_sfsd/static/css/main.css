@@ -6,3 +6,79 @@
     -ms-user-select: none; /* Internet Explorer/Edge */
     user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
 }
+
+/* width */
+.ms-container::-webkit-scrollbar {
+    width: 20px;
+}
+
+/* Track */
+.ms-container::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey;
+    border-radius: 10px;
+}
+
+/* Handle */
+.ms-container::-webkit-scrollbar-thumb {
+    background: #93C5FD;
+    border-radius: 10px;
+}
+
+.ms-container {
+    scroll-behavior: smooth;
+    padding: 45px 10px;
+}
+
+.algorithm {
+    position: absolute;
+    width: 700px;
+    height: 400px;
+    top: 0;
+    left: calc(50% - 350px);
+    padding: 20px 0;
+    background: #9ca3af;
+    overflow-y: scroll;
+}
+
+.algorithm div {
+    padding: 1px 25px 0 5px;
+    font-size: 1.2em;
+}
+
+.algorithm div div {
+    width: 40px;
+    display: inline-block;
+    color: #374151;
+}
+
+.algorithm .highlight-instruction {
+    background: #eee !important;
+}
+
+.algorithm .no-highlight-instruction {
+    background: none !important;
+}
+
+.save-file-btn {
+    position: absolute;
+    padding: 15px;
+    bottom: 80px;
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+    left: 30px;
+    background: #4D93E4;
+    border-radius: 50%;
+    transition: all ease 0.3s;
+}
+
+.save-file-btn:hover {
+    background: #BA68C8;
+    bottom: 85px;
+}
+
+.save-file-btn:active {
+    -webkit-transform: scale(.95); /* Safari and Chrome */
+    -moz-transform: scale(.95); /* Firefox */
+    -ms-transform: scale(.95); /* IE 9 */
+    -o-transform: scale(.95); /* Opera */
+    transform: scale(.95);
+}

@@ -15,38 +15,35 @@
     {% block stylesheets %}
     {% endblock %}
 
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- jQuery -->
+    <script src="{% static 'js/lib/jquery-3.6.0.min.js' %}"></script>
+
+    <!-- JS Cookie -->
+    <script src="{% static 'js/lib/js.cookie.min.js' %}"></script>
+    <script>
+        let csrfToken = Cookies.get('csrftoken');
+
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+        $.ajaxSetup({
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrfToken);
+                }
+            }
+        });
+    </script>
+
     <!-- Scripts -->
     {% block scripts %}
 
     {% endblock %}
-
-
-{#    <!-- jQuery -->#}
-{#    <script src="{% static 'js/lib/jquery-3.6.0.min.js' %}"></script>#}
-{##}
-{#    <!-- JS Cookie -->#}
-{#    <script src="{% static 'js/lib/js.cookie.min.js' %}"></script>#}
-{#    <script>#}
-{#        let csrfToken = Cookies.get('csrftoken');#}
-{##}
-{#        function csrfSafeMethod(method) {#}
-{#            // these HTTP methods do not require CSRF protection#}
-{#            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));#}
-{#        }#}
-{##}
-{#        $.ajaxSetup({#}
-{#            beforeSend: function (xhr, settings) {#}
-{#                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {#}
-{#                    xhr.setRequestHeader("X-CSRFToken", csrfToken);#}
-{#                }#}
-{#            }#}
-{#        });#}
-{#        $(document).ready(function () {#}
-{#            {% block domready %}#}
-{#            {% endblock %}#}
-{#        });#}
-{#    </script>#}
-
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

@@ -3,7 +3,7 @@ from .models import File
 
 
 class FileAdmin(admin.ModelAdmin):
-    list_display = ('owner', 'name', 'nb_max_enregs')
+    list_display = ('owner', 'name')
 
 
 admin.site.register(File, FileAdmin)

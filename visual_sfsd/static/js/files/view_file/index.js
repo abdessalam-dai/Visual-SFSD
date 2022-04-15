@@ -3,6 +3,7 @@ import TnOF from "../SFSD/types/simple/TnOF.js";
 import LOF from "../SFSD/types/simple/LOF.js";
 import LnOF from "../SFSD/types/simple/LnOF.js";
 import * as DomElements from "./DomElements.js";
+import * as API from "./api.js";
 import {MAX_NB_BLOCKS, MAX_NB_ENREGS_DEFAULT} from "../constants.js";
 import {entete, fileHeadDropDown, fileNameSpan, imageDropDown} from "./DomElements.js";
 import {Block, Enreg} from "../SFSD/SFSD.js";
@@ -48,12 +49,16 @@ formForFileName.addEventListener('submit' , (e) => {
         let fileNameStr = Array.from(editFileNameInput.value.trim()).map((char ) => char === " " ? "_" : char).join("")
         DomElements.fileNameSpan.textContent = fileNameStr;
         currentFileName = fileNameStr;
-        console.log(editFileNameInput.value)
 
         formForFileName.classList.add("hidden");
         formIsHidden = true;
+
+        // edit the file name
+        API.editFileName(fileNameStr);
+        // change window title
+        document.title = `${fileNameStr} - VisualSFSD`;
     }
-})
+});
 
 
 // handle the case if the user wants to undo rename file
@@ -115,7 +120,7 @@ console.log(blocks)
 
 if (FILE_TYPE === "TOF") {
     newFile = new TOF(
-        fileData["name"],
+        FILE_NAME,
         buff,
         buff2,
         MSBoard,
@@ -127,7 +132,7 @@ if (FILE_TYPE === "TOF") {
     );
 } else if (FILE_TYPE === "TnOF") {
     newFile = new TOF(
-        fileData["name"],
+        FILE_NAME,
         buff,
         buff2,
         MSBoard,
@@ -139,7 +144,7 @@ if (FILE_TYPE === "TOF") {
     );
 } else if (FILE_TYPE === "LOF") {
     newFile = new LOF(
-        fileData["name"],
+        FILE_NAME,
         buff,
         buff2,
         MSBoard,
@@ -153,7 +158,7 @@ if (FILE_TYPE === "TOF") {
     );
 } else {
     newFile = new LnOF(
-        fileData["name"],
+        FILE_NAME,
         buff,
         buff2,
         MSBoard,
@@ -637,22 +642,7 @@ const saveFileBtn = $("#save-file-btn");
 
 saveFileBtn.click(function (e) {
     e.preventDefault();
-
-    let newFileData = newFile.getJsonFormat();
-
-    $.ajax({
-        type: 'POST',
-        url: SAVE_FILE_URL,
-        data: {
-            fileData: JSON.stringify(newFileData)
-        },
-        datatype: 'json',
-        success: function (response) {
-            console.log("OK !!");
-        },
-        error: function (response) {
-            console.log("Error");
-        }
-    })
+    let newFileData = newFile.getJsonFormat()
+    API.saveFileData(JSON.stringify(newFileData));
 });
 // END - Handle file saving
