@@ -1,15 +1,15 @@
 {% load static %}
 
 <button id="create-file-btn"
-        class="save-file-btn w-[100px] h-[100px] flex justify-center items-center hover:bg-[#eee] bg-white z-5 right-20 bottom-20"
+        class="save-file-btn fixed w-[100px] h-[100px] flex justify-center items-center hover:bg-[#eee] bg-white z-5 right-20 bottom-20"
         title="Create file">
     <img src="{% static 'imgs/dashboard/plus.svg' %}" alt="Create">
 </button>
 
 <div id="create-file-modal-overlay"
-     class="create-file-modal-overlay fixed _ top-0 left-0 w-full h-screen z-10"></div>
+     class="create-file-modal-overlay fixed hidden top-0 left-0 w-full h-screen z-10"></div>
 <div id="create-file-modal"
-     class="no-select create-file-modal _ fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] flex items-center justify-center z-20 rounded-full">
+     class="no-select create-file-modal hidden fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] flex items-center justify-center z-20 rounded-full">
     <div class="bg-white rounded-3xl text-center">
         <div class="p-20">
             <!-- START - step 1 -->
