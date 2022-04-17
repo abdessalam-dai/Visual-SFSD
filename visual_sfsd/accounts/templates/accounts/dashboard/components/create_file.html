@@ -1,7 +1,7 @@
 {% load static %}
 
 <button id="create-file-btn"
-        class="save-file-btn fixed w-[100px] h-[100px] flex justify-center items-center hover:bg-[#eee] bg-white z-5 right-20 bottom-20"
+        class="save-file-btn shadow-2xl bg-white z-5 right-20 bottom-20 rounded-full transition-all fixed w-[100px] h-[100px] flex justify-center items-center hover:bg-[#eee]"
         title="Create file">
     <img src="{% static 'imgs/dashboard/plus.svg' %}" alt="Create">
 </button>
@@ -11,210 +11,223 @@
 <div id="create-file-modal"
      class="no-select create-file-modal hidden fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] flex items-center justify-center z-20 rounded-full">
     <div class="bg-white rounded-3xl text-center">
-        <div class="p-20">
-            <!-- START - step 1 -->
-            <div id="step-1" class="">
-                <div>
-                    <h1 class="font-bold text-3xl">File Name</h1>
-                    <input id="file-name"
-                           maxlength="100" autocomplete="off"
-                           type="text" placeholder="File Name"
-                           class="mt-8 block w-full px-3 py-2 border border-slate-300 rounded-md text-sm shadow-sm placeholder-gray-400
+        <form method="POST" action="">
+            <div class="p-20">
+                <!-- START - step 1 -->
+                <div id="step-1" class="">
+                    <div>
+                        <h1 class="font-bold text-3xl">File Name</h1>
+                        <input name="name"
+                               id="file-name"
+                               maxlength="100" autocomplete="off"
+                               type="text" placeholder="File Name"
+                               class="mt-8 block w-full px-3 py-2 border border-slate-300 rounded-md text-sm shadow-sm placeholder-gray-400
                             text-xl px-4
                             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
                             bg-gray-50"
-                    />
+                        />
+                    </div>
+                    <div class="mt-10">
+                        <button id="submit-file-name-btn" class="no-select">
+                            <img class="w-12" src="{% static 'imgs/dashboard/nextStep.svg' %}" alt="Next">
+                        </button>
+                    </div>
                 </div>
-                <div class="mt-10">
-                    <button id="submit-file-name-btn" class="no-select">
-                        <img class="w-12" src="{% static 'imgs/dashboard/nextStep.svg' %}" alt="Next">
+                <!-- END - step 1 -->
+
+                <!-- START - step 2 -->
+                <!-- hidden input for file access type -->
+                <input name="file-access" type="text" value="sequential" class="hidden"/>
+                <div id="step-2" class="hidden">
+                    <h1 class="font-bold text-3xl">Choose the type of <span
+                            class="text-purple-600">file organization</span>
+                    </h1>
+                    <ul class="flex flex-row justify-center mt-10">
+                        <li data-access="sequential"
+                            id="file-access-btn"
+                            class="transition-all ease-in-out bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer rounded-l-2xl">
+                            Sequential
+                        </li>
+                        <li data-access="indexed"
+                            id="file-access-btn"
+                            class="transition-all ease-in-out bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer">
+                            Indexed
+                        </li>
+                        <li data-access="hashing"
+                            id="file-access-btn"
+                            class="transition-all ease-in-out bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer rounded-r-2xl">
+                            Hashing
+                        </li>
+                    </ul>
+                </div>
+                <!-- END - step 2 -->
+
+                <!-- hidden input for file type -->
+                <input name="type" type="text" value="TOF" class="hidden"/>
+                <!-- START - step 3 -->
+                <div id="step-3-sequential" class="hidden">
+                    <h1 class="font-bold text-3xl">Choose the type of <span class="text-purple-600">file</span></h1>
+                    <ul class="flex flex-row justify-center mt-10">
+                        <li data-type="TOF"
+                            id="file-type-btn"
+                            class="transition-all ease-in-out bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer rounded-l-2xl">
+                            TOF
+                        </li>
+                        <li data-type="TnOF"
+                            id="file-type-btn"
+                            class="transition-all ease-in-out bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer">
+                            TnOF
+                        </li>
+                        <li data-type="LOF"
+                            id="file-type-btn"
+                            class="transition-all ease-in-out bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer">
+                            LOF
+                        </li>
+                        <li data-type="LnOF"
+                            id="file-type-btn"
+                            class="transition-all ease-in-out bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer rounded-r-2xl">
+                            LnOF
+                        </li>
+                    </ul>
+                </div>
+                <div id="step-3-indexed" class="hidden">
+                    <h1 class="font-bold text-3xl">Choose the type of <span class="text-purple-600">file</span></h1>
+                    <ul class="flex flex-row justify-center mt-10">
+                        <li data-type="clustered"
+                            id="file-type-btn"
+                            class="transition-all ease-in-out bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer rounded-l-2xl">
+                            Clustered
+                        </li>
+                        <li data-type="notClustered"
+                            id="file-type-btn"
+                            class="transition-all ease-in-out bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer rounded-r-2xl">
+                            Not Clustered
+                        </li>
+                    </ul>
+                </div>
+                <div id="step-3-hashing" class="hidden">
+                    <h1 class="font-bold text-3xl">Choose the type of <span class="text-purple-600">file</span></h1>
+                    <ul class="flex flex-row justify-center mt-10">
+                        <li data-type="static"
+                            id="file-type-btn"
+                            class="transition-all ease-in-out bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer rounded-l-2xl">
+                            Static
+                        </li>
+                        <li data-type="dynamic"
+                            id="file-type-btn"
+                            class="transition-all ease-in-out bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer rounded-r-2xl">
+                            Dynamic
+                        </li>
+                    </ul>
+                </div>
+                <!-- END - step 3 -->
+
+                <!-- START - step 4 -->
+                <div id="step-4-sequential" class="hidden">
+                    <h1 class="font-bold text-3xl mb-8">File configuration</h1>
+                    <div class="text-left mb-4">
+                        <label for="max-nb-enregs"
+                               class="block mb-2 text-lg font-medium text-gray-900 dark:text-gray-300">
+                            Max. number of elements
+                        </label>
+                        <input name="max-nb-enregs"
+                               id="max-nb-enregs"
+                               autocomplete="off"
+                               value="8"
+                               type="number" placeholder="Max. number of elements"
+                               min="4"
+                               max="8"
+                               class="w-full px-3 py-2 border border-slate-300 rounded-md text-lg shadow-sm placeholder-gray-400 px-4
+                                focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
+                                bg-gray-50"
+                        />
+                    </div>
+                    <div class="text-left mb-4">
+                        <label for="max-nb-blocks"
+                               class="block mb-2 text-lg font-medium text-gray-900 dark:text-gray-300">
+                            Max. number of blocks
+                        </label>
+                        <input name="max-nb-blocks"
+                               id="max-nb-blocks"
+                               autocomplete="off"
+                               value="50"
+                               type="number" placeholder="Max. number of blocks"
+                               min="5"
+                               max="50"
+                               class="w-full px-3 py-2 border border-slate-300 rounded-md text-lg shadow-sm placeholder-gray-400 px-4
+                                focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
+                                bg-gray-50"
+                        />
+                    </div>
+
+                    <div class="flex items-start hidden">
+                        <div class="flex items-center h-5">
+                            <input id="fill-with-dummy-data" aria-describedby="remember" type="checkbox"
+                                   class="w-4 h-4 mt-2 cursor-pointer bg-gray-50 rounded border border-gray-300 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800">
+                        </div>
+                        <div class="ml-3 text-lg">
+                            <label for="fill-with-dummy-data"
+                                   class="cursor-pointer font-medium text-gray-900 dark:text-gray-300">
+                                Fill with dummy data
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 hidden" id="dummy-data-form">
+                        <div class="text-left mb-4">
+                            <label for="elements-number"
+                                   class="block mb-2 text-lg font-medium text-gray-900 dark:text-gray-300">
+                                Elements Number
+                            </label>
+                            <input id="elements-number"
+                                   autocomplete="off"
+                                   type="number" placeholder="Elements Number"
+                                   min="0"
+                                   class="w-full px-3 py-2 border border-slate-300 rounded-md text-lg shadow-sm placeholder-gray-400 px-4
+                                focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
+                                bg-gray-50"
+                            />
+                        </div>
+
+                        <div class="text-left mb-4">
+                            <label for="min-key"
+                                   class="block mb-2 text-lg font-medium text-gray-900 dark:text-gray-300">
+                                Min Key
+                            </label>
+                            <input id="min-key"
+                                   autocomplete="off"
+                                   type="number" placeholder="Min Key"
+                                   min="0"
+                                   class="w-full px-3 py-2 border border-slate-300 rounded-md text-lg shadow-sm placeholder-gray-400 px-4
+                                    focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
+                                    bg-gray-50"
+                            />
+
+                        </div>
+                        <div class="text-left mb-4">
+                            <label for="max-key"
+                                   class="block mb-2 text-lg font-medium text-gray-900 dark:text-gray-300">
+                                Max key
+                            </label>
+                            <input id="max-key"
+                                   autocomplete="off"
+                                   type="number" placeholder="Max Key"
+                                   min="0"
+                                   class="w-full px-3 py-2 border border-slate-300 rounded-md text-lg shadow-sm placeholder-gray-400 px-4
+                                    focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
+                                    bg-gray-50"
+                            />
+                        </div>
+                    </div>
+
+                    <button id="submit-create-file"
+                            type="submit"
+                            class="text-white mt-8 bg-[#733A8E] hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-2xl w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                        Create
                     </button>
                 </div>
+                <!-- END - step 4 -->
             </div>
-            <!-- END - step 1 -->
-
-            <!-- START - step 2 -->
-            <div id="step-2" class="hidden">
-                <h1 class="font-bold text-3xl">Choose the type of <span class="text-purple-600">file organization</span>
-                </h1>
-                <ul class="flex flex-row justify-center mt-10">
-                    <li data-access="sequential"
-                        id="file-access-btn"
-                        class="transition-all ease-in-out bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer rounded-l-2xl">
-                        Sequential
-                    </li>
-                    <li data-access="indexed"
-                        id="file-access-btn"
-                        class="transition-all ease-in-out bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer">
-                        Indexed
-                    </li>
-                    <li data-access="hashing"
-                        id="file-access-btn"
-                        class="transition-all ease-in-out bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer rounded-r-2xl">
-                        Hashing
-                    </li>
-                </ul>
-            </div>
-            <!-- END - step 2 -->
-
-            <!-- START - step 3 -->
-            <div id="step-3-sequential" class="hidden">
-                <h1 class="font-bold text-3xl">Choose the type of <span class="text-purple-600">file</span></h1>
-                <ul class="flex flex-row justify-center mt-10">
-                    <li data-type="TOF"
-                        id="file-type-btn"
-                        class="transition-all ease-in-out bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer rounded-l-2xl">
-                        TOF
-                    </li>
-                    <li data-type="TnOF"
-                        id="file-type-btn"
-                        class="transition-all ease-in-out bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer">
-                        TnOF
-                    </li>
-                    <li data-type="LOF"
-                        id="file-type-btn"
-                        class="transition-all ease-in-out bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer">
-                        LOF
-                    </li>
-                    <li data-type="LnOF"
-                        id="file-type-btn"
-                        class="transition-all ease-in-out bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer rounded-r-2xl">
-                        LnOF
-                    </li>
-                </ul>
-            </div>
-            <div id="step-3-indexed" class="hidden">
-                <h1 class="font-bold text-3xl">Choose the type of <span class="text-purple-600">file</span></h1>
-                <ul class="flex flex-row justify-center mt-10">
-                    <li data-type="clustered"
-                        id="file-type-btn"
-                        class="transition-all ease-in-out bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer rounded-l-2xl">
-                        Clustered
-                    </li>
-                    <li data-type="notClustered"
-                        id="file-type-btn"
-                        class="transition-all ease-in-out bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer rounded-r-2xl">
-                        Not Clustered
-                    </li>
-                </ul>
-            </div>
-            <div id="step-3-hashing" class="hidden">
-                <h1 class="font-bold text-3xl">Choose the type of <span class="text-purple-600">file</span></h1>
-                <ul class="flex flex-row justify-center mt-10">
-                    <li data-type="static"
-                        id="file-type-btn"
-                        class="transition-all ease-in-out bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer rounded-l-2xl">
-                        Static
-                    </li>
-                    <li data-type="dynamic"
-                        id="file-type-btn"
-                        class="transition-all ease-in-out bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer rounded-r-2xl">
-                        Dynamic
-                    </li>
-                </ul>
-            </div>
-            <!-- END - step 3 -->
-
-            <!-- START - step 4 -->
-            <div id="step-4-sequential" class="hidden">
-                <h1 class="font-bold text-3xl mb-8">File configuration</h1>
-                <div class="text-left mb-4">
-                    <label for="max-nb-enregs" class="block mb-2 text-lg font-medium text-gray-900 dark:text-gray-300">
-                        Max. number of elements
-                    </label>
-                    <input id="max-nb-enregs"
-                           autocomplete="off"
-                           value="8"
-                           type="number" placeholder="Max. number of elements"
-                           min="4"
-                           max="8"
-                           class="w-full px-3 py-2 border border-slate-300 rounded-md text-lg shadow-sm placeholder-gray-400 px-4
-                                focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
-                                bg-gray-50"
-                    />
-                </div>
-                <div class="text-left mb-4">
-                    <label for="max-nb-blocks" class="block mb-2 text-lg font-medium text-gray-900 dark:text-gray-300">
-                        Max. number of blocks
-                    </label>
-                    <input id="max-nb-blocks"
-                           autocomplete="off"
-                           value="50"
-                           type="number" placeholder="Max. number of blocks"
-                           min="5"
-                           max="50"
-                           class="w-full px-3 py-2 border border-slate-300 rounded-md text-lg shadow-sm placeholder-gray-400 px-4
-                                focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
-                                bg-gray-50"
-                    />
-                </div>
-
-                <div class="flex items-start">
-                    <div class="flex items-center h-5">
-                        <input id="fill-with-dummy-data" aria-describedby="remember" type="checkbox"
-                               class="w-4 h-4 mt-2 cursor-pointer bg-gray-50 rounded border border-gray-300 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800">
-                    </div>
-                    <div class="ml-3 text-lg">
-                        <label for="fill-with-dummy-data"
-                               class="cursor-pointer font-medium text-gray-900 dark:text-gray-300">
-                            Fill with dummy data
-                        </label>
-                    </div>
-                </div>
-
-                <div class="mt-4 hidden" id="dummy-data-form">
-                    <div class="text-left mb-4">
-                        <label for="elements-number"
-                               class="block mb-2 text-lg font-medium text-gray-900 dark:text-gray-300">
-                            Elements Number
-                        </label>
-                        <input id="elements-number"
-                               autocomplete="off"
-                               type="number" placeholder="Elements Number"
-                               min="0"
-                               class="w-full px-3 py-2 border border-slate-300 rounded-md text-lg shadow-sm placeholder-gray-400 px-4
-                                focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
-                                bg-gray-50"
-                        />
-                    </div>
-
-                    <div class="text-left mb-4">
-                        <label for="min-key"
-                               class="block mb-2 text-lg font-medium text-gray-900 dark:text-gray-300">
-                            Min Key
-                        </label>
-                        <input id="min-key"
-                               autocomplete="off"
-                               type="number" placeholder="Min Key"
-                               min="0"
-                               class="w-full px-3 py-2 border border-slate-300 rounded-md text-lg shadow-sm placeholder-gray-400 px-4
-                                    focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
-                                    bg-gray-50"
-                        />
-
-                    </div>
-                    <div class="text-left mb-4">
-                        <label for="max-key"
-                               class="block mb-2 text-lg font-medium text-gray-900 dark:text-gray-300">
-                            Max key
-                        </label>
-                        <input id="max-key"
-                               autocomplete="off"
-                               type="number" placeholder="Max Key"
-                               min="0"
-                               class="w-full px-3 py-2 border border-slate-300 rounded-md text-lg shadow-sm placeholder-gray-400 px-4
-                                    focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
-                                    bg-gray-50"
-                        />
-                    </div>
-                </div>
-
-                <button id="submit-create-file"
-                        class="text-white mt-8 bg-[#733A8E] hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-2xl w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                    Create
-                </button>
-            </div>
-            <!-- END - step 4 -->
-        </div>
+        </form>
     </div>
 </div>

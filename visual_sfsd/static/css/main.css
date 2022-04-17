@@ -60,16 +60,11 @@
 }
 
 .save-file-btn {
-    position: absolute;
-    /*padding: 15px;*/
-    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 50%;
     transition: all ease 0.3s;
 }
 
 .save-file-btn:hover {
-    background: #BA68C8;
-    bottom: 85px;
+    transform: translateY(-3px);
 }
 
 .save-file-btn:active {

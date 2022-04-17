@@ -107,12 +107,12 @@ Array.from(DE.fileTypeBtns).forEach((fileTypeBtn) => {
 
 
 // handle file configuration
-// handle clicking fill with dummy data
-DE.fillWithDummyData.addEventListener('change', function () {
-    if (this.checked) {
-        DE.dummyDataForm.classList.remove('hidden');
-    } else {
-        DE.dummyDataForm.classList.add('hidden');
-    }
-});
-
+// // handle clicking fill with dummy data
+// DE.fillWithDummyData.addEventListener('change', function () {
+//     if (this.checked) {
+//         DE.dummyDataForm.classList.remove('hidden');
+//     } else {
+//         DE.dummyDataForm.classList.add('hidden');
+//     }
+// });
+//
