@@ -35,7 +35,9 @@
 {% block content %}
     {% include "files/view_file/components/animation-speed.html" %}
 
-    <button id="save-file-btn" data-id="{{ file.id }}" class="save-file-btn" title="Save">
+    <button id="save-file-btn" data-id="{{ file.id }}"
+            class="save-file-btn shadow-2xl bg-[#BA68C8] z-5 left-20 bottom-20 rounded-full transition-all fixed w-[80px] h-[80px] flex justify-center items-center"
+            title="Save">
         <img src="{% static 'imgs/view_file/saveBtn.svg' %}" alt="Save">
     </button>
 
