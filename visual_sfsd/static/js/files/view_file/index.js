@@ -640,9 +640,22 @@ handleScrollButtons();
 // START - Handle file saving
 const saveFileBtn = $("#save-file-btn");
 
-saveFileBtn.click(function (e) {
-    e.preventDefault();
+const  saveFile = () => {
     let newFileData = newFile.getJsonFormat()
     API.saveFileData(JSON.stringify(newFileData));
+}
+
+saveFileBtn.click(function (e) {
+    e.preventDefault();
+
 });
+// add the a shortcut to allow the user to save the file with Ctrl + s
+
+document.addEventListener('keydown' , e => {
+    if(e.key.toLowerCase() === 's' && e.ctrlKey) {
+        e.preventDefault()
+        saveFile()
+    }
+})
+
 // END - Handle file saving
