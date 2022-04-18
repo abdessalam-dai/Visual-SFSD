@@ -4,7 +4,6 @@ import LOF from "../SFSD/types/simple/LOF.js";
 import LnOF from "../SFSD/types/simple/LnOF.js";
 import * as DomElements from "./DomElements.js";
 import * as API from "./api.js";
-import {MAX_NB_BLOCKS, MAX_NB_ENREGS_DEFAULT} from "../constants.js";
 import {entete, fileHeadDropDown, fileNameSpan, imageDropDown} from "./DomElements.js";
 import {Block, Enreg} from "../SFSD/SFSD.js";
 
@@ -124,10 +123,10 @@ if (FILE_TYPE === "TOF") {
         buff,
         buff2,
         MSBoard,
-        fileData["characteristics"]["maxNbEnregs"],
-        fileData["characteristics"]["maxNbBlocks"],
-        fileData["characteristics"]["nbBlocks"],
-        fileData["characteristics"]["nbInsertions"],
+        parseInt(fileData["characteristics"]["maxNbEnregs"]),
+        parseInt(fileData["characteristics"]["maxNbBlocks"]),
+        parseInt(fileData["characteristics"]["nbBlocks"]),
+        parseInt(fileData["characteristics"]["nbInsertions"]),
         blocks
     );
 } else if (FILE_TYPE === "TnOF") {
@@ -136,10 +135,10 @@ if (FILE_TYPE === "TOF") {
         buff,
         buff2,
         MSBoard,
-        fileData["characteristics"]["maxNbEnregs"],
-        fileData["characteristics"]["maxNbBlocks"],
-        fileData["characteristics"]["nbBlocks"],
-        fileData["characteristics"]["nbInsertions"],
+        parseInt(fileData["characteristics"]["maxNbEnregs"]),
+        parseInt(fileData["characteristics"]["maxNbBlocks"]),
+        parseInt(fileData["characteristics"]["nbBlocks"]),
+        parseInt(fileData["characteristics"]["nbInsertions"]),
         blocks
     );
 } else if (FILE_TYPE === "LOF") {
@@ -148,13 +147,13 @@ if (FILE_TYPE === "TOF") {
         buff,
         buff2,
         MSBoard,
-        fileData["characteristics"]["maxNbEnregs"],
-        fileData["characteristics"]["maxNbBlocks"],
-        fileData["characteristics"]["nbBlocks"],
-        fileData["characteristics"]["nbInsertions"],
+        parseInt(fileData["characteristics"]["maxNbEnregs"]),
+        parseInt(fileData["characteristics"]["maxNbBlocks"]),
+        parseInt(fileData["characteristics"]["nbBlocks"]),
+        parseInt(fileData["characteristics"]["nbInsertions"]),
         blocks,
-        fileData["characteristics"]["headIndex"],
-        fileData["characteristics"]["tailIndex"]
+        parseInt(fileData["characteristics"]["headIndex"]),
+        parseInt(fileData["characteristics"]["tailIndex"])
     );
 } else {
     newFile = new LnOF(
@@ -162,13 +161,13 @@ if (FILE_TYPE === "TOF") {
         buff,
         buff2,
         MSBoard,
-        fileData["characteristics"]["maxNbEnregs"],
-        fileData["characteristics"]["maxNbBlocks"],
-        fileData["characteristics"]["nbBlocks"],
-        fileData["characteristics"]["nbInsertions"],
+        parseInt(fileData["characteristics"]["maxNbEnregs"]),
+        parseInt(fileData["characteristics"]["maxNbBlocks"]),
+        parseInt(fileData["characteristics"]["nbBlocks"]),
+        parseInt(fileData["characteristics"]["nbInsertions"]),
         blocks,
-        fileData["characteristics"]["headIndex"],
-        fileData["characteristics"]["tailIndex"]
+        parseInt(fileData["characteristics"]["headIndex"]),
+        parseInt(fileData["characteristics"]["tailIndex"])
     );
 }
 
@@ -455,7 +454,7 @@ const handleGenerateData = () => {
             min = getValue(DomElements.minKey),
             max = getValue(DomElements.maxKey);
 
-        let dataIsValid = (n <= max - min + 1) && n <= MAX_NB_BLOCKS * MAX_NB_ENREGS_DEFAULT;
+        let dataIsValid = (n <= max - min + 1) && n <= newFile.maxNbBlocks * newFile.maxNbEnregs;
 
         if (dataIsValid && elementsNumberValid && minKeyValid && maxKeyValid) {
             changeButtonsState(true);

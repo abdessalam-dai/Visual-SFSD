@@ -3,8 +3,6 @@ import Enreg from '../../structres/Enreg.js';
 import Block from '../../structres/Block.js';
 import {
     ENREG_HIGHLIGHT_GREEN, ENREG_HIGHLIGHT_RED,
-    MAX_NB_BLOCKS,
-    MAX_NB_ENREGS_DEFAULT
 } from "../../../constants.js";
 import {delay, sleep} from "../../../view_file/shared/animationSpeed.js";
 
@@ -93,7 +91,7 @@ export default class LnOF extends ListFile {
 
         let newRandomBlock = -1;
         let newJ = j;
-        if (j >= MAX_NB_ENREGS_DEFAULT) {
+        if (j >= this.maxNbEnregs) {
             isBlocksLengthExceeded = true;
             newJ = 0;
             newRandomBlock = this.randomBlockIndex();
@@ -199,7 +197,7 @@ export default class LnOF extends ListFile {
                 await sleep(1000);
             }
 
-            if (currBlock.nb < MAX_NB_ENREGS_DEFAULT) { // if there is space in the block
+            if (currBlock.nb < this.maxNbEnregs) { // if there is space in the block
                 currBlock.nb++;
                 currBlock.enregs[j] = newEnreg;
                 this.blocks[i] = currBlock;

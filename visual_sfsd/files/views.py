@@ -160,3 +160,46 @@ def save_file_name(request, pk):
 def create_file(request):
     # form =
     return render(request, 'files/create_file/index.html')
+
+
+def dashboard(request):
+    ACCESS_TYPES = {'sequential': ["TOF", "TnOF", "LOF", "LnOF"],
+                    'indexed': ["clustered", "not_clustered"],
+                    'hashing': ["static", "dynamic"]}
+    if request.method == 'POST':
+        f_name = request.POST.get('name').strip()
+        f_access = request.POST.get('access').strip()
+        f_type = request.POST.get('type').strip()
+        max_nb_enregs = request.POST.get('max-nb-enregs').strip()
+        max_nb_blocks = request.POST.get('max-nb-blocks').strip()
+
+        print(f_name, f_access, f_type, max_nb_blocks, max_nb_enregs)
+        if 1 <= len(f_name) <= 100 and f_access in ACCESS_TYPES.keys() and f_type in ACCESS_TYPES[f_access] and 5 <= int(max_nb_blocks) <= 100 and 4 <= int(max_nb_enregs) <= 8:
+            data = {
+                "name": f_name,
+                "characteristics": {
+                    "maxNbEnregs": max_nb_enregs,
+                    "maxNbBlocks": max_nb_blocks,
+                    "nbBlocks": 0,
+                    "nbInsertions": 0
+                },
+                "blocks": [],
+            }
+
+            if f_type in ['LOF', 'LnOF']:
+                data["characteristics"]["headIndex"] = -1
+                data["characteristics"]["tailIndex"] = -1
+            print(request.user, f_name, f_type, data)
+
+            file = File(
+                owner=request.user,
+                name=f_name,
+                file_type=f_type
+            )
+            file.save()
+            file.data = json.dumps(data)
+            file.save()
+
+            return redirect('view_file', pk=file.id)
+
+    return render(request, 'accounts/dashboard/index.html')
