@@ -5,8 +5,6 @@ import {
     ENREG_HIGHLIGHT_GREEN,
     ENREG_HIGHLIGHT_GREY, ENREG_HIGHLIGHT_ORANGE,
     ENREG_HIGHLIGHT_PURPLE, ENREG_HIGHLIGHT_RED,
-    MAX_NB_BLOCKS,
-    MAX_NB_ENREGS_DEFAULT
 } from "../../../constants.js";
 import {delay, sleep} from "../../../view_file/shared/animationSpeed.js";
 
@@ -163,7 +161,7 @@ export default class LOF extends ListFile {
         }
 
         if (!found && !stop) {
-            if (currBlock.nb < MAX_NB_ENREGS_DEFAULT) {
+            if (currBlock.nb < this.maxNbEnregs) {
                 i = iPrev;
                 j = currBlock.nb;
             } else {
@@ -244,7 +242,7 @@ export default class LOF extends ListFile {
 
             let newEnreg = new Enreg(key, field1, field2, removed); // create a new enreg.
 
-            if (this.blocks.filter((block) => block === null).length === MAX_NB_BLOCKS) {
+            if (this.blocks.filter((block) => block === null).length === this.maxNbBlocks) {
                 // create new block if there is no block at all
                 let address = this.setBlockAddress(i);
                 this.blocks[i] = new Block([newEnreg], 1, address, -1);

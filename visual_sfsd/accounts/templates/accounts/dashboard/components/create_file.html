@@ -7,11 +7,12 @@
 </button>
 
 <div id="create-file-modal-overlay"
-     class="create-file-modal-overlay fixed hidden top-0 left-0 w-full h-screen z-10"></div>
+     class="create-file-modal-overlay fixed __ top-0 left-0 w-full h-screen z-10"></div>
 <div id="create-file-modal"
-     class="no-select create-file-modal hidden fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] flex items-center justify-center z-20 rounded-full">
+     class="no-select create-file-modal __ fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] flex items-center justify-center z-20 rounded-full">
     <div class="bg-white rounded-3xl text-center">
         <form method="POST" action="">
+            {% csrf_token %}
             <div class="p-20">
                 <!-- START - step 1 -->
                 <div id="step-1" class="">
@@ -28,7 +29,7 @@
                         />
                     </div>
                     <div class="mt-10">
-                        <button id="submit-file-name-btn" class="no-select">
+                        <button id="submit-file-name-btn" class="no-select" type="button">
                             <img class="w-12" src="{% static 'imgs/dashboard/nextStep.svg' %}" alt="Next">
                         </button>
                     </div>
@@ -37,7 +38,7 @@
 
                 <!-- START - step 2 -->
                 <!-- hidden input for file access type -->
-                <input name="file-access" type="text" value="sequential" class="hidden"/>
+                <input name="access" id="file-access" type="text" value="sequential" class="hidden">
                 <div id="step-2" class="hidden">
                     <h1 class="font-bold text-3xl">Choose the type of <span
                             class="text-purple-600">file organization</span>
@@ -63,7 +64,7 @@
                 <!-- END - step 2 -->
 
                 <!-- hidden input for file type -->
-                <input name="type" type="text" value="TOF" class="hidden"/>
+                <input name="type" id="file-type" type="text" value="TOF" class="hidden">
                 <!-- START - step 3 -->
                 <div id="step-3-sequential" class="hidden">
                     <h1 class="font-bold text-3xl">Choose the type of <span class="text-purple-600">file</span></h1>
@@ -153,7 +154,7 @@
                                value="50"
                                type="number" placeholder="Max. number of blocks"
                                min="5"
-                               max="50"
+                               max="100"
                                class="w-full px-3 py-2 border border-slate-300 rounded-md text-lg shadow-sm placeholder-gray-400 px-4
                                 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
                                 bg-gray-50"
@@ -222,7 +223,7 @@
 
                     <button id="submit-create-file"
                             type="submit"
-                            class="text-white mt-8 bg-[#733A8E] hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-2xl w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                            class="text-white mt-8 bg-[#733A8E] disabled:bg-gray-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-2xl w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                         Create
                     </button>
                 </div>

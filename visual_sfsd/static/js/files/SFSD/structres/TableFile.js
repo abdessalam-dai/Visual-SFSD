@@ -208,7 +208,7 @@ export default class TableFile {
                 d3.select(this)
                     .select("span")
                     .text(function (block, blockIndex) {
-                        if (index <= MAX_NB_BLOCKS && index >= 0) {
+                        if (index <= this.maxNbBlocks && index >= 0) {
                             return `0x${block.blockAddress}`;
                         } else {
                             return blockIndex;
@@ -218,7 +218,7 @@ export default class TableFile {
                 d3.select(this)
                     .select("div")
                     .text(function (block, blockIndex) {
-                        if (index <= MAX_NB_BLOCKS && index >= 0) {
+                        if (index <= this.maxNbBlocks && index >= 0) {
                             return "Physical address (real)";
                         } else {
                             return "Logical address";
@@ -330,9 +330,9 @@ export default class TableFile {
         // allow insertion only if the maximum capacity of blocks isn't reached
         if (this.blocks.length === 0) {
             return true;
-        } else if (this.blocks[this.blocks.length - 1].enregs.length < MAX_NB_ENREGS_DEFAULT) {
+        } else if (this.blocks[this.blocks.length - 1].enregs.length < this.maxNbEnregs) {
             return true;
-        } else if (this.blocks.length < MAX_NB_BLOCKS) {
+        } else if (this.blocks.length < this.maxNbBlocks) {
             return true;
         }
 

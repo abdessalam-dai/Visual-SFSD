@@ -7,4 +7,5 @@ urlpatterns = [
     path('file/<str:pk>', views.view_file, name='view_file'),
     path('file/save/<str:pk>', views.save_file, name='save_file'),
     path('file/save/name/<str:pk>', views.save_file_name, name='save_file_name'),
+    path('dashboard/', views.dashboard, name='dashboard')
 ]

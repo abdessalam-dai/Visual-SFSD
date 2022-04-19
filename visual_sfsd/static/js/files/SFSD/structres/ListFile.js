@@ -135,18 +135,18 @@ export default class ListFile {
     }
 
     init() {
-        while (this.blocks.length < MAX_NB_BLOCKS) {
+        while (this.blocks.length < this.maxNbBlocks) {
             this.blocks.push(null);
         }
     }
 
     randomBlockIndex() {
-        let randomBlockIndex = Math.floor(Math.random() * MAX_NB_BLOCKS);
+        let randomBlockIndex = Math.floor(Math.random() * this.maxNbBlocks);
 
         if (this.blocks.every((block) => block !== null)) return -1;
 
         while (this.blocks[randomBlockIndex] !== null) {
-            randomBlockIndex = Math.floor(Math.random() * MAX_NB_BLOCKS);
+            randomBlockIndex = Math.floor(Math.random() * this.maxNbBlocks);
         }
 
         return randomBlockIndex;
@@ -223,7 +223,9 @@ export default class ListFile {
                         .style("z-index", "99")
                         .text("Logical address");
                 }
-            })
+            });
+
+        let maxNbBlocks = this.maxNbBlocks;
 
         this.MSBoard.selectAll(".bloc-index")
             .data(this.blocks)
@@ -250,7 +252,7 @@ export default class ListFile {
                     d3.select(this)
                         .select("span")
                         .text(function (block, blockIndex) {
-                            if (index <= MAX_NB_BLOCKS && index >= 0) {
+                            if (index <= maxNbBlocks && index >= 0) {
                                 return `0x${block.blockAddress}`;
                             } else {
                                 return blockIndex;
@@ -260,7 +262,7 @@ export default class ListFile {
                     d3.select(this)
                         .select("div")
                         .text(function (block, blockIndex) {
-                            if (index <= MAX_NB_BLOCKS && index >= 0) {
+                            if (index <= maxNbBlocks && index >= 0) {
                                 return "Physical address (real)";
                             } else {
                                 return "Logical address";
@@ -480,9 +482,9 @@ export default class ListFile {
 
         if (usedBlocks.length === 0) {
             return true;
-        } else if (this.blocks[this.tailIndex].enregs.length < MAX_NB_ENREGS_DEFAULT) {
+        } else if (this.blocks[this.tailIndex].enregs.length < this.maxNbEnregs) {
             return true;
-        } else if (usedBlocks.length < MAX_NB_BLOCKS) {
+        } else if (usedBlocks.length < this.maxNbBlocks) {
             return true;
         }
 

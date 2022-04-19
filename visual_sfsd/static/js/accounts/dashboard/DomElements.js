@@ -10,8 +10,7 @@ export const step3Hashing = document.querySelector("#step-3-hashing");
 
 export const step4Sequential = document.querySelector("#step-4-sequential");
 
-export const maxNbEnregs = document.querySelector("#max-nb-enregs");
-export const maxNbBlocks = document.querySelector("#max-nb-blocks");
+
 export const dummyDataForm = document.querySelector("#dummy-data-form");
 export const fillWithDummyData = document.querySelector("#fill-with-dummy-data");
 export const elementsNumber = document.querySelector("#elements-number");
@@ -19,7 +18,13 @@ export const minKey = document.querySelector("#min-key");
 export const maxKey = document.querySelector("#max-key");
 export const submitCreateFile = document.querySelector("#submit-create-file");
 
-export const fileName = document.querySelector("#file-name");
+export const fName = document.querySelector("#file-name");
+export const fType = document.querySelector("#file-type");
+export const fAccess = document.querySelector("#file-access");
+export const maxNbEnregs = document.querySelector("#max-nb-enregs");
+export const maxNbBlocks = document.querySelector("#max-nb-blocks");
+
+
 export const submitFileNameBtn = document.querySelector("#submit-file-name-btn");
 
 export const fileAccessBtns = document.querySelectorAll("#file-access-btn");
