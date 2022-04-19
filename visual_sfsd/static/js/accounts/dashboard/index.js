@@ -30,13 +30,23 @@ const resetForm = () => {
     DE.fName.blur();
 }
 
-
-// handle click on the create file button
-DE.createFileBtn.addEventListener('click', function (e) {
+// create a new file with shortcut Ctrl + n
+const  handleOverlayAndFileModal = () => {
     DE.createFileModalOverlay.classList.remove('hidden');
     DE.createFileModal.classList.remove('hidden');
-    DE.fName.focus();
+    DE.fileName.focus();
+}
+
+document.addEventListener('keydown' , e => {
+    if(e.key.toLowerCase() === 'o' && e.ctrlKey) {
+        e.preventDefault();
+        handleOverlayAndFileModal();
+    }
 });
+
+// handle click on the create file button
+DE.createFileBtn.addEventListener('click', function (e) { handleOverlayAndFileModal(); });
+
 
 // handle click on the overlay (to close the modal)
 DE.createFileModalOverlay.addEventListener('click', function (e) {
@@ -141,3 +151,4 @@ DE.maxNbEnregs.addEventListener('keyup', function () {
 //     }
 // });
 //
+
