@@ -83,10 +83,54 @@
                     <img src="{% static 'imgs/ci_settings-filledsettings.svg' %}"
                          class="w-10 hover:rotate-45 transition-all"
                          alt="">
+                         <div class="profile-menu bg-slate-800 font-sans rounded-b-xl fixed left-2" style="z-index: 9999;">
+                            <ul>
+                                <li class="flex flex-row px-4 py-2 space-x-4 items-center  border-b-2 justify-between">
+                                    <span class="text-white text-xl font-semibold">Animations</span>
+                                    <label for="toggle-example-checked" class="flex relative items-center cursor-pointer">
+                                        <input type="checkbox" id="toggle-example-checked" class="sr-only" checked>
+                                        <div class="w-11 h-6 bg-gray-200 rounded-full border border-gray-200 toggle-bg dark:bg-gray-700 dark:border-gray-600"></div>
+                                      </label>
+                                </li>
+                                <li class="flex flex-row justify-between space-x-4 px-4 py-2 border-b-2 items-center">
+                                    <span class="text-white font-semibold text-xl">Dark Mode</span>
+                                    <label for="toggle-example" class="flex relative items-center  cursor-pointer">
+                                        <input type="checkbox" id="toggle-example" class="sr-only">
+                                        <div class="w-11 h-6 bg-gray-200 rounded-full border border-gray-200 toggle-bg dark:bg-gray-700 dark:border-gray-600"></div>
+                                      </label>
+                                </li>
+                                <li class="flex cursor-pointer flex-row px-4 py-2 items-center space-x-4 justify-between ">
+                                    <span class="text-red-400 font-semibold text-xl">Delete File</span>
+                                    <img src="{% static 'imgs/deleteFileIcon.svg' %}" class="w-7" alt="">
+                                </li>
+                                
+                            </ul>
+                        </div>
                 </li>
                 <li class="">
                     <img src="{% static 'imgs/download.jpg' %}" class="rounded-full w-10" alt="">
+                    <div class="profile-menu bg-slate-800 font-sans rounded-b-xl fixed right-2" style="z-index: 9999;">
+                        <ul>
+                            <li class="flex flex-row px-4 py-2 space-x-4 border-b-2 justify-start">
+                                <img src="{% static 'imgs/download.jpg' %}" class="w-10 rounded-full" alt="">
+                                <div class="flex flex-col text-white">
+                                    <span class="font-semibold">Ouassim Hamdani</span>
+                                    <span class="font-normal ">Student</span>
+                                </div>
+                            </li>
+                            <li class="flex flex-row px-4 py-2 space-x-4 border-b-2 items-center justify-start">
+                                <img src="{% static 'imgs/dashBoardIcon.svg' %}" class="w-9" alt="">
+                                <span class="text-white font-semibold text-xl">Dashboard</span>
+                            </li>
+                            <li class="flex flex-row px-4 py-2 space-x-4 items-center justify-start ">
+                                <img src="{% static 'imgs/logoutIcon.svg' %}" class="w-9" alt="">
+                                <span class="text-red-500 font-semibold text-xl">Log Out</span>
+                            </li>
+                            
+                        </ul>
+                    </div>
                 </li>
+                
             </ul>
         </div>
     </div>
