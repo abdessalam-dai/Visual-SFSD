@@ -6,20 +6,16 @@ import * as DomElements from "./DomElements.js";
 import * as API from "./api.js";
 import {entete, fileHeadDropDown, fileNameSpan, imageDropDown} from "./DomElements.js";
 import {Block, Enreg} from "../SFSD/SFSD.js";
+import {animate} from "./shared/animationSpeed.js";
+import "./shared/deleteFile.js";
 
 
 // handling the function to change the file name
 let formIsHidden = true;
-const logoInfoFileName = document.querySelector(".logo-info");
-const changeFileNameSection = document.querySelector(".change-file-name-section");
 const fileNameAndFileTypeSpan = document.querySelector('.file-name-all');
-const EditFileNameBtn = document.querySelector(".edit-file-name-button");
 const formForFileName = document.querySelector(".form-for-file-name");
 const editFileNameInput = document.querySelector(".edit-file-name-input");
-const editFileNameSubmitBtn = document.querySelector(".submit-file-name-input");
-
 let currentFileName = DomElements.fileNameSpan.textContent;
-console.log(currentFileName)
 
 fileNameAndFileTypeSpan.addEventListener('dblclick', (e) => {
     DomElements.entete.classList.add("hidden");
@@ -30,10 +26,9 @@ fileNameAndFileTypeSpan.addEventListener('dblclick', (e) => {
     editFileNameInput.focus();
     editFileNameInput.select();
     formIsHidden = false;
-    console.log(changeFileNameSection)
-})
+});
 
-formForFileName.addEventListener('submit' , (e) => {
+formForFileName.addEventListener('submit', (e) => {
     e.preventDefault();
     DomElements.entete.classList.remove("hidden");
     console.log(editFileNameInput.value.length)
@@ -41,11 +36,10 @@ formForFileName.addEventListener('submit' , (e) => {
         editFileNameInput.value = "";
         editFileNameInput.focus();
         formIsHidden = false
-    }
-    else {
+    } else {
         DomElements.fileNameSpan.classList.remove("hidden");
         DomElements.fileTypeSpan.classList.remove("hidden");
-        let fileNameStr = Array.from(editFileNameInput.value.trim()).map((char ) => char === " " ? "_" : char).join("")
+        let fileNameStr = Array.from(editFileNameInput.value.trim()).map((char) => char === " " ? "_" : char).join("")
         DomElements.fileNameSpan.textContent = fileNameStr;
         currentFileName = fileNameStr;
 
@@ -61,15 +55,26 @@ formForFileName.addEventListener('submit' , (e) => {
 
 
 // handle the case if the user wants to undo rename file
-document.addEventListener('click', (e) => {
-    if(!formIsHidden && e.target.tagName !== "BUTTON" && e.target.tagName !== "INPUT") {
-        DomElements.entete.classList.remove("hidden");
-        DomElements.formForFileName.classList.add("hidden");
-        DomElements.fileNameSpan.classList.remove("hidden");
-        DomElements.fileTypeSpan.classList.remove("hidden");
-        formIsHidden = true;
+
+const hideFileNameForm = () => {
+    DomElements.formForFileName.classList.add("hidden");
+    DomElements.entete.classList.remove("hidden");
+    DomElements.fileNameSpan.classList.remove("hidden");
+    DomElements.fileTypeSpan.classList.remove("hidden");
+    formIsHidden = true;
+}
+// handle clicking outside the form
+document.addEventListener('click', function (e) {
+    if (!formIsHidden && e.target.tagName !== "BUTTON" && e.target.tagName !== "INPUT") {
+        hideFileNameForm();
     }
-})
+});
+// handle pressing Escape button
+document.addEventListener('keyup', function (e) {
+    if (e.key === "Escape") {
+        hideFileNameForm();
+    }
+});
 
 
 // START - useful functions
@@ -178,17 +183,17 @@ newFile.createBoardsDOM();
 
 
 // START - Handle file head drop down
-let dropDowncharacteristicsIsVisible = false;
+let dropDownCharacteristicsIsVisible = false;
 DomElements.entete.addEventListener("click", function () {
     console.log(DomElements.imageDropDown)
     const fileHeadDropDown = DomElements.fileHeadDropDown;
     if (fileHeadDropDown.classList.contains("hidden")) {
         fileHeadDropDown.classList.remove("hidden");
         DomElements.imageDropDown.style.transform = 'rotate(0deg)'
-        dropDowncharacteristicsIsVisible = true;
+        dropDownCharacteristicsIsVisible = true;
     } else {
         fileHeadDropDown.classList.add("hidden");
-        dropDowncharacteristicsIsVisible = false;
+        dropDownCharacteristicsIsVisible = false;
         DomElements.imageDropDown.style.transform = 'rotate(-180deg)'
     }
 });
@@ -204,8 +209,6 @@ document.addEventListener('click', (e) => {
 // END - Handle file head drop down
 
 
-
-
 const changeButtonsState = (state) => {
     if (state) { // if an option is clicked, hide all tooltips
         hideAllToolbarTooltips();
@@ -219,7 +222,7 @@ const changeButtonsState = (state) => {
 }
 
 
-// handle buffer
+// handle MC visibility
 const upImage = document.querySelector(".mc-footer img");
 const mcFooter = document.querySelector(".mc-footer");
 const mcSection = document.querySelector(".mc");
@@ -297,14 +300,6 @@ const hideAllToolbarTooltips = () => {
     });
 }
 
-// for (let i = 0; i < toolbarOptions.length; i++) {
-//     let option = toolbarOptions[i];
-//     let tooltip = option.querySelector(".toolbar-tooltip");
-//     option.querySelector(".toolbar-icon").addEventListener('click', function () {
-//         hideAllToolbarTooltips();
-//         tooltip.classList.remove("hidden");
-//     });
-// }
 // END - Handle toolbar
 
 
@@ -404,10 +399,6 @@ validateEdit();
 
 
 // START - Fill with dummy data
-const n = 6;
-const min = 0;
-const max = 100;
-
 const randInt = (min, max) => {
     min = Math.ceil(min);
     max = Math.floor(max);
@@ -514,7 +505,7 @@ const handleSearch = () => {
                 found: found,
                 pos: pos,
                 readTimes: readTimes
-            } = await newFile.search(key, true);
+            } = await newFile.search(key, animate);
             console.log(found, pos, readTimes)
             changeButtonsState(false)
         }
@@ -533,7 +524,7 @@ const handleRemove = () => {
 
             let key = parseInt(DomElements.keyToRemove.value);
 
-            let removeSuccess = await newFile.removeLogically(key, true);
+            let removeSuccess = await newFile.removeLogically(key, animate);
 
             console.log(removeSuccess)
 
@@ -554,7 +545,7 @@ const handleRemovePhysically = () => {
 
             let key = parseInt(DomElements.keyToRemovePhysically.value);
 
-            let removeSuccess = await newFile.removePhysically(key, true);
+            let removeSuccess = await newFile.removePhysically(key, animate);
 
             newFile.createBoardsDOM();
 
@@ -581,7 +572,7 @@ const handleInsert = () => {
             let field1 = DomElements.field1ToInsert.value;
             let field2 = DomElements.field2ToInsert.value;
 
-            let insertingResult = await newFile.insert(key, field1, field2, false, true);
+            let insertingResult = await newFile.insert(key, field1, field2, false, animate);
 
             console.log(insertingResult)
 
@@ -606,7 +597,7 @@ const handleEdit = () => {
             let field1 = DomElements.field1ToEdit.value;
             let field2 = DomElements.field2ToEdit.value;
 
-            let editingResults = await newFile.editEnreg(key, field1, field2, false, true);
+            let editingResults = await newFile.editEnreg(key, field1, field2, false, animate);
 
             console.log(editingResults);
 
@@ -639,7 +630,7 @@ handleScrollButtons();
 // START - Handle file saving
 const saveFileBtn = $("#save-file-btn");
 
-const  saveFile = () => {
+const saveFile = () => {
     let newFileData = newFile.getJsonFormat()
     API.saveFileData(JSON.stringify(newFileData));
 }
@@ -650,8 +641,8 @@ saveFileBtn.click(function (e) {
 });
 
 // add the shortcut to allow the user to save the file with Ctrl + s
-document.addEventListener('keydown' , e => {
-    if(e.key.toLowerCase() === 's' && e.ctrlKey) {
+document.addEventListener('keydown', e => {
+    if (e.key.toLowerCase() === 's' && e.ctrlKey) {
         e.preventDefault();
         saveFile();
     }

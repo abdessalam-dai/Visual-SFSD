@@ -173,8 +173,8 @@ def dashboard(request):
         max_nb_enregs = request.POST.get('max-nb-enregs').strip()
         max_nb_blocks = request.POST.get('max-nb-blocks').strip()
 
-        print(f_name, f_access, f_type, max_nb_blocks, max_nb_enregs)
-        if 1 <= len(f_name) <= 100 and f_access in ACCESS_TYPES.keys() and f_type in ACCESS_TYPES[f_access] and 5 <= int(max_nb_blocks) <= 100 and 4 <= int(max_nb_enregs) <= 8:
+        if 1 <= len(f_name) <= 100 and f_access in ACCESS_TYPES.keys() and f_type in ACCESS_TYPES[
+            f_access] and 5 <= int(max_nb_blocks) <= 100 and 4 <= int(max_nb_enregs) <= 8:
             data = {
                 "name": f_name,
                 "characteristics": {
@@ -189,11 +189,11 @@ def dashboard(request):
             if f_type in ['LOF', 'LnOF']:
                 data["characteristics"]["headIndex"] = -1
                 data["characteristics"]["tailIndex"] = -1
-            print(request.user, f_name, f_type, data)
 
             file = File(
                 owner=request.user,
                 name=f_name,
+                file_access=f_access,
                 file_type=f_type
             )
             file.save()
@@ -202,4 +202,39 @@ def dashboard(request):
 
             return redirect('view_file', pk=file.id)
 
-    return render(request, 'accounts/dashboard/index.html')
+    user_files = request.user.file_set.all()
+    context = {
+        'user_files': user_files
+    }
+    return render(request, 'files/dashboard/index.html', context)
+
+
+def delete_file(request, pk):
+    # check if the file exists
+    try:
+        file = File.objects.get(id=int(pk))
+
+        # check if the user is the owner of the file
+        if file.owner == request.user:
+            file.delete()
+    except:
+        pass
+    return redirect('dashboard')
+
+
+# this is used to delete a file (real time) in the dashboard
+@require_POST
+def delete_file_dashboard(request):
+    pk = request.POST.get("pk")
+
+    if pk:
+        try:
+            file = File.objects.get(id=int(pk))
+
+            # check if the user is the owner of the file
+            if file.owner == request.user:
+                file.delete()
+                return JsonResponse({"status": "ok"})
+        except:
+            pass
+    return JsonResponse({"status": "error"})

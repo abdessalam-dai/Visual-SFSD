@@ -1,49 +1,20 @@
 <div class="list-files-container flex justify-around flex-wrap p-20">
 
-    <a href="#">
-        <div class="file-info rounded-3xl mb-8 bg-white pt-4 pl-6 pb-10 pr-10 w-[220px] shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
-            <h2 class="file-name font-bold text-4xl">TP_1</h2>
-            <p class="file-structure text-lg font-normal">Sequential</p>
-            <p class="file-type text-lg font-normal">TOF</p>
-        </div>
-    </a><a href="#">
-        <div class="file-info rounded-3xl mb-8 bg-white pt-4 pl-6 pb-10 pr-10 w-[220px] shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
-            <h2 class="file-name font-bold text-4xl">TP_1</h2>
-            <p class="file-structure text-lg font-normal">Sequential</p>
-            <p class="file-type text-lg font-normal">TOF</p>
-        </div>
-    </a><a href="#">
-        <div class="file-info rounded-3xl mb-8 bg-white pt-4 pl-6 pb-10 pr-10 w-[220px] shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
-            <h2 class="file-name font-bold text-4xl">TP_1</h2>
-            <p class="file-structure text-lg font-normal">Sequential</p>
-            <p class="file-type text-lg font-normal">TOF</p>
-        </div>
-    </a><a href="#">
-        <div class="file-info rounded-3xl mb-8 bg-white pt-4 pl-6 pb-10 pr-10 w-[220px] shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
-            <h2 class="file-name font-bold text-4xl">TP_1</h2>
-            <p class="file-structure text-lg font-normal">Sequential</p>
-            <p class="file-type text-lg font-normal">TOF</p>
-        </div>
-    </a><a href="#">
-        <div class="file-info rounded-3xl mb-8 bg-white pt-4 pl-6 pb-10 pr-10 w-[220px] shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
-            <h2 class="file-name font-bold text-4xl">TP_1</h2>
-            <p class="file-structure text-lg font-normal">Sequential</p>
-            <p class="file-type text-lg font-normal">TOF</p>
-        </div>
-    </a><a href="#">
-        <div class="file-info rounded-3xl mb-8 bg-white pt-4 pl-6 pb-10 pr-10 w-[220px] shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
-            <h2 class="file-name font-bold text-4xl">TP_1</h2>
-            <p class="file-structure text-lg font-normal">Sequential</p>
-            <p class="file-type text-lg font-normal">TOF</p>
-        </div>
-    </a><a href="#">
-        <div class="file-info rounded-3xl mb-8 bg-white pt-4 pl-6 pb-10 pr-10 w-[220px] shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
-            <h2 class="file-name font-bold text-4xl">TP_1</h2>
-            <p class="file-structure text-lg font-normal">Sequential</p>
-            <p class="file-type text-lg font-normal">TOF</p>
-        </div>
-    </a>
+    {% for file in user_files %}
+        <a href="{% url 'view_file' file.id %}" class="mb-8">
+            <div class="rounded-3xl bg-white pt-4 pl-6 pb-10 pr-10 w-[220px] shadow-[0px_4px_4px_rgba(0,0,0,0.25)]"
+                 draggable="true"
+                 data-id="{{ file.id }}">
+                <h2 class="file-name font-bold text-4xl break-words">{{ file.name|truncatechars:10 }}</h2>
+                <p class="file-structure text-lg font-normal">{{ file.file_access }}</p>
+                <p class="file-type text-lg font-normal">{{ file.file_type }}</p>
+            </div>
+        </a>
+    {% endfor %}
 
 </div>
 
-
+<div id="delete-file-section"
+     class="hidden shadow-2xl h-[100px] w-[100px] absolute bottom-20 left-[50%] rounded-full bg-red-400 flex justify-center items-center">
+    <i class="fa-solid fa-trash-can fa-2xl text-white"></i>
+</div>

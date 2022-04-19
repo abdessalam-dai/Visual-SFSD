@@ -9,5 +9,5 @@ def register(request):
     return render(request, 'accounts/register/index.html')
 
 
-def dashboard(request):
-    return render(request, 'accounts/dashboard/index.html')
+def settings(request):
+    return render(request, 'accounts/settings/index.html')

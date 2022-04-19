@@ -1,4 +1,5 @@
 let delay = 0.5;
+let animate = true;
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms * delay));
@@ -17,7 +18,16 @@ function handleChangeAnimationSpeed() {
 handleChangeAnimationSpeed();
 // END - Change animation speed.
 
+// START - Toggle animation
+const toggleAnimationBtn = document.querySelector("#toggle-animation");
+
+toggleAnimationBtn.addEventListener('click', function() {
+    animate = this.checked;
+});
+// END - Toggle animation
+
 export {
     delay,
+    animate,
     sleep,
 }

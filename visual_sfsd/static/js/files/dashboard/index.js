@@ -30,23 +30,23 @@ const resetForm = () => {
     DE.fName.blur();
 }
 
-// create a new file with shortcut Ctrl + n
-const handleOverlayAndFileModal = () => {
+const openOverlayAndFileModal = () => {
     DE.createFileModalOverlay.classList.remove('hidden');
     DE.createFileModal.classList.remove('hidden');
     DE.fName.focus();
 }
 
+// create a new file with shortcut Ctrl + n
 document.addEventListener('keydown', e => {
     if (e.key.toLowerCase() === 'o' && e.ctrlKey) {
         e.preventDefault();
-        handleOverlayAndFileModal();
+        openOverlayAndFileModal();
     }
 });
 
 // handle click on the create file button
 DE.createFileBtn.addEventListener('click', function (e) {
-    handleOverlayAndFileModal();
+    openOverlayAndFileModal();
 });
 
 

@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 import json
 
-
 TOF = 'TOF'
 TnOF = 'TnOF'
 LOF = 'LOF'
@@ -15,10 +14,25 @@ FILE_TYPE_CHOICES = [
     (LnOF, 'LnOF'),
 ]
 
+sequential = 'sequential'
+indexed = 'indexed'
+hashing = 'hashing'
+
+FILE_ACCESS_CHOICES = [
+    (sequential, 'sequential'),
+    (indexed, 'indexed'),
+    (hashing, 'hashing'),
+]
+
 
 class File(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
+    file_access = models.CharField(
+        max_length=20,
+        choices=FILE_ACCESS_CHOICES,
+        default=sequential
+    )
     file_type = models.CharField(
         max_length=5,
         choices=FILE_TYPE_CHOICES,

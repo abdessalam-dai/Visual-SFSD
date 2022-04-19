@@ -8,14 +8,15 @@
 
 {% block scripts %}
     <script>
-
+        const DELETE_FILE_DASHBOARD_URL = "{% url 'delete_file_dashboard' %}";
     </script>
-    <script type="module" src="{% static 'js/accounts/dashboard/index.js' %}"></script>
+    <script type="module" src="{% static 'js/files/dashboard/index.js' %}"></script>
+    <script type="module" src="{% static 'js/files/dashboard/deleteFile.js' %}"></script>
 {% endblock %}
 
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="{% static 'css/accounts/dashboard/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/dashboard/dashboard.css' %}">
 {% endblock %}
 
 
@@ -26,7 +27,7 @@
 
 {% block content %}
     {% include 'components/aside/aside_dashboard.html' with active_page='dashboard' %}
-    {% include 'accounts/dashboard/components/files.html' %}
-    {% include 'accounts/dashboard/components/create_file.html'     %}
+    {% include 'files/dashboard/components/files.html' %}
+    {% include 'files/dashboard/components/create_file.html'     %}
 {#    {% include 'accounts/dashboard/components/settings.html' %}#}
 {% endblock content %}

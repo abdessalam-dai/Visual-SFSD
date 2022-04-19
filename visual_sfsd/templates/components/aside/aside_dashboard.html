@@ -5,22 +5,28 @@
             <div class="w-1/3 h-1/3 bg-white"></div>
             <h1 class="text-4xl text-white font-bold ml-4">SFSD</h1>
         </div>
+        <a href="{% url 'dashboard' %}"
+           class="hover:bg-white hover:text-[#8846DD] rounded-l-full flex h-20 mt-20 items-center
+                {% if active_page == 'dashboard' %}text-[#8846DD] bg-white{% else %}text-white bg-[#8846DD]{% endif %}">
+            <i class="fa-solid text-4xl fa-folder-tree w-11 ml-6 mr-3"></i>
+            <h3 class="text-2xl font-bold">Dashboard</h3>
+        </a>
+        <a href="{% url 'settings' %}"
+           class="hover:bg-white hover:text-[#8846DD] rounded-l-full flex h-20 mt-6 items-center
+                {% if active_page == 'settings' %}text-[#8846DD] bg-white{% else %}text-white bg-[#8846DD]{% endif %}">
+            <i class="fa-solid text-4xl fa-gear w-11 ml-6 mr-3"></i>
+            <h3 class="text-2xl font-bold">Settings</h3>
+        </a>
         <a href="#"
-           class="hover:bg-white hover:text-[#8846DD] active-sidebar-link rounded-l-full text-white flex h-20 mt-20 items-center justify-start pl-2 bg-white">
-            <i class="fa-solid text-4xl fa-folder-tree w-11 ml-3 mr-3 text-[#8846DD]"></i>
-            <h3 class="text-2xl font-bold" style="color: #8846DD">Dashboard</h3>
-        </a>
-        <a href="#" class="hover:bg-white hover:text-[#8846DD] rounded-l-full text-white flex h-20 mt-6  items-center">
-            <i class="fa-solid text-4xl fa-gear w-11 ml-3 mr-3"></i>
-            <h3 class="text-2xl font-bold ml-2">Settings</h3>
-        </a>
-        <a href="#" class="hover:bg-white hover:text-[#8846DD] rounded-l-full text-white flex h-20  mt-6 items-center">
-            <i class="fa-solid fa-circle-question text-4xl w-11 ml-3 mr-3"></i>
-            <h3 class="text-2xl font-bold ml-2">Help</h3>
+           class="hover:bg-white hover:text-[#8846DD] rounded-l-full flex h-20 mt-6 items-center
+                {% if active_page == 'help' %}text-[#8846DD] bg-white{% else %}text-white bg-[#8846DD]{% endif %}">
+            <i class="fa-solid fa-circle-question text-4xl w-11 ml-6 mr-3"></i>
+            <h3 class="text-2xl font-bold">Help</h3>
         </a>
 
         <div class="fixed left-0 bottom-10 w-[300px]"> <!-- width depends on the side bar's width -->
-            <a href="#" class="hover:bg-white hover:text-[#8846DD] ml-10 rounded-l-full text-white flex h-20  mt-6 items-center">
+            <a href="#"
+               class="hover:bg-white hover:text-[#8846DD] ml-10 rounded-l-full text-white flex h-20  mt-6 items-center">
                 <i class="fa-solid fa-right-from-bracket text-4xl w-11 ml-3 mr-3"></i>
                 <h3 class="text-2xl font-bold ml-2">Log Out</h3>
             </a>

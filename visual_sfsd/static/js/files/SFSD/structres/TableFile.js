@@ -3,18 +3,14 @@ import {
     NB_BLOCKS_DEFAULT,
     NB_INSERTIONS_DEFAULT,
     BLOCKS_DEFAULT,
-    ERROR_BG,
-    WARNING_BG,
-    SUCCESS_BG,
     ENREG_SIZE,
     MAX_NB_BLOCKS,
     ENREG_HIGHLIGHT_GREEN,
-    ENREG_HIGHLIGHT_GREY,
 } from '../../constants.js';
-import {delay, sleep} from "../../view_file/shared/animationSpeed.js";
+import SequentialFile from "./SequentialFile.js";
 
 
-export default class TableFile {
+export default class TableFile extends SequentialFile {
     /*
 
     This is class is used for TOF and TnOF files
@@ -34,15 +30,17 @@ export default class TableFile {
         nbInsertions = NB_INSERTIONS_DEFAULT,
         blocks = BLOCKS_DEFAULT,
     ) {
-        this.name = name;
-        this.buff = buff;
-        this.buff2 = buff2;
-        this.MSBoard = MSBoard;
-        this.maxNbEnregs = maxNbEnregs;
-        this.maxNbBlocks = maxNbBlocks;
-        this.nbBlocks = nbBlocks;
-        this.nbInsertions = nbInsertions;
-        this.blocks = blocks;
+        super(
+            name,
+            buff,
+            buff2,
+            MSBoard,
+            maxNbEnregs,
+            maxNbBlocks,
+            nbBlocks,
+            nbInsertions,
+            blocks
+        );
     }
 
     reset() {
@@ -52,83 +50,8 @@ export default class TableFile {
         this.createBoardsDOM();
     }
 
-    async removeLogically(key, animate = false) {
-        let {found, pos, readTimes} = await this.search(key, animate);
-        let {i, j} = pos
-        let writeTimes;
-
-        if (found) {
-            this.blocks[i].enregs[j].removed = true;
-            writeTimes = 1;
-
-            if (animate) {
-                this.buff
-                    .select(`.bloc .bloc-body ul li:nth-child(${j + 1})`)
-                    .transition()
-                    .duration(500 * delay)
-                    .style("color", "#a70000");
-
-                await sleep(1000);
-
-                this.MSBoard
-                    .select(`.bloc:nth-child(${i + 1})`)
-                    .select(`.bloc-body ul li:nth-child(${j + 1})`)
-                    .transition()
-                    .duration(500 * delay)
-                    .style("color", "#a70000");
-
-                this.updateIOTimes(readTimes, writeTimes);
-                this.updateMCDescription("Removing was successful", "success");
-
-                this.createBoardsDOM();
-            }
-
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    async editEnreg(key, field1, field2, removed = false, animate = false) {
-        let {found, pos, readTimes} = await this.search(key, animate);
-        let {i, j} = pos
-        let writeTimes;
-
-        let block;
-
-        if (found) {
-            block = this.blocks[i];
-            block.enregs[j].field1 = field1;
-            block.enregs[j].field2 = field2;
-            // block.enregs[j].removed = removed; // no need to edit removed
-
-            this.blocks[i] = block;
-            writeTimes = 1;
-
-            if (animate) {
-                this.buff
-                    .select(`.bloc .bloc-body ul li:nth-child(${j + 1})`)
-                    .transition()
-                    .duration(500 * delay)
-                    .style("background", ENREG_HIGHLIGHT_GREEN);
-
-                await sleep(1000);
-
-                this.updateBlockInMS(i, block);
-
-                this.updateIOTimes(readTimes, writeTimes);
-                this.updateMCDescription("Editing was successful", "success");
-            }
-
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     createBoardsDOM() {
         // set number of blocks and number of elements in header
-        let toolTipEnregHidden = true;
         let lastElementShown;
         d3.select("#nb-blocks")
             .text(this.nbBlocks);
@@ -182,6 +105,7 @@ export default class TableFile {
             .style("z-index", "99")
             .text("Logical address");
 
+        const maxNbBlocks = this.maxNbBlocks;
         this.MSBoard.selectAll(".bloc-index")
             .data(this.blocks)
             .on("mouseover", function (e) {
@@ -208,7 +132,7 @@ export default class TableFile {
                 d3.select(this)
                     .select("span")
                     .text(function (block, blockIndex) {
-                        if (index <= this.maxNbBlocks && index >= 0) {
+                        if (index <= maxNbBlocks && index >= 0) {
                             return `0x${block.blockAddress}`;
                         } else {
                             return blockIndex;
@@ -218,7 +142,7 @@ export default class TableFile {
                 d3.select(this)
                     .select("div")
                     .text(function (block, blockIndex) {
-                        if (index <= this.maxNbBlocks && index >= 0) {
+                        if (index <= maxNbBlocks && index >= 0) {
                             return "Physical address (real)";
                         } else {
                             return "Logical address";
@@ -255,6 +179,7 @@ export default class TableFile {
 
 
         let cpt = 1;
+        let toolTipEnregHidden = true;
 
         this.MSBoard.selectAll('.bloc')
             .data(this.blocks)
@@ -279,7 +204,7 @@ export default class TableFile {
                         console.log(`before if and else`, toolTipEnregHidden, e.target);
                         if (toolTipEnregHidden) {
                             let html = `
-                                <div id="last-element-shown" class="fixed no-select" style="position: absolute; top: 40px; width: 192px; z-index: 102">
+                                <div id="last-element-shown" class="no-select" style="position: absolute; top: 40px; width: 192px; z-index: 900">
                                     <ul class="rounded-md text-center bg-gray-800 " style="z-index: 12;">
                                         <li class="flex flex-row justify-between  border-b-2 px-2 py-1 text-sm text-white">
                                             <span class="text-sm text-blue-300">key</span>
@@ -293,12 +218,15 @@ export default class TableFile {
                                             <span class="text-sm text-blue-300">field2</span>
                                             <span style="word-wrap: anywhere">${enreg.field2}</span>
                                         </li>
+                                        <li class="flex flex-row justify-between  border-b-2 px-2 py-1 text-sm text-white">
+                                            <span class="text-sm text-blue-300">removed</span>
+                                            <span>${enreg.removed}</span>
+                                        </li>
                                     </ul>
-                                </div>`
+                                </div>`;
                             this.children[0].insertAdjacentHTML('afterend', html)
                             toolTipEnregHidden = false;
                         } else {
-
                             document.querySelector('#last-element-shown').remove();
                             toolTipEnregHidden = true;
                         }
@@ -347,24 +275,6 @@ export default class TableFile {
         //     .select(`div:nth-child(${i + 1})`)
         //     .attr("class", "highlight-instruction");
         // await sleep(1000);
-    }
-
-    updateMCDescription(message, status) { // here, status can be error, warning or success
-        let bg;
-        switch (status) {
-            case "error":
-                bg = ERROR_BG;
-                break;
-            case "warning":
-                bg = WARNING_BG;
-                break;
-            default:
-                bg = SUCCESS_BG;
-        }
-
-        let MCDescription = d3.select(".mc-description")
-            .text(message)
-            .style("background", bg);
     }
 
     updateBufferElement(blockElement, bufferIndex = 1) {
@@ -418,14 +328,6 @@ export default class TableFile {
         }
     }
 
-    updateIOTimes(readTimes, writeTimes) {
-        d3.select(".complexity-in-reading")
-            .text(`Number of reads : ${readTimes}`);
-
-        d3.select(".complexity-in-writing")
-            .text(`Number of writes : ${writeTimes}`);
-    }
-
     setBlockAddress(index) {
         if (index === 0) {
             if (this.blocks.length === 0) {
@@ -436,65 +338,6 @@ export default class TableFile {
         } else {
             return Number(index * ENREG_SIZE + parseInt(this.blocks[0].blockAddress, 16)).toString(16)
         }
-    }
-
-    updateBlockInMS(i, block) {
-        let blockElement = this.MSBoard.select(`.bloc:nth-child(${i + 1})`);
-
-        blockElement.select(".bloc-body ul")
-            .selectAll("li")
-            .remove();
-
-        blockElement
-            .select(".bloc-body ul")
-            .selectAll("li")
-            .data(block.enregs)
-            .enter()
-            .append("li")
-            .attr("class", "border-b-2 h-10 flex justify-center flex-col")
-            .style("color", function (enreg) {
-                return enreg.removed ? "#a70000" : "black"
-            })
-            .style("cursor", "pointer")
-            .style("overflow-y", "hidden")
-            .style("overflow-x", "hidden")
-            .on("click", function (e, enreg) {
-                console.log(enreg.key)
-            })
-            .on("mouseover", function () {
-                d3.select(this)
-                    .style("background", "gray")
-            })
-            .on("mouseout", function () {
-                d3.select(this)
-                    .style("background", ENREG_HIGHLIGHT_GREY)
-            })
-            .append("span")
-            .text(function (enreg) {
-                return enreg.key
-            });
-    }
-
-    async traverseBlockAnimation(i, delay) {
-        let midBlockElement = this.MSBoard.select(`.bloc:nth-child(${i + 1})`);
-
-        midBlockElement.transition()
-            .duration(600 * delay)
-            .style("transform", "translate(0, -10px)")
-            .select('.bloc-header')
-            .style('background', "#1765ba");
-
-        midBlockElement.transition()
-            .delay(600 * delay)
-            .duration(600 * delay)
-            .style("transform", "translate(0, 0)");
-    }
-
-    async resetBlocksHeaders(delay) {
-        this.MSBoard.selectAll(".bloc").select(".bloc-header")
-            .transition()
-            .duration(600 * delay)
-            .style('background', "#0F172A");
     }
 
     createNewBlockInBuff(newEnreg) {
