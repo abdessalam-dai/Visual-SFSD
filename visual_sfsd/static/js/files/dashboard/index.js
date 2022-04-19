@@ -31,27 +31,36 @@ const resetForm = () => {
 }
 
 // create a new file with shortcut Ctrl + n
-const  handleOverlayAndFileModal = () => {
+const handleOverlayAndFileModal = () => {
     DE.createFileModalOverlay.classList.remove('hidden');
     DE.createFileModal.classList.remove('hidden');
     DE.fName.focus();
 }
 
-document.addEventListener('keydown' , e => {
-    if(e.key.toLowerCase() === 'o' && e.ctrlKey) {
+document.addEventListener('keydown', e => {
+    if (e.key.toLowerCase() === 'o' && e.ctrlKey) {
         e.preventDefault();
         handleOverlayAndFileModal();
     }
 });
 
 // handle click on the create file button
-DE.createFileBtn.addEventListener('click', function (e) { handleOverlayAndFileModal(); });
+DE.createFileBtn.addEventListener('click', function (e) {
+    handleOverlayAndFileModal();
+});
 
 
 // handle click on the overlay (to close the modal)
 DE.createFileModalOverlay.addEventListener('click', function (e) {
     resetForm();
 });
+
+// handle pressing Escape button to close the modal
+document.addEventListener('keyup', function (e) {
+    if (e.key === "Escape") {
+        resetForm();
+    }
+})
 
 // handle submitting the file name
 const handleFileNameSubmit = () => {
