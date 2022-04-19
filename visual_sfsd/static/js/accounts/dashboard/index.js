@@ -34,7 +34,7 @@ const resetForm = () => {
 const  handleOverlayAndFileModal = () => {
     DE.createFileModalOverlay.classList.remove('hidden');
     DE.createFileModal.classList.remove('hidden');
-    DE.fileName.focus();
+    DE.fName.focus();
 }
 
 document.addEventListener('keydown' , e => {

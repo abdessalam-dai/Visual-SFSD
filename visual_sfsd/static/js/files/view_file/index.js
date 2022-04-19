@@ -646,14 +646,14 @@ const  saveFile = () => {
 
 saveFileBtn.click(function (e) {
     e.preventDefault();
-
+    saveFile();
 });
-// add the a shortcut to allow the user to save the file with Ctrl + s
 
+// add the shortcut to allow the user to save the file with Ctrl + s
 document.addEventListener('keydown' , e => {
     if(e.key.toLowerCase() === 's' && e.ctrlKey) {
-        e.preventDefault()
-        saveFile()
+        e.preventDefault();
+        saveFile();
     }
 })
 
