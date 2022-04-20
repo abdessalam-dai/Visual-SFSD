@@ -8,6 +8,8 @@ import {entete, fileHeadDropDown, fileNameSpan, imageDropDown} from "./DomElemen
 import {Block, Enreg} from "../SFSD/SFSD.js";
 import {animate} from "./shared/animationSpeed.js";
 import "./shared/deleteFile.js";
+import NotClustered from "../SFSD/types/indexed/NotClustered.js";
+import IndexCouple from "../SFSD/structres/IndexCouple.js";
 
 
 // handling the function to change the file name
@@ -98,6 +100,7 @@ let toolTipIsVisible = false;
 let ToolTipToHide;
 let goDown = false;
 
+const indexTableHtml = d3.select("#index-table");
 
 let newFile;
 
@@ -122,32 +125,8 @@ for (let block of fileData["blocks"]) {
 
 console.log(blocks)
 
-if (FILE_TYPE === "TOF") {
-    newFile = new TOF(
-        FILE_NAME,
-        buff,
-        buff2,
-        MSBoard,
-        parseInt(fileData["characteristics"]["maxNbEnregs"]),
-        parseInt(fileData["characteristics"]["maxNbBlocks"]),
-        parseInt(fileData["characteristics"]["nbBlocks"]),
-        parseInt(fileData["characteristics"]["nbInsertions"]),
-        blocks
-    );
-} else if (FILE_TYPE === "TnOF") {
-    newFile = new TOF(
-        FILE_NAME,
-        buff,
-        buff2,
-        MSBoard,
-        parseInt(fileData["characteristics"]["maxNbEnregs"]),
-        parseInt(fileData["characteristics"]["maxNbBlocks"]),
-        parseInt(fileData["characteristics"]["nbBlocks"]),
-        parseInt(fileData["characteristics"]["nbInsertions"]),
-        blocks
-    );
-} else if (FILE_TYPE === "LOF") {
-    newFile = new LOF(
+if (FILE_ACCESS === "indexed") {
+    newFile = new NotClustered(
         FILE_NAME,
         buff,
         buff2,
@@ -157,23 +136,64 @@ if (FILE_TYPE === "TOF") {
         parseInt(fileData["characteristics"]["nbBlocks"]),
         parseInt(fileData["characteristics"]["nbInsertions"]),
         blocks,
-        parseInt(fileData["characteristics"]["headIndex"]),
-        parseInt(fileData["characteristics"]["tailIndex"])
+        [],
+        40,
+        indexTableHtml
     );
 } else {
-    newFile = new LnOF(
-        FILE_NAME,
-        buff,
-        buff2,
-        MSBoard,
-        parseInt(fileData["characteristics"]["maxNbEnregs"]),
-        parseInt(fileData["characteristics"]["maxNbBlocks"]),
-        parseInt(fileData["characteristics"]["nbBlocks"]),
-        parseInt(fileData["characteristics"]["nbInsertions"]),
-        blocks,
-        parseInt(fileData["characteristics"]["headIndex"]),
-        parseInt(fileData["characteristics"]["tailIndex"])
-    );
+    if (FILE_TYPE === "TOF") {
+        newFile = new TOF(
+            FILE_NAME,
+            buff,
+            buff2,
+            MSBoard,
+            parseInt(fileData["characteristics"]["maxNbEnregs"]),
+            parseInt(fileData["characteristics"]["maxNbBlocks"]),
+            parseInt(fileData["characteristics"]["nbBlocks"]),
+            parseInt(fileData["characteristics"]["nbInsertions"]),
+            blocks
+        );
+    } else if (FILE_TYPE === "TnOF") {
+        newFile = new TnOF(
+            FILE_NAME,
+            buff,
+            buff2,
+            MSBoard,
+            parseInt(fileData["characteristics"]["maxNbEnregs"]),
+            parseInt(fileData["characteristics"]["maxNbBlocks"]),
+            parseInt(fileData["characteristics"]["nbBlocks"]),
+            parseInt(fileData["characteristics"]["nbInsertions"]),
+            blocks
+        );
+    } else if (FILE_TYPE === "LOF") {
+        newFile = new LOF(
+            FILE_NAME,
+            buff,
+            buff2,
+            MSBoard,
+            parseInt(fileData["characteristics"]["maxNbEnregs"]),
+            parseInt(fileData["characteristics"]["maxNbBlocks"]),
+            parseInt(fileData["characteristics"]["nbBlocks"]),
+            parseInt(fileData["characteristics"]["nbInsertions"]),
+            blocks,
+            parseInt(fileData["characteristics"]["headIndex"]),
+            parseInt(fileData["characteristics"]["tailIndex"])
+        );
+    } else {
+        newFile = new LnOF(
+            FILE_NAME,
+            buff,
+            buff2,
+            MSBoard,
+            parseInt(fileData["characteristics"]["maxNbEnregs"]),
+            parseInt(fileData["characteristics"]["maxNbBlocks"]),
+            parseInt(fileData["characteristics"]["nbBlocks"]),
+            parseInt(fileData["characteristics"]["nbInsertions"]),
+            blocks,
+            parseInt(fileData["characteristics"]["headIndex"]),
+            parseInt(fileData["characteristics"]["tailIndex"])
+        );
+    }
 }
 
 console.log(newFile.getJsonFormat());
@@ -477,19 +497,27 @@ const handleGenerateData = () => {
 handleGenerateData();
 
 
-// let data = generateData(n, min, max);
-//
-// for (const enreg of data) {
-//     await newFile.insert(
-//         enreg.key,
-//         enreg.field1,
-//         enreg.field2,
-//         false,
-//         false
-//     )
-// }
-//
-// newFile.createBoardsDOM();
+let data = generateData(8, 0, 11);
+
+let j = 0;
+for (const enreg of data) {
+    // await newFile.insert(
+    //     enreg.key,
+    //     enreg.field1,
+    //     enreg.field2,
+    //     false,
+    //     false
+    // )
+
+    newFile.indexTable.push(new IndexCouple(enreg.key, 0, j));
+    j++;
+    newFile.blocks.push(new Block());
+    newFile.blocks[0].enregs.push(new Enreg(enreg.key, enreg.field1, enreg.field2, false))
+}
+
+newFile.indexTable = newFile.indexTable.sort((a, b) => a.key - b.key);
+console.table(newFile.indexTable);
+newFile.createBoardsDOM();
 // END - Fill with dummy data
 
 

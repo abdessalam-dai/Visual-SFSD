@@ -12,6 +12,7 @@
     <script>
         let fileData = {{ data|safe }};
         const FILE_NAME = "{{ file.name }}";
+        const FILE_ACCESS = "{{ file.get_file_access_display }}";
         const FILE_TYPE = "{{ file.get_file_type_display }}";
         const SAVE_FILE_URL = "{% url 'save_file' file.id %}";
         const EDIT_FILE_NAME_URL = "{% url 'save_file_name' file.id %}";
