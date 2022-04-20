@@ -1,31 +1,8 @@
-<div class="animation-speed-container">
-    <div class="animation-speed rounded-t-lg shadow-lg">
-        <label for="animation-speed-bar">Animation speed : </label>
-        Slow<input type="range" id="animation-speed-bar" min="0" max="190"/>Fast
-        <br>
+<div class="fixed no-select flex flex-row justify-center bg-gray-100 py-6 px-3 translate-y-11 bottom-0 hover:translate-y-0 transition-all shadow-2xl shadow-black w-[400px] rounded-t-lg shadow-lg"
+     style="left: calc(50% - 200px)">
+    <label class="font-bold mr-3" for="animation-speed-bar">Animation speed</label>
+    <div>
+        <input class="w-full cursor-pointer h-2 bg-blue-200 hover:bg-blue-300 rounded-lg appearance-none"
+                type="range" id="animation-speed-bar" min="0" max="190"/>
     </div>
 </div>
-
-<style>
-    .animation-speed-container {
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        position: absolute;
-        bottom: 0;
-        z-index: 1;
-    }
-
-    .animation-speed-container:hover .animation-speed {
-        visibility: initial;
-    }
-
-    .animation-speed {
-        visibility: hidden;
-        width: 400px;
-        padding: 20px 0;
-        text-align: center;
-        background: #eee;
-        transition: all 0.6s ease;
-    }
-</style>
