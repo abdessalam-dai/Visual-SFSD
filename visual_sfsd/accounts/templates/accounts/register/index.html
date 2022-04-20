@@ -1,1 +1,84 @@
-Registration page
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{% block title %}{% endblock %}VisualSFSD</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    {% load static %}
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Scripts -->
+    {% block scripts %}
+
+    {% endblock %}
+
+    <!-- Fonts -->
+
+    <!-- Fontawesome -->
+</head>
+
+<body>
+
+</body>
+    <div class="h-screen flex bg-[#DFDDDD]">
+        <div class="register-container w-full text-center p-20 rounded-tr-[75px] rounded-br-[75px] bg-[white] lg:w-1/2">
+            <h1 class="text-center font-bold text-6xl mb-12">Register</h1>
+            <div class="flex justify-center items-center">
+                <form class="w-2/3">
+                    <label for="first-name"></label>
+                    <input type="text" placeholder="First Name" class="block m-[auto]  mb-8 p-5 w-4/5 rounded-3xl custom-shadow">
+                    <label for="last-name"></label>
+                    <input type="text" placeholder="Last Name" class="block m-[auto] mb-8 p-5 w-4/5 rounded-3xl custom-shadow">
+                    <label for="email"></label>
+                    <input type="email" placeholder="Email" class="block m-[auto] mb-8 p-5 w-4/5 rounded-3xl custom-shadow">
+                    <label for="password"></label>
+                    <input type="password" placeholder="Password" class="block m-[auto] mb-8 p-5 w-4/5 rounded-3xl custom-shadow">
+                    <label for="confirm-password"></label>
+                    <input type="password" placeholder="Confirm Password" class="block m-[auto] mb-8 p-5 w-4/5 rounded-3xl custom-shadow">
+                    <button class="rounded-2xl bg-[#879EF1] text-white text-2xl p-4 cursor-pointer w-1/3">Sign Up</button>
+                </form>
+            </div>
+
+            <div class="alternative-signup relative mt-8">
+                <div class="google text-[474747]p-4">
+                    <p class="">Or sign up with google</p>
+                </div>
+            </div>
+            <div class="flex justify-center items-center border-2 h-20 w-20 m-auto rounded-2xl mt-8">
+                <img src="{% static 'imgs/register/google.png' %}" class="cursor-pointer">
+            </div>
+        </div>
+        <div class="side-image w-0 flex justify-center items-center lg:w-1/2">
+            <img src="{% static 'imgs/register/register.png' %}">
+        </div>
+    </div>
+</html>
+
+<style>
+    .google::after {
+        content: '';
+        width: 20%;
+        border-bottom: solid 1px #5F5E5E;
+        position: absolute;
+        left: 17%;
+        top: 50%;
+        z-index: 1;
+    }
+
+    .google::before {
+        content: '';
+        width: 20%;
+        border-bottom: solid 1px #5F5E5E;
+        position: absolute;
+        right: 17%;
+        top: 50%;
+        z-index: 1;
+    }
+    .custom-shadow {
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px -1px 4px rgba(0, 0, 0, 0.25);
+    }
+</style>
