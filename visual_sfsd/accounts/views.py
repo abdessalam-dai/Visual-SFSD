@@ -1,8 +1,15 @@
+from django.contrib.auth.models import User
+from django.apps import apps
+from django.contrib.auth.decorators import login_required
+from django.http import Http404
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from .forms import UserRegistrationForm
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from .models import Account
+from .forms import UserRegistrationForm
+
+File = apps.get_model(app_label='files', model_name='File')
 
 
 def login_page(request):
@@ -69,5 +76,34 @@ def register(request):
     return render(request, 'accounts/register/index.html', context)
 
 
+@login_required
 def settings(request):
     return render(request, 'accounts/settings/index.html')
+
+
+@login_required
+def profile(request, username):
+    try:
+        user = User.objects.get(username=username)
+
+        files_all = File.objects.filter(
+            owner=user, is_public=True
+        ).order_by('-date_created')
+
+        paginator = Paginator(files_all, 3)
+        page = request.GET.get('page')
+        try:
+            files = paginator.page(page)
+        except PageNotAnInteger:
+            files = paginator.page(1)
+        except EmptyPage:
+            files = paginator.page(paginator.num_pages)
+
+        context = {
+            'user': user,
+            'files': files,
+        }
+
+        return render(request, 'accounts/profile/index.html', context)
+    except:
+        raise Http404

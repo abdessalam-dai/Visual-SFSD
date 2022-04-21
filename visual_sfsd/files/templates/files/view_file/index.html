@@ -25,6 +25,7 @@
     </script>
     <script type="module" src="{% static 'js/files/view_file/index.js' %}"></script>
     {% if file.owner == request.user %}
+        <script type="module" src="{% static 'js/files/view_file/shared/saveFile.js' %}"></script>
         <script type="module" src="{% static 'js/files/view_file/shared/deleteFile.js' %}"></script>
         <script type="module" src="{% static 'js/files/view_file/shared/editFileName.js' %}"></script>
         <script type="module" src="{% static 'js/files/view_file/shared/toggleFileVisibility.js' %}"></script>
