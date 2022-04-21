@@ -14,12 +14,21 @@
         const FILE_NAME = "{{ file.name }}";
         const FILE_ACCESS = "{{ file.get_file_access_display }}";
         const FILE_TYPE = "{{ file.get_file_type_display }}";
-        const SAVE_FILE_URL = "{% url 'save_file' file.id %}";
-        const EDIT_FILE_NAME_URL = "{% url 'save_file_name' file.id %}";
+
+        {% if file.owner == request.user %}
+            const SAVE_FILE_URL = "{% url 'save_file' file.id %}";
+            const EDIT_FILE_NAME_URL = "{% url 'save_file_name' file.id %}";
+            const TOGGLE_FILE_VISIBILITY_URL = "{% url 'toggle_public' file.id %}";
+        {% endif %}
 
         console.log(fileData);
     </script>
     <script type="module" src="{% static 'js/files/view_file/index.js' %}"></script>
+    {% if file.owner == request.user %}
+        <script type="module" src="{% static 'js/files/view_file/shared/deleteFile.js' %}"></script>
+        <script type="module" src="{% static 'js/files/view_file/shared/editFileName.js' %}"></script>
+        <script type="module" src="{% static 'js/files/view_file/shared/toggleFileVisibility.js' %}"></script>
+    {% endif %}
 {% endblock %}
 
 
@@ -36,11 +45,11 @@
 {% block content %}
     {% include "files/view_file/components/animation-speed.html" %}
 
-    <button id="save-file-btn" data-id="{{ file.id }}"
-            class="save-file-btn shadow-2xl bg-[#BA68C8] z-5 left-20 bottom-20 rounded-full transition-all fixed w-[80px] h-[80px] flex justify-center items-center"
-            title="Save">
-        <img src="{% static 'imgs/view_file/saveBtn.svg' %}" alt="Save">
-    </button>
+    {% if file.owner == request.user %}
+        {% include 'files/view_file/components/save-file.html' %}
+    {% else %}
+        {% include 'files/view_file/components/clone-file.html' %}
+    {% endif %}
 
     <div class="flex flex-row items-center justify-between">
         {% include "files/view_file/components/toolsbar.html" %}

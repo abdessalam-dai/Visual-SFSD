@@ -2,81 +2,14 @@ import TOF from "../SFSD/types/simple/TOF.js";
 import TnOF from "../SFSD/types/simple/TnOF.js";
 import LOF from "../SFSD/types/simple/LOF.js";
 import LnOF from "../SFSD/types/simple/LnOF.js";
-import * as DomElements from "./DomElements.js";
-import * as API from "./api.js";
-import {entete, fileHeadDropDown, fileNameSpan, imageDropDown} from "./DomElements.js";
 import {Block, Enreg} from "../SFSD/SFSD.js";
-import {animate} from "./shared/animationSpeed.js";
-import "./shared/deleteFile.js";
 import NotClustered from "../SFSD/types/indexed/NotClustered.js";
 import IndexCouple from "../SFSD/structres/IndexCouple.js";
-
-
-// handling the function to change the file name
-let formIsHidden = true;
-const fileNameAndFileTypeSpan = document.querySelector('.file-name-all');
-const formForFileName = document.querySelector(".form-for-file-name");
-const editFileNameInput = document.querySelector(".edit-file-name-input");
-let currentFileName = DomElements.fileNameSpan.textContent;
-
-fileNameAndFileTypeSpan.addEventListener('dblclick', (e) => {
-    DomElements.entete.classList.add("hidden");
-    DomElements.fileNameSpan.classList.add("hidden");
-    DomElements.fileTypeSpan.classList.add("hidden");
-    DomElements.formForFileName.classList.remove("hidden");
-    editFileNameInput.value = currentFileName;
-    editFileNameInput.focus();
-    editFileNameInput.select();
-    formIsHidden = false;
-});
-
-formForFileName.addEventListener('submit', (e) => {
-    e.preventDefault();
-    DomElements.entete.classList.remove("hidden");
-    console.log(editFileNameInput.value.length)
-    if (editFileNameInput.value.length > 100 || editFileNameInput.value.length === 0) {
-        editFileNameInput.value = "";
-        editFileNameInput.focus();
-        formIsHidden = false
-    } else {
-        DomElements.fileNameSpan.classList.remove("hidden");
-        DomElements.fileTypeSpan.classList.remove("hidden");
-        let fileNameStr = Array.from(editFileNameInput.value.trim()).map((char) => char === " " ? "_" : char).join("")
-        DomElements.fileNameSpan.textContent = fileNameStr;
-        currentFileName = fileNameStr;
-
-        formForFileName.classList.add("hidden");
-        formIsHidden = true;
-
-        // edit the file name
-        API.editFileName(fileNameStr);
-        // change window title
-        document.title = `${fileNameStr} - VisualSFSD`;
-    }
-});
-
-
-// handle the case if the user wants to undo rename file
-
-const hideFileNameForm = () => {
-    DomElements.formForFileName.classList.add("hidden");
-    DomElements.entete.classList.remove("hidden");
-    DomElements.fileNameSpan.classList.remove("hidden");
-    DomElements.fileTypeSpan.classList.remove("hidden");
-    formIsHidden = true;
-}
-// handle clicking outside the form
-document.addEventListener('click', function (e) {
-    if (!formIsHidden && e.target.tagName !== "BUTTON" && e.target.tagName !== "INPUT") {
-        hideFileNameForm();
-    }
-});
-// handle pressing Escape button
-document.addEventListener('keyup', function (e) {
-    if (e.key === "Escape") {
-        hideFileNameForm();
-    }
-});
+import {animate} from "./shared/animationSpeed.js";
+import * as DomElements from "./DomElements.js";
+import * as API from "./api.js";
+import "./shared/fileHead.js";
+import "./shared/MC.js";
 
 
 // START - useful functions
@@ -88,17 +21,16 @@ function isNumeric(value) {
 const getValue = (element) => {
     return parseInt(element.value);
 }
-
 // END - useful functions
 
 
-// START - Create file
+// START - Create file from Json data (passed by Django in view_file/index.html)
 const buff = d3.select(".buf");
 const buff2 = d3.select(".buf2");
 const MSBoard = d3.select(".ms-container");
 let toolTipIsVisible = false;
 let ToolTipToHide;
-let goDown = false;
+
 
 const indexTableHtml = d3.select("#index-table");
 
@@ -120,12 +52,13 @@ for (let block of fileData["blocks"]) {
     } else {
         b = null;
     }
-    blocks.push(b)
+    blocks.push(b);
 }
 
 console.log(blocks)
 
-if (FILE_TYPE === "Not Clustered") {
+console.log(FILE_TYPE)
+if (FILE_TYPE === "not_clustered") {
     newFile = new NotClustered(
         FILE_NAME,
         buff,
@@ -202,33 +135,6 @@ newFile.createBoardsDOM(FILE_ACCESS === 'indexed');
 // END - Create file
 
 
-// START - Handle file head drop down
-let dropDownCharacteristicsIsVisible = false;
-DomElements.entete.addEventListener("click", function () {
-    console.log(DomElements.imageDropDown)
-    const fileHeadDropDown = DomElements.fileHeadDropDown;
-    if (fileHeadDropDown.classList.contains("hidden")) {
-        fileHeadDropDown.classList.remove("hidden");
-        DomElements.imageDropDown.style.transform = 'rotate(0deg)'
-        dropDownCharacteristicsIsVisible = true;
-    } else {
-        fileHeadDropDown.classList.add("hidden");
-        dropDownCharacteristicsIsVisible = false;
-        DomElements.imageDropDown.style.transform = 'rotate(-180deg)'
-    }
-});
-
-
-document.addEventListener('click', (e) => {
-    if (!e.target.classList.contains("characteristics-image")) {
-        DomElements.fileHeadDropDown.classList.add("hidden");
-        DomElements.imageDropDown.style.transform = 'rotate(-180deg)'
-    }
-});
-
-// END - Handle file head drop down
-
-
 const changeButtonsState = (state) => {
     if (state) { // if an option is clicked, hide all tooltips
         hideAllToolbarTooltips();
@@ -240,35 +146,6 @@ const changeButtonsState = (state) => {
     DomElements.editBtn.disabled = state
     DomElements.removePhysicallyBtn.disabled = state
 }
-
-
-// handle MC visibility
-const upImage = document.querySelector(".mc-footer img");
-const mcFooter = document.querySelector(".mc-footer");
-const mcSection = document.querySelector(".mc");
-const mcDescription = document.querySelector(".mc-description")
-const complexitySection = document.querySelector(".complexity-section");
-const buffers = document.querySelector(".buffers");
-console.log(mcFooter.offsetHeight);
-
-upImage.addEventListener('click', (e) => {
-    if (!goDown) {
-        complexitySection.style.visibility = 'hidden';
-        mcDescription.style.visibility = 'hidden';
-        buffers.style.visibility = 'hidden';
-        mcSection.style.backgroundColor = 'inherit';
-        mcFooter.style.backgroundColor = '#9EACF3'
-        upImage.style.transform = 'rotate(0deg)'
-        goDown = true;
-    } else {
-        mcSection.style.backgroundColor = '#9EACF3';
-        complexitySection.style.visibility = 'initial'
-        mcDescription.style.visibility = 'initial'
-        buffers.style.visibility = 'initial'
-        upImage.style.transform = 'rotate(-180deg)'
-        goDown = false;
-    }
-});
 
 
 // START - Handle toolbar
@@ -497,31 +374,33 @@ const handleGenerateData = () => {
 handleGenerateData();
 
 
-// let data = generateData(8, 0, 11);
-//
-// newFile.blocks.push(new Block([], 8));
-// let j = 0;
-// for (const enreg of data) {
-//     // await newFile.insert(
-//     //     enreg.key,
-//     //     enreg.field1,
-//     //     enreg.field2,
-//     //     false,
-//     //     false
-//     // )
-//     // console.log(enreg)
-//     console.log(newFile)
-//     newFile.indexTable.push(new IndexCouple(enreg.key, 0, j));
-//     j++;
-//     newFile.blocks[0].enregs.push(new Enreg(enreg.key, enreg.field1, enreg.field2, false))
-// }
+if (FILE_TYPE === 'not_clustered') {// FOR TESTING NOT CLUSTERED INDEX TYPES OF FILES
+  // let data = generateData(8, 0, 11);
+  //
+  // newFile.blocks.push(new Block([], 8));
+  // let j = 0;
+  // for (const enreg of data) {
+  //     // await newFile.insert(
+  //     //     enreg.key,
+  //     //     enreg.field1,
+  //     //     enreg.field2,
+  //     //     false,
+  //     //     false
+  //     // )
+  //     // console.log(enreg)
+  //     console.log(newFile)
+  //     newFile.indexTable.push(new IndexCouple(enreg.key, 0, j));
+  //     j++;
+  //     newFile.blocks[0].enregs.push(new Enreg(enreg.key, enreg.field1, enreg.field2, false))
+  // }
 
-// newFile.indexTable = newFile.indexTable.sort((a, b) => a.key - b.key);
-// console.table(newFile.indexTable);
-// console.table(newFile.blocks[0].enregs)
-// newFile.createBoardsDOM();
-// console.log(newFile.search(9));
-// END - Fill with dummy data
+  // newFile.indexTable = newFile.indexTable.sort((a, b) => a.key - b.key);
+  // console.table(newFile.indexTable);
+  // console.table(newFile.blocks[0].enregs)
+  // newFile.createBoardsDOM();
+  // console.log(newFile.search(9));
+  // END - Fill with dummy data
+}
 
 
 // START - Search for element
@@ -658,25 +537,4 @@ handleScrollButtons();
 // END - Scroll buttons
 
 
-// START - Handle file saving
-const saveFileBtn = $("#save-file-btn");
-
-const saveFile = () => {
-    let newFileData = newFile.getJsonFormat()
-    API.saveFileData(JSON.stringify(newFileData));
-}
-
-saveFileBtn.click(function (e) {
-    e.preventDefault();
-    saveFile();
-});
-
-// add the shortcut to allow the user to save the file with Ctrl + s
-document.addEventListener('keydown', e => {
-    if (e.key.toLowerCase() === 's' && e.ctrlKey) {
-        e.preventDefault();
-        saveFile();
-    }
-})
-
-// END - Handle file saving
+export {newFile};

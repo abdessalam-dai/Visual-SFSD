@@ -13,112 +13,20 @@ def view_file(request, pk):
     try:
         file = File.objects.get(id=int(pk))
 
-        # data = {"name": "file.txt", "maxNbEnregs": 5, "nbBlocks": 2, "nbInsertions": 8, "blocks": [
-        #     {"enregs": [
-        #         {"key": 28, "field1": "field1", "field2": "field2", "removed": False},
-        #         {"key": 29, "field1": "field1", "field2": "field2", "removed": False},
-        #         {"key": 75, "field1": "field1", "field2": "field2", "removed": False},
-        #         {"key": 90, "field1": "field1", "field2": "field2", "removed": False},
-        #         {"key": 122, "field1": "field1", "field2": "field2", "removed": False}], "nb": 5, "nextBlockIndex": -1},
-        #     {
-        #         "enregs": [
-        #             {"key": 359,
-        #              "field1": "field1",
-        #              "field2": "field2",
-        #              "removed": False},
-        #             {"key": 362,
-        #              "field1": "field1",
-        #              "field2": "field2",
-        #              "removed": False},
-        #             {"key": 379,
-        #              "field1": "field1",
-        #              "field2": "field2",
-        #              "removed": False}],
-        #         "nb": 3,
-        #         "nextBlockIndex": -1}]}
-        #
-        # json_data = json.dumps(data)
-        # file.data = json_data
-        # file.save()
+        if file.is_owned_by(request.user) or file.is_public:
+            context = {
+                'file': file,
+                'dataPy': json.loads(file.data),  # this is used for displaying in django templates
+                'data': file.data,  # this is used for JavaScript
+            }
 
-        # data2 = {
-        #     "name": "file.txt",
-        #     "maxNbEnregs": 5,
-        #     "nbBlocks": 2,
-        #     "nbInsertions": 7,
-        #     "blocks": [
-        #         {
-        #             "enregs": [
-        #                 {
-        #                     "key": 2,
-        #                     "field1": "sebaa",
-        #                     "field2": "yahia",
-        #                     "removed": False
-        #                 },
-        #                 {
-        #                     "key": 38,
-        #                     "field1": "sebaa",
-        #                     "field2": "yanis",
-        #                     "removed": False
-        #                 },
-        #                 {
-        #                     "key": 40,
-        #                     "field1": "bilal",
-        #                     "field2": "abdessalam",
-        #                     "removed": False
-        #                 },
-        #                 {
-        #                     "key": 44,
-        #                     "field1": "mouloud",
-        #                     "field2": "yahia",
-        #                     "removed": False
-        #                 },
-        #                 {
-        #                     "key": 53,
-        #                     "field1": "tari",
-        #                     "field2": "tari",
-        #                     "removed": False
-        #                 }
-        #             ],
-        #             "nb": 5,
-        #             "nextBlockIndex": -1
-        #         },
-        #         {
-        #             "enregs": [
-        #                 {
-        #                     "key": 73,
-        #                     "field1": "kacimi",
-        #                     "field2": "yahia",
-        #                     "removed": False
-        #                 },
-        #                 {
-        #                     "key": 83,
-        #                     "field1": "houssam",
-        #                     "field2": "mouloud",
-        #                     "removed": False
-        #                 }
-        #             ],
-        #             "nb": 2,
-        #             "nextBlockIndex": -1
-        #         }
-        #     ]
-        # }
-        #
-        # json_data = json.dumps(data2)
-        # file.data = json_data
-        # file.save()
-
-        context = {
-            'file': file,
-            'dataPy': json.loads(file.data),
-            'data': file.data,
-        }
-
-        template_path = 'files/view_file/index.html'
-
-        return render(request, template_path, context)
+            return render(request, 'files/view_file/index.html', context)
+        else:
+            pass
     except:
-        raise Http404
+        pass
+
+    raise Http404
 
 
 @login_required
@@ -130,12 +38,13 @@ def save_file(request, pk):
         try:
             file = File.objects.get(id=int(pk))
 
-            data = json.loads(file_data)
+            if file.is_owned_by(request.user):
+                data = json.loads(file_data)
 
-            file.data = json.dumps(data)
-            file.save()
+                file.data = json.dumps(data)
+                file.save()
 
-            return JsonResponse({"status": "ok"})
+                return JsonResponse({"status": "ok"})
         except:
             pass
 
@@ -151,10 +60,10 @@ def save_file_name(request, pk):
         try:
             file = File.objects.get(id=int(pk))
 
-            file.name = name
-            file.save()
-
-            return JsonResponse({"status": "ok"})
+            if file.is_owned_by(request.user):
+                file.name = name
+                file.save()
+                return JsonResponse({"status": "ok"})
         except:
             pass
 
@@ -168,11 +77,40 @@ def delete_file(request, pk):
         file = File.objects.get(id=int(pk))
 
         # check if the user is the owner of the file
-        if file.owner == request.user:
+        if file.is_owned_by(request.user):
             file.delete()
     except:
         pass
     return redirect('dashboard')
+
+
+@login_required
+@require_POST
+def toggle_public(request, pk):
+    try:
+        file = File.objects.get(id=int(pk))
+
+        if file.is_owned_by(request.user):
+            file.is_public = not file.is_public
+            file.save()
+            return JsonResponse({"status": "ok"})
+    except:
+        pass
+
+    return JsonResponse({"status": "error"})
+
+
+
+@login_required
+def clone_file(request, pk):
+    # check if the file exists
+    try:
+        file = File.objects.get(id=int(pk))
+
+        file_copy = file.clone(request.user)
+        return redirect('view_file', pk=file_copy.id)
+    except:
+        return redirect('dashboard')
 
 
 @login_required
@@ -181,7 +119,7 @@ def dashboard(request):
                     'indexed': ["clustered", "not_clustered"],
                     'hashing': ["static", "dynamic"]}
     if request.method == 'POST':
-        f_name = request.POST.get('name').strip()
+        f_name = request.POST.get('name')
         f_access = request.POST.get('access').strip()
         f_type = request.POST.get('type').strip()
         max_nb_enregs = request.POST.get('max-nb-enregs').strip()
@@ -234,12 +172,9 @@ def delete_file_dashboard(request):
             file = File.objects.get(id=int(pk))
 
             # check if the user is the owner of the file
-            if file.owner == request.user:
+            if file.is_owned_by(request.user):
                 file.delete()
-                messages.error(request, "You are not the owner of this file")
                 return JsonResponse({"status": "ok"})
-            else:
-                messages.error(request, "You are not the owner of this file")
         except:
             pass
     return JsonResponse({"status": "error"})

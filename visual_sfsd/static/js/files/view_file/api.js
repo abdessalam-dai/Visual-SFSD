@@ -31,3 +31,24 @@ export const saveFileData = (fileData) => {
         }
     });
 }
+
+
+export const toggleFileVisibility = () => {
+    const toggleFileVisibilityBtn = document.querySelector("#toggle-file-visibility-btn");
+
+    $.ajax({
+        type: 'POST',
+        url: TOGGLE_FILE_VISIBILITY_URL,
+        data: {
+
+        },
+        datatype: 'json',
+        success: function (response) {
+            console.log(response["status"]);
+        },
+        error: function (response) {
+            toggleFileVisibilityBtn.checked = !toggleFileVisibilityBtn.checked;
+            console.log("Something went wrong");
+        }
+    });
+}
