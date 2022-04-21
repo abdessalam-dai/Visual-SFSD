@@ -27,6 +27,7 @@
 
 {% block content %}
     {% include 'components/aside/aside_dashboard.html' with active_page='dashboard' %}
-    {% include 'files/dashboard/components/files.html' %}
-    {% include 'files/dashboard/components/create_file.html' %}
+    {# {% include 'files/dashboard/components/files.html' %} #}
+{#    {% include 'files/dashboard/components/create_file.html' %} #}
+    {% include 'files/dashboard/components/view_other_profile.html' %}
 {% endblock content %}
