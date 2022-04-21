@@ -9,6 +9,7 @@ export const step3Indexed = document.querySelector("#step-3-indexed");
 export const step3Hashing = document.querySelector("#step-3-hashing");
 
 export const step4Sequential = document.querySelector("#step-4-sequential");
+export const step4IndexedNotClustered = document.querySelector("#step-4-indexed");
 
 
 export const dummyDataForm = document.querySelector("#dummy-data-form");

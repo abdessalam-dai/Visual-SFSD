@@ -8,7 +8,7 @@ const closeModal = () => {
     deleteFileModal.classList.add('hidden');
 }
 
-const openOverlayAndFileModal = () => {
+const openOverlayAndModal = () => {
     deleteFileModalOverlay.classList.remove('hidden');
     deleteFileModal.classList.remove('hidden');
 }
@@ -17,13 +17,13 @@ const openOverlayAndFileModal = () => {
 document.addEventListener('keydown', e => {
     if (e.key.toLowerCase() === 'd' && e.ctrlKey) {
         e.preventDefault();
-        openOverlayAndFileModal();
+        openOverlayAndModal();
     }
 });
 
-// handle click on the create file button
+// handle click on the delete file button
 openDeleteFileModal.addEventListener('click', function (e) {
-    openOverlayAndFileModal();
+    openOverlayAndModal();
 });
 
 // handle click on the overlay (to close the modal)

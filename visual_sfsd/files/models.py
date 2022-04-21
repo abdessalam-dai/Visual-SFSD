@@ -7,16 +7,21 @@ TOF = 'TOF'
 TnOF = 'TnOF'
 LOF = 'LOF'
 LnOF = 'LnOF'
-Clustered = 'Clustered'
-NotClustered = 'Not Clustered'
+clustered = 'clustered'
+not_clustered = 'not_clustered'
+static = 'static'
+dynamic = 'dynamic'
+
 
 FILE_TYPE_CHOICES = [
     (TOF, 'TOF'),
     (TnOF, 'TnOF'),
     (LOF, 'LOF'),
     (LnOF, 'LnOF'),
-    (Clustered, 'Clustered'),
-    (NotClustered, 'Not Clustered'),
+    (clustered, 'Clustered'),
+    (not_clustered, 'Not Clustered'),
+    (static, 'Static'),
+    (dynamic, 'Dynamic'),
 ]
 
 sequential = 'sequential'
@@ -24,9 +29,9 @@ indexed = 'indexed'
 hashing = 'hashing'
 
 FILE_ACCESS_CHOICES = [
-    (sequential, 'sequential'),
-    (indexed, 'indexed'),
-    (hashing, 'hashing'),
+    (sequential, 'Sequential'),
+    (indexed, 'Indexed'),
+    (hashing, 'Hashing'),
 ]
 
 
@@ -43,6 +48,7 @@ class File(models.Model):
         choices=FILE_TYPE_CHOICES,
         default=TOF,
     )
+    is_public = models.BooleanField(default=True)
     data = models.TextField(null=True, blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
 
@@ -58,3 +64,7 @@ class File(models.Model):
         file._state.adding = True
         file.save()
         return file
+
+    # check if the file is owner by user
+    def is_owned_by(self, user):
+        return self.owner == user
