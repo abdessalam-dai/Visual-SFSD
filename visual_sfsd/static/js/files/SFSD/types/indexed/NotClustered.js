@@ -52,6 +52,7 @@ export default class NotClustered extends TableFile {
     }
 
     search(key, animate=false) {
+        console.log('starting the search process')
         let start=0, end=this.indexTable.length-1;
 
         // Iterate while start not meets end
@@ -87,21 +88,22 @@ export default class NotClustered extends TableFile {
                 }
             }
 
-
-
-
     }
 
    async insert(key, field1, field2, removed = false, animate=false) {
        let readTimes,writeTimes=0;
-        let i,j;
-        if (this.indexTable.length  == this.maxIndex ) {
+        // let i , j = 0;
+        if (this.indexTable.length  === this.maxIndex ) {
             return false
         }
+
+        console.log(this.search(key))
+       console.log(this.blocks)
         let {
             found : found,
             pos : pos
         } = this.search(key);
+
         if (!found) {
             //insert f file at the end
             // if (animate) {
@@ -112,14 +114,13 @@ export default class NotClustered extends TableFile {
 
             //handle the case when it's the first time we create a block
             if (this.blocks.length === 0) {
-                let i=0,j = 0;
                 let address = this.setBlockAddress(0);
                 let newBlock = new Block([newEnreg], 1, address);
                 this.blocks.push(newBlock);
                 this.nbBlocks += 1;
                 writeTimes++;
             } else {
-                let i = this.blocks.length-1
+                let i = this.blocks.length - 1
                 let lastBlock = this.blocks[i];
                 readTimes++;
 
@@ -135,10 +136,9 @@ export default class NotClustered extends TableFile {
                 //     await sleep(1000);
                 // }
 
+                // if the last block is not full, then insert the new enreg. at the end
                 if (lastBlock.enregs.length < this.maxNbEnregs) {
-                    // if the last block is not full, then insert the new enreg. at the end
                     lastBlock.enregs.push(newEnreg);
-                    j = lastBlock.nb;
                     lastBlock.nb++;
                     this.blocks[i] = lastBlock;
                     writeTimes++;
@@ -163,12 +163,9 @@ export default class NotClustered extends TableFile {
                     // else, create a new block and append to it the new enreg.
                     let address = this.setBlockAddress(this.blocks.length - 1);
                     let newBlock = new Block([newEnreg], 1, address);
-                    i = this.blocks.length
-                    j = 0;
                     this.blocks.push(newBlock);
                     writeTimes++;
                     this.nbBlocks += 1;
-
                     // if (animate) {
                     //     this.createNewBlockInBuff(newEnreg);
 
@@ -189,20 +186,60 @@ export default class NotClustered extends TableFile {
 
             let m = this.indexTable.length;
             this.indexTable.push(-1)
-            while (m>pos.k) {
+            while ( m > pos.k) {
                 this.indexTable[m] = this.indexTable[m-1]
                 m--;
             }
-            this.indexTable[pos.k] = new IndexCouple(key,i,j);
+            this.indexTable[pos.k] = new IndexCouple(key, this.blocks.indexOf(this.blocks[this.blocks.length - 1]), this.blocks[this.blocks.length-1].nb - 1);
             console.table(this.indexTable)
             return true;
         }
     }
 
     removeLogically(key, animate = false) {
+        let {
+            found : found,
+                pos : pos
+        } = this.search(key);
 
+        if (found) {
+            this.blocks[pos.i].enregs[pos.j].removed = true;
+            return true;
+        }
+        return false;
     }
 
     editEnreg(key, field1, field2, removed = false, animate = false) {
+        let {
+            found : found,
+            pos : pos
+        } = this.search(key);
+
+        if (found) {
+            this.blocks[pos.i].enregs[pos.j].field1 = field1;
+            this.blocks[pos.i].enregs[pos.j].field2 = field2;
+            // this.blocks[pos.i].enregs[pos.j].removed = removed;
+            return true;
+        }
+        return false;
+    }
+
+    createIndexTableDOM(){
+        this.indexTableHtml.selectAll('*').remove();
+        for (let couple of this.indexTable) {
+            let html = `           
+            <div class="cell bg-slate-200 text-center border-gray-700">
+                <div class="key bg-gray-100 w-12 h-20 min-w-fit text-gray-800 border-r-2 px-1 py-6 border-gray-500 border-b-2">
+                    ${couple.key}
+                </div>
+                <div class="pos-i px-2 py-2 w-12 h-10 min-w-fit border-r-2 border-gray-600 border-gray-500 border-b-2">
+                    ${couple.i}
+                </div>
+                <div class="pos-j px-2 py-2 w-12 h-10 min-w-fit border-r-2 border-gray-600 border-gray-500 border-b-2">
+                    ${couple.j}
+                </div>
+            </div>`
+            this.indexTableHtml.node().insertAdjacentHTML('beforeend', html);
+        }
     }
 }

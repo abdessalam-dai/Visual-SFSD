@@ -197,7 +197,7 @@ if (FILE_TYPE === "Not Clustered") {
 }
 
 console.log(newFile.getJsonFormat());
-newFile.createBoardsDOM();
+newFile.createBoardsDOM(FILE_ACCESS === 'indexed');
 
 // END - Create file
 
@@ -487,7 +487,7 @@ const handleGenerateData = () => {
                 );
             }
 
-            newFile.createBoardsDOM();
+            newFile.createBoardsDOM(FILE_ACCESS === 'indexed');
 
             changeButtonsState(false);
         }
@@ -497,29 +497,30 @@ const handleGenerateData = () => {
 handleGenerateData();
 
 
-let data = generateData(8, 0, 11);
+// let data = generateData(8, 0, 11);
+//
+// newFile.blocks.push(new Block([], 8));
+// let j = 0;
+// for (const enreg of data) {
+//     // await newFile.insert(
+//     //     enreg.key,
+//     //     enreg.field1,
+//     //     enreg.field2,
+//     //     false,
+//     //     false
+//     // )
+//     // console.log(enreg)
+//     console.log(newFile)
+//     newFile.indexTable.push(new IndexCouple(enreg.key, 0, j));
+//     j++;
+//     newFile.blocks[0].enregs.push(new Enreg(enreg.key, enreg.field1, enreg.field2, false))
+// }
 
-newFile.blocks.push(new Block([], 8));
-let j = 0;
-for (const enreg of data) {
-    // await newFile.insert(
-    //     enreg.key,
-    //     enreg.field1,
-    //     enreg.field2,
-    //     false,
-    //     false
-    // )
-
-    newFile.indexTable.push(new IndexCouple(enreg.key, 0, j));
-    j++;
-    newFile.blocks[0].enregs.push(new Enreg(enreg.key, enreg.field1, enreg.field2, false))
-}
-
-newFile.indexTable = newFile.indexTable.sort((a, b) => a.key - b.key);
-console.table(newFile.indexTable);
-console.table(newFile.blocks[0].enregs)
-newFile.createBoardsDOM();
-console.log(newFile.search(15));
+// newFile.indexTable = newFile.indexTable.sort((a, b) => a.key - b.key);
+// console.table(newFile.indexTable);
+// console.table(newFile.blocks[0].enregs)
+// newFile.createBoardsDOM();
+// console.log(newFile.search(9));
 // END - Fill with dummy data
 
 
@@ -536,7 +537,7 @@ const handleSearch = () => {
                 pos: pos,
                 readTimes: readTimes
             } = await newFile.search(key, animate);
-            console.log(found, pos, readTimes)
+            console.log(found, pos)
             changeButtonsState(false)
         }
     });
@@ -577,7 +578,7 @@ const handleRemovePhysically = () => {
 
             let removeSuccess = await newFile.removePhysically(key, animate);
 
-            newFile.createBoardsDOM();
+            newFile.createBoardsDOM(FILE_ACCESS === 'indexed');
 
             console.log(removeSuccess);
 
@@ -608,7 +609,7 @@ const handleInsert = () => {
 
             changeButtonsState(false);
 
-            newFile.createBoardsDOM();
+            newFile.createBoardsDOM(FILE_ACCESS === 'indexed');
         }
     });
 }
@@ -633,7 +634,7 @@ const handleEdit = () => {
 
             changeButtonsState(false);
 
-            newFile.createBoardsDOM();
+            newFile.createBoardsDOM(FILE_ACCESS === 'indexed');
         }
     });
 }
