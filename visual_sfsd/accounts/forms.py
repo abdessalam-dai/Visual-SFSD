@@ -1,9 +1,9 @@
-from django.forms import ModelForm
 from django.contrib.auth.models import User
 from django import forms
+from django.forms import ModelForm
 
 
-class UserRegistrationForm(forms.ModelForm):
+class UserRegistrationForm(ModelForm):
     input_classes = 'focus:outline-blue-500 block m-auto p-5 w-full rounded-full custom-shadow'
     first_name = forms.CharField(
         label='First Name',

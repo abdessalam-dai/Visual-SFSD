@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.http import Http404, JsonResponse
 from django.views.decorators.http import require_POST
 from .models import File
@@ -7,6 +8,7 @@ from .forms import CreateFileForm
 import json
 
 
+@login_required
 def view_file(request, pk):
     try:
         file = File.objects.get(id=int(pk))
@@ -119,6 +121,7 @@ def view_file(request, pk):
         raise Http404
 
 
+@login_required
 @require_POST
 def save_file(request, pk):
     file_data = request.POST.get("fileData")
@@ -139,6 +142,7 @@ def save_file(request, pk):
     return JsonResponse({"status": "error"})
 
 
+@login_required
 @require_POST
 def save_file_name(request, pk):
     name = request.POST.get("name")
@@ -157,11 +161,21 @@ def save_file_name(request, pk):
     return JsonResponse({"status": "error"})
 
 
-def create_file(request):
-    # form =
-    return render(request, 'files/create_file/index.html')
+@login_required
+def delete_file(request, pk):
+    # check if the file exists
+    try:
+        file = File.objects.get(id=int(pk))
+
+        # check if the user is the owner of the file
+        if file.owner == request.user:
+            file.delete()
+    except:
+        pass
+    return redirect('dashboard')
 
 
+@login_required
 def dashboard(request):
     ACCESS_TYPES = {'sequential': ["TOF", "TnOF", "LOF", "LnOF"],
                     'indexed': ["clustered", "not_clustered"],
@@ -209,20 +223,8 @@ def dashboard(request):
     return render(request, 'files/dashboard/index.html', context)
 
 
-def delete_file(request, pk):
-    # check if the file exists
-    try:
-        file = File.objects.get(id=int(pk))
-
-        # check if the user is the owner of the file
-        if file.owner == request.user:
-            file.delete()
-    except:
-        pass
-    return redirect('dashboard')
-
-
 # this is used to delete a file (real time) in the dashboard
+@login_required
 @require_POST
 def delete_file_dashboard(request):
     pk = request.POST.get("pk")
@@ -234,7 +236,10 @@ def delete_file_dashboard(request):
             # check if the user is the owner of the file
             if file.owner == request.user:
                 file.delete()
+                messages.error(request, "You are not the owner of this file")
                 return JsonResponse({"status": "ok"})
+            else:
+                messages.error(request, "You are not the owner of this file")
         except:
             pass
     return JsonResponse({"status": "error"})
