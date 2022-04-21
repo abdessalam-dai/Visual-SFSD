@@ -518,6 +518,7 @@ for (const enreg of data) {
 newFile.indexTable = newFile.indexTable.sort((a, b) => a.key - b.key);
 console.table(newFile.indexTable);
 newFile.createBoardsDOM();
+console.log(newFile.search(15));
 // END - Fill with dummy data
 
 
