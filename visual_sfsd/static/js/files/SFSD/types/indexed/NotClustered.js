@@ -65,7 +65,6 @@ export default class NotClustered extends TableFile {
     }
 
     removeLogically(key, animate = false) {
-
     }
 
     editEnreg(key, field1, field2, removed = false, animate = false) {

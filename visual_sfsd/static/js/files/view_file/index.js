@@ -125,7 +125,7 @@ for (let block of fileData["blocks"]) {
 
 console.log(blocks)
 
-if (FILE_ACCESS === "indexed") {
+if (FILE_TYPE === "Not Clustered") {
     newFile = new NotClustered(
         FILE_NAME,
         buff,
@@ -499,6 +499,7 @@ handleGenerateData();
 
 let data = generateData(8, 0, 11);
 
+newFile.blocks.push(new Block([], 8));
 let j = 0;
 for (const enreg of data) {
     // await newFile.insert(
@@ -511,12 +512,12 @@ for (const enreg of data) {
 
     newFile.indexTable.push(new IndexCouple(enreg.key, 0, j));
     j++;
-    newFile.blocks.push(new Block());
     newFile.blocks[0].enregs.push(new Enreg(enreg.key, enreg.field1, enreg.field2, false))
 }
 
 newFile.indexTable = newFile.indexTable.sort((a, b) => a.key - b.key);
 console.table(newFile.indexTable);
+console.table(newFile.blocks[0].enregs)
 newFile.createBoardsDOM();
 // END - Fill with dummy data
 

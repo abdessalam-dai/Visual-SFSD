@@ -15,32 +15,56 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
 
-    <style>
-        body {
-            font-family: 'Poppins', serif;
-        }
-    </style>
+    <!-- Style sheets -->
+    <link rel="stylesheet" href="{% static 'css/accounts/login.css' %}">
 </head>
 
 <body>
-{% include 'components/messages.html' %}
 <div class="h-screen flex bg-[#D2DCFF]">
     <div class="w-full flex flex-col  justify-between text-center py-20 px-10 2xl:rounded-r-[75px] bg-[white] 2xl:w-1/2">
         <h1 class="text-center font-bold text-6xl mb-12">Register</h1>
         <div class="pb-20 2xl:py-0">
             <div class="flex justify-center items-center">
                 <form method="POST"
-                      class="w-full md:w-2/3 px-[50px]">
+                      class="w-full 2xl:w-2/3 2xl:px-[50px]">
                     {% csrf_token %}
 
-                    {% for tag in form %}
-                        {{ tag }}
-                        {% for error in tag.errors %}
-                            <div class="d-block invalid-feedback">
-                                {{ error|escape }}
+
+                    <div class="flex flex-row space-x-5  mb-8">
+                        <div>
+                            <div class="mb-3">
+                                {{ form.first_name }}
                             </div>
-                        {% endfor %}
-                    {% endfor %}
+                            <div class="text-red-500">
+                                {{ form.first_name.errors|escape }}
+                            </div>
+                        </div>
+                        <div>
+                            <div class="mb-3">
+                                {{ form.last_name }}
+                            </div>
+                            <div class="text-red-500">
+                                {{ form.last_name.errors|escape }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" mb-8">
+                        <div class="mb-3">
+                            {{ form.email }}
+                        </div>
+                        <div class="text-red-500">
+                            {{ form.email.errors|escape }}
+                        </div>
+                    </div>
+                    <div class="mb-8">
+                        <div class="flex flex-row space-x-5 mb-3">
+                            {{ form.password }}
+                            {{ form.password2 }}
+                        </div>
+                        <div class="text-red-500">
+                            {{ form.password2.errors|escape }}
+                        </div>
+                    </div>
 
                     <button type="submit"
                             class="rounded-full bg-[#879EF1] hover:bg-[#BA68C8] transition-all text-white text-2xl py-4 px-[50px] cursor-pointer">
@@ -64,31 +88,10 @@
         <img src="{% static 'imgs/accounts/register.svg' %}" alt="Register">
     </div>
 </div>
+
+
+<div class="fixed z-10 bottom-0 right-0 display-delay">
+    {% include 'components/messages.html' %}
+</div>
 </body>
 </html>
-
-<style>
-    .google::after {
-        content: '';
-        width: 20%;
-        border-bottom: solid 1px #5F5E5E;
-        position: absolute;
-        left: 17%;
-        top: 50%;
-        z-index: 1;
-    }
-
-    .google::before {
-        content: '';
-        width: 20%;
-        border-bottom: solid 1px #5F5E5E;
-        position: absolute;
-        right: 17%;
-        top: 50%;
-        z-index: 1;
-    }
-
-    .custom-shadow {
-        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px -1px 4px rgba(0, 0, 0, 0.25);
-    }
-</style>

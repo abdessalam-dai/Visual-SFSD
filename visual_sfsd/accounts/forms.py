@@ -4,14 +4,15 @@ from django import forms
 
 
 class UserRegistrationForm(forms.ModelForm):
-    input_classes = 'focus:outline-blue-500 block m-[auto] mb-8 p-5 w-full rounded-full custom-shadow'
+    input_classes = 'focus:outline-blue-500 block m-auto p-5 w-full rounded-full custom-shadow'
     first_name = forms.CharField(
         label='First Name',
         min_length=2,
         max_length=150,
         widget=forms.TextInput(attrs={
             'class': input_classes,
-            'placeholder': 'First Name'
+            'placeholder': 'First Name',
+            'autofocus': ''
         }),
     )
 
@@ -56,7 +57,7 @@ class UserRegistrationForm(forms.ModelForm):
     def clean_email(self):
         email = self.cleaned_data.get('email')
         if User.objects.filter(email=email).exists():
-            raise forms.ValidationError("Email exists")
+            raise forms.ValidationError("Email is already exists")
         return email
 
     def clean_password2(self):
