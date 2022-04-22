@@ -68,7 +68,8 @@ def register(request):
             return redirect('login')
         else:
             for field in form.errors:
-                form[field].field.widget.attrs['class'] += ' bg-red-50 border border-red-500 text-red-900 placeholder-red-700 focus:outline-red-500'
+                form[field].field.widget.attrs[
+                    'class'] += ' bg-red-50 border border-red-500 text-red-900 placeholder-red-700 focus:outline-red-500'
     else:
         form = UserRegistrationForm()
 
@@ -82,6 +83,29 @@ def settings(request):
 
 
 @login_required
+def students_list(request):
+    # only teachers can view this page
+    if not request.user.account.is_teacher:
+        raise Http404
+
+    students_all = User.objects.filter(account__role='student').order_by('date_joined')
+
+    paginator = Paginator(students_all, 20)
+    page = request.GET.get('page')
+    try:
+        students = paginator.page(page)
+    except PageNotAnInteger:
+        students = paginator.page(1)
+    except EmptyPage:
+        students = paginator.page(paginator.num_pages)
+
+    context = {
+        'students': students,
+    }
+    return render(request, 'accounts/students_list/index.html', context=context)
+
+
+@login_required
 def profile(request, username):
     try:
         user = User.objects.get(username=username)
@@ -90,7 +114,7 @@ def profile(request, username):
             owner=user, is_public=True
         ).order_by('-date_created')
 
-        paginator = Paginator(files_all, 3)
+        paginator = Paginator(files_all, 20)
         page = request.GET.get('page')
         try:
             files = paginator.page(page)

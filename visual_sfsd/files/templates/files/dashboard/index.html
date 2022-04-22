@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block title %}
-    Dashboard
+    My Dashboard -
 {% endblock title %}
 
 {% block scripts %}
@@ -27,7 +27,11 @@
 
 {% block content %}
     {% include 'components/aside/aside_dashboard.html' with active_page='dashboard' %}
-    {# {% include 'files/dashboard/components/files.html' %} #}
-{#    {% include 'files/dashboard/components/create_file.html' %} #}
-    {% include 'files/dashboard/components/view_other_profile.html' %}
+
+    <div class="p-20">
+        {% include 'accounts/profile/components/files.html' with files=files %}
+        {% include 'files/dashboard/components/pagination.html' with page=files %}
+    </div>
+    {% include 'files/dashboard/components/create_file.html' %}
+
 {% endblock content %}
