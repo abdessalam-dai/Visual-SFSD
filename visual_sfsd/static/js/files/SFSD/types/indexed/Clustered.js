@@ -20,7 +20,7 @@ import {
 import IndexCouple from "../../structres/IndexCouple.js";
 
 
-export default class NotClustered extends TableFile {
+export default class Clustered extends TableFile {
     constructor(
         name,
         buff,
@@ -53,14 +53,11 @@ export default class NotClustered extends TableFile {
 
     search(key, animate=false) {
         console.log('starting the search process')
-        let start=0, end=this.indexTable.length-1;
-
+        let start = 0, end = this.indexTable.length - 1;
         // Iterate while start not meets end
         while (start<=end){
-
             // Find the mid index
             let mid=Math.floor((start + end)/2);
-
             // If element is present at mid, return True
             if (this.indexTable[mid].key === key) {
                 return {
@@ -72,37 +69,72 @@ export default class NotClustered extends TableFile {
                     }
                 }
             }
-
             // Else look in left or right half accordingly
             else if (this.indexTable[mid].key < key)
                 start = mid + 1;
             else
                 end = mid - 1;
         }
-            return { //if start > end we set the insert position to start
-                found: false,
-                pos: {
-                    i: -1,
-                    j: -1,
-                    k: start, // position in index table
+        return { // if start > end we set the insert position to start
+            found: false,
+            pos: {
+                i: -1,
+                j: -1,
+                k: start, // position in index table
+            }
+        }
+    }
+
+
+    searchMS(i , key) {
+        let indexOfBlockToSearch = this.search(key).pos.k;
+
+        // binary search
+        let start = 0, end = this.blocks[indexOfBlockToSearch].enregs.length - 1;
+        // Iterate while start not meets end
+        while (start <= end){
+            // Find the mid index
+            let mid = Math.floor((start + end) / 2);
+            // If element is present at mid, return True
+            if (this.blocks[indexOfBlockToSearch].enregs[mid].key === key) {
+                return {
+                    found: true,
+                    pos: {
+                        i: this.indexTable[mid].i,
+                        j: this.indexTable[mid].j,
+                        k: mid, // position in index table
+                    }
                 }
             }
+            // Else look in left or right half accordingly
+            else if (this.blocks[indexOfBlockToSearch].enregs.key < key)
+                start = mid + 1;
+            else
+                end = mid - 1;
+        }
+
+        return { // if start > end we set the insert position to start
+            found: false,
+            pos: {
+                i: -1,
+                j: -1,
+            }
+        }
 
     }
 
-   async insert(key, field1, field2, removed = false, animate=false) {
-       let readTimes,writeTimes=0;
+    async insert(key, field1, field2, removed = false, animate=false) {
+        let readTimes,writeTimes=0;
         // let i , j = 0;
         if (this.indexTable.length  === this.maxIndex ) {
             return false
         }
 
-        console.log(this.search(key))
-       console.log(this.blocks)
+        console.log(this.blocks)
         let {
             found : found,
             pos : pos
-        } = this.search(key);
+        } = this.searchMS(key);
 
         if (!found) {
             //insert f file at the end
@@ -185,13 +217,14 @@ export default class NotClustered extends TableFile {
             this.nbInsertions += 1; // increment the number of insertion in the file
 
             let m = this.indexTable.length;
-            this.indexTable.push(-1)
-            while ( m > pos.k) {
-                this.indexTable[m] = this.indexTable[m-1]
-                m--;
-            }
-            this.indexTable[pos.k] = new IndexCouple(key, this.blocks.indexOf(this.blocks[this.blocks.length - 1]), this.blocks[this.blocks.length-1].nb - 1);
-            console.table(this.indexTable)
+            // this.indexTable.push(-1)
+            // while ( m > pos.k) {
+            //     this.indexTable[m] = this.indexTable[m-1]
+            //     m--;
+            // }
+            // this.indexTable[pos.k] = new IndexCouple(key, this.blocks.indexOf(this.blocks[this.blocks.length - 1]), this.blocks[this.blocks.length-1].nb - 1);
+            // console.table(this.indexTable)
+            this.createIndexTableDOM()
             return true;
         }
     }
@@ -199,7 +232,7 @@ export default class NotClustered extends TableFile {
     removeLogically(key, animate = false) {
         let {
             found : found,
-                pos : pos
+            pos : pos
         } = this.search(key);
 
         if (found) {
@@ -224,22 +257,23 @@ export default class NotClustered extends TableFile {
         return false;
     }
 
-    // createIndexTableDOM(){
-    //     this.indexTableHtml.selectAll('*').remove();
-    //     for (let couple of this.indexTable) {
-    //         let html = `
-    //         <div class="cell bg-slate-200 text-center border-gray-700">
-    //             <div class="key bg-gray-100 w-12 h-20 min-w-fit text-gray-800 border-r-2 px-1 py-6 border-gray-500 border-b-2">
-    //                 ${couple.key}
-    //             </div>
-    //             <div class="pos-i px-2 py-2 w-12 h-10 min-w-fit border-r-2 border-gray-600 border-gray-500 border-b-2">
-    //                 ${couple.i}
-    //             </div>
-    //             <div class="pos-j px-2 py-2 w-12 h-10 min-w-fit border-r-2 border-gray-600 border-gray-500 border-b-2">
-    //                 ${couple.j}
-    //             </div>
-    //         </div>`
-    //         this.indexTableHtml.node().insertAdjacentHTML('beforeend', html);
-    //     }
-    // }
+    createIndexTableDOM(){
+        this.indexTableHtml.selectAll('*').remove();
+        console.log(this.indexTable)
+        for (let couple of this.indexTable) {
+            let html = `
+            <div class="cell bg-slate-200 text-center border-gray-700">
+                <div class="key bg-gray-100 w-12 h-20 min-w-fit text-gray-800 border-r-2 px-1 py-6 border-gray-500 border-b-2">
+                    ${couple.key}
+                </div>
+                <div class="pos-i px-2 py-2 w-12 h-10 min-w-fit border-r-2 border-gray-600 border-gray-500 border-b-2">
+                    ${couple.i}
+                </div>
+                <div class="pos-j px-2 py-2 w-12 h-10 min-w-fit border-r-2 border-gray-600 border-gray-500 border-b-2">
+                    ${couple.j}
+                </div>
+            </div>`
+            this.indexTableHtml.node().insertAdjacentHTML('beforeend', html);
+        }
+    }
 }

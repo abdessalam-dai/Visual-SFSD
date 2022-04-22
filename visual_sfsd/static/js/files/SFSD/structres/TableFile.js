@@ -51,7 +51,7 @@ export default class TableFile extends SequentialFile {
     }
 
     createBoardsDOM(isIndexed = false) {
-        if (isIndexed) this.createIndexTableDOM();
+        // if (isIndexed) this.createIndexTableDOM();
 
         // set number of blocks and number of elements in header
         let lastElementShown;
