@@ -4,6 +4,7 @@ import LOF from "../SFSD/types/simple/LOF.js";
 import LnOF from "../SFSD/types/simple/LnOF.js";
 import {Block, Enreg} from "../SFSD/SFSD.js";
 import NotClustered from "../SFSD/types/indexed/NotClustered.js";
+import Clustered from "../SFSD/types/indexed/Clustered.js";
 import {animate} from "./shared/animationSpeed.js";
 import * as DomElements from "./DomElements.js";
 import "./shared/fileHead.js";
@@ -56,6 +57,8 @@ for (let block of fileData["blocks"]) {
 console.log(blocks)
 
 console.log(FILE_TYPE)
+
+
 if (FILE_TYPE === "not_clustered") {
     newFile = new NotClustered(
         FILE_NAME,
@@ -71,6 +74,21 @@ if (FILE_TYPE === "not_clustered") {
         40,
         indexTableHtml
     );
+} else if (FILE_TYPE === "clustered") {
+  newFile = new Clustered(
+          FILE_NAME,
+          buff,
+          buff2,
+          MSBoard,
+          parseInt(fileData["characteristics"]["maxNbEnregs"]),
+          parseInt(fileData["characteristics"]["maxNbBlocks"]),
+          parseInt(fileData["characteristics"]["nbBlocks"]),
+          parseInt(fileData["characteristics"]["nbInsertions"]),
+          blocks,
+          [],
+          40,
+          indexTableHtml
+      );
 } else if (FILE_TYPE === "TOF") {
     newFile = new TOF(
         FILE_NAME,
