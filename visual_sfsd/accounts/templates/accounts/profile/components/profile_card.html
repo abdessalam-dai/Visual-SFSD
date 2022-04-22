@@ -1,19 +1,18 @@
 {% load static %}
 
-<div class="profile-info relative overflow-hidden mb-7 p-10 mb-4 rounded-3xl bg-white text-center shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
-    <h2 class="block text-center font-bold text-4xl">Profile</h2>
+<div class="h-max p-10  rounded-3xl bg-white text-center shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
     <div class="profile-img w-[220px] h-[220px] m-auto mt-5">
         <img src="{% static 'imgs/profile.jpeg' %}" class="rounded-full w-full h-full" alt="">
     </div>
-    <div class="mt-8">
-        <div class="">
-            <h3 class="text-2xl text-center">Dai Abdessalem</h3>
+    <div class="flex flex-col space-y-3 mt-5">
+        <div>
+            <h3 class="text-2xl text-center font-bold">{{ user.first_name }} {{ user.last_name }}</h3>
         </div>
-        <div class="mt-6">
-            <h3 class="text-2xl text-center">Student</h3>
+        <div>
+            <h3 class="text-2xl text-center">{{ user.account.get_role_display }}</h3>
         </div>
-        <div class="mt-5">
-            <h5 class="">Joined on <span class="text-indigo-900">20/05/2020</span></h5>
+        <div>
+            <h5 class="text-md">Joined on <span class="text-indigo-900">{{ user.date_joined|date }}</span></h5>
         </div>
     </div>
 </div>

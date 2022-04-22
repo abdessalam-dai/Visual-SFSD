@@ -12,8 +12,8 @@
     <script>
         let fileData = {{ data|safe }};
         const FILE_NAME = "{{ file.name }}";
-        const FILE_ACCESS = "{{ file.get_file_access_display }}";
-        const FILE_TYPE = "{{ file.get_file_type_display }}";
+        const FILE_ACCESS = "{{ file.file_access }}";
+        const FILE_TYPE = "{{ file.file_type }}";
 
         {% if file.owner == request.user %}
             const SAVE_FILE_URL = "{% url 'save_file' file.id %}";

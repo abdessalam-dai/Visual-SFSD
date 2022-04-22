@@ -23,7 +23,7 @@ const resetForm = () => {
     DE.step3Indexed.classList.add('hidden');
     DE.step3Hashing.classList.add('hidden');
     DE.step4Sequential.classList.add('hidden');
-    DE.step4Indexed.classList.add('hidden');
+    // DE.step4Indexed.classList.add('hidden');
     // hide overlay
     DE.createFileModalOverlay.classList.add("hidden");
     DE.createFileModal.classList.add('hidden');

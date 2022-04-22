@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -100,7 +101,6 @@ def toggle_public(request, pk):
     return JsonResponse({"status": "error"})
 
 
-
 @login_required
 def clone_file(request, pk):
     # check if the file exists
@@ -154,9 +154,18 @@ def dashboard(request):
 
             return redirect('view_file', pk=file.id)
 
-    user_files = request.user.file_set.all()
+    files_all = request.user.file_set.all().order_by('-date_created')
+
+    paginator = Paginator(files_all, 20)
+    page = request.GET.get('page')
+    try:
+        files = paginator.page(page)
+    except PageNotAnInteger:
+        files = paginator.page(1)
+    except EmptyPage:
+        files = paginator.page(paginator.num_pages)
     context = {
-        'user_files': user_files
+        'files': files
     }
     return render(request, 'files/dashboard/index.html', context)
 

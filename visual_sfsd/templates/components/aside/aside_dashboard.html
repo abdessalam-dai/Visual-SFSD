@@ -11,6 +11,14 @@
             <i class="fa-solid text-4xl fa-folder-tree w-11 ml-6 mr-3"></i>
             <h3 class="text-2xl font-bold">Dashboard</h3>
         </a>
+        {% if request.user.account.is_teacher %}
+            <a href="{% url 'students_list' %}"
+               class="hover:bg-white hover:text-[#8846DD] rounded-l-full flex h-20 mt-6 items-center
+                {% if active_page == 'students' %}text-[#8846DD] bg-white{% else %}text-white bg-[#8846DD]{% endif %}">
+                <i class="fa-solid text-4xl fa-graduation-cap w-11 ml-6 mr-3"></i>
+                <h3 class="text-2xl font-bold">Students</h3>
+            </a>
+        {% endif %}
         <a href="{% url 'settings' %}"
            class="hover:bg-white hover:text-[#8846DD] rounded-l-full flex h-20 mt-6 items-center
                 {% if active_page == 'settings' %}text-[#8846DD] bg-white{% else %}text-white bg-[#8846DD]{% endif %}">
