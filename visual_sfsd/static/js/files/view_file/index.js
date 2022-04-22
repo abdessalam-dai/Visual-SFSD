@@ -4,10 +4,8 @@ import LOF from "../SFSD/types/simple/LOF.js";
 import LnOF from "../SFSD/types/simple/LnOF.js";
 import {Block, Enreg} from "../SFSD/SFSD.js";
 import NotClustered from "../SFSD/types/indexed/NotClustered.js";
-import IndexCouple from "../SFSD/structres/IndexCouple.js";
 import {animate} from "./shared/animationSpeed.js";
 import * as DomElements from "./DomElements.js";
-import * as API from "./api.js";
 import "./shared/fileHead.js";
 import "./shared/MC.js";
 
@@ -73,60 +71,58 @@ if (FILE_TYPE === "not_clustered") {
         40,
         indexTableHtml
     );
+} else if (FILE_TYPE === "TOF") {
+    newFile = new TOF(
+        FILE_NAME,
+        buff,
+        buff2,
+        MSBoard,
+        parseInt(fileData["characteristics"]["maxNbEnregs"]),
+        parseInt(fileData["characteristics"]["maxNbBlocks"]),
+        parseInt(fileData["characteristics"]["nbBlocks"]),
+        parseInt(fileData["characteristics"]["nbInsertions"]),
+        blocks
+    );
+} else if (FILE_TYPE === "TnOF") {
+    newFile = new TnOF(
+        FILE_NAME,
+        buff,
+        buff2,
+        MSBoard,
+        parseInt(fileData["characteristics"]["maxNbEnregs"]),
+        parseInt(fileData["characteristics"]["maxNbBlocks"]),
+        parseInt(fileData["characteristics"]["nbBlocks"]),
+        parseInt(fileData["characteristics"]["nbInsertions"]),
+        blocks
+    );
+} else if (FILE_TYPE === "LOF") {
+    newFile = new LOF(
+        FILE_NAME,
+        buff,
+        buff2,
+        MSBoard,
+        parseInt(fileData["characteristics"]["maxNbEnregs"]),
+        parseInt(fileData["characteristics"]["maxNbBlocks"]),
+        parseInt(fileData["characteristics"]["nbBlocks"]),
+        parseInt(fileData["characteristics"]["nbInsertions"]),
+        blocks,
+        parseInt(fileData["characteristics"]["headIndex"]),
+        parseInt(fileData["characteristics"]["tailIndex"])
+    );
 } else {
-    if (FILE_TYPE === "TOF") {
-        newFile = new TOF(
-            FILE_NAME,
-            buff,
-            buff2,
-            MSBoard,
-            parseInt(fileData["characteristics"]["maxNbEnregs"]),
-            parseInt(fileData["characteristics"]["maxNbBlocks"]),
-            parseInt(fileData["characteristics"]["nbBlocks"]),
-            parseInt(fileData["characteristics"]["nbInsertions"]),
-            blocks
-        );
-    } else if (FILE_TYPE === "TnOF") {
-        newFile = new TnOF(
-            FILE_NAME,
-            buff,
-            buff2,
-            MSBoard,
-            parseInt(fileData["characteristics"]["maxNbEnregs"]),
-            parseInt(fileData["characteristics"]["maxNbBlocks"]),
-            parseInt(fileData["characteristics"]["nbBlocks"]),
-            parseInt(fileData["characteristics"]["nbInsertions"]),
-            blocks
-        );
-    } else if (FILE_TYPE === "LOF") {
-        newFile = new LOF(
-            FILE_NAME,
-            buff,
-            buff2,
-            MSBoard,
-            parseInt(fileData["characteristics"]["maxNbEnregs"]),
-            parseInt(fileData["characteristics"]["maxNbBlocks"]),
-            parseInt(fileData["characteristics"]["nbBlocks"]),
-            parseInt(fileData["characteristics"]["nbInsertions"]),
-            blocks,
-            parseInt(fileData["characteristics"]["headIndex"]),
-            parseInt(fileData["characteristics"]["tailIndex"])
-        );
-    } else {
-        newFile = new LnOF(
-            FILE_NAME,
-            buff,
-            buff2,
-            MSBoard,
-            parseInt(fileData["characteristics"]["maxNbEnregs"]),
-            parseInt(fileData["characteristics"]["maxNbBlocks"]),
-            parseInt(fileData["characteristics"]["nbBlocks"]),
-            parseInt(fileData["characteristics"]["nbInsertions"]),
-            blocks,
-            parseInt(fileData["characteristics"]["headIndex"]),
-            parseInt(fileData["characteristics"]["tailIndex"])
-        );
-    }
+    newFile = new LnOF(
+        FILE_NAME,
+        buff,
+        buff2,
+        MSBoard,
+        parseInt(fileData["characteristics"]["maxNbEnregs"]),
+        parseInt(fileData["characteristics"]["maxNbBlocks"]),
+        parseInt(fileData["characteristics"]["nbBlocks"]),
+        parseInt(fileData["characteristics"]["nbInsertions"]),
+        blocks,
+        parseInt(fileData["characteristics"]["headIndex"]),
+        parseInt(fileData["characteristics"]["tailIndex"])
+    );
 }
 
 console.log(newFile.getJsonFormat());
@@ -375,31 +371,31 @@ handleGenerateData();
 
 
 if (FILE_TYPE === 'not_clustered') {// FOR TESTING NOT CLUSTERED INDEX TYPES OF FILES
-  // let data = generateData(8, 0, 11);
-  //
-  // newFile.blocks.push(new Block([], 8));
-  // let j = 0;
-  // for (const enreg of data) {
-  //     // await newFile.insert(
-  //     //     enreg.key,
-  //     //     enreg.field1,
-  //     //     enreg.field2,
-  //     //     false,
-  //     //     false
-  //     // )
-  //     // console.log(enreg)
-  //     console.log(newFile)
-  //     newFile.indexTable.push(new IndexCouple(enreg.key, 0, j));
-  //     j++;
-  //     newFile.blocks[0].enregs.push(new Enreg(enreg.key, enreg.field1, enreg.field2, false))
-  // }
+    // let data = generateData(8, 0, 11);
+    //
+    // newFile.blocks.push(new Block([], 8));
+    // let j = 0;
+    // for (const enreg of data) {
+    //     // await newFile.insert(
+    //     //     enreg.key,
+    //     //     enreg.field1,
+    //     //     enreg.field2,
+    //     //     false,
+    //     //     false
+    //     // )
+    //     // console.log(enreg)
+    //     console.log(newFile)
+    //     newFile.indexTable.push(new IndexCouple(enreg.key, 0, j));
+    //     j++;
+    //     newFile.blocks[0].enregs.push(new Enreg(enreg.key, enreg.field1, enreg.field2, false))
+    // }
 
-  // newFile.indexTable = newFile.indexTable.sort((a, b) => a.key - b.key);
-  // console.table(newFile.indexTable);
-  // console.table(newFile.blocks[0].enregs)
-  // newFile.createBoardsDOM();
-  // console.log(newFile.search(9));
-  // END - Fill with dummy data
+    // newFile.indexTable = newFile.indexTable.sort((a, b) => a.key - b.key);
+    // console.table(newFile.indexTable);
+    // console.table(newFile.blocks[0].enregs)
+    // newFile.createBoardsDOM();
+    // console.log(newFile.search(9));
+    // END - Fill with dummy data
 }
 
 

@@ -51,15 +51,15 @@ export default class NotClustered extends TableFile {
         this.indexTableHtml = indexTableHtml;
     }
 
-    search(key, animate=false) {
+    search(key, animate = false) {
         console.log('starting the search process')
-        let start=0, end=this.indexTable.length-1;
+        let start = 0, end = this.indexTable.length - 1;
 
         // Iterate while start not meets end
-        while (start<=end){
+        while (start <= end) {
 
             // Find the mid index
-            let mid=Math.floor((start + end)/2);
+            let mid = Math.floor((start + end) / 2);
 
             // If element is present at mid, return True
             if (this.indexTable[mid].key === key) {
@@ -79,29 +79,29 @@ export default class NotClustered extends TableFile {
             else
                 end = mid - 1;
         }
-            return { //if start > end we set the insert position to start
-                found: false,
-                pos: {
-                    i: -1,
-                    j: -1,
-                    k: start, // position in index table
-                }
+        return { //if start > end we set the insert position to start
+            found: false,
+            pos: {
+                i: -1,
+                j: -1,
+                k: start, // position in index table
             }
+        }
 
     }
 
-   async insert(key, field1, field2, removed = false, animate=false) {
-       let readTimes,writeTimes=0;
+    async insert(key, field1, field2, removed = false, animate = false) {
+        let readTimes, writeTimes = 0;
         // let i , j = 0;
-        if (this.indexTable.length  === this.maxIndex ) {
+        if (this.indexTable.length === this.maxIndex) {
             return false
         }
 
         console.log(this.search(key))
-       console.log(this.blocks)
+        console.log(this.blocks)
         let {
-            found : found,
-            pos : pos
+            found: found,
+            pos: pos
         } = this.search(key);
 
         if (!found) {
@@ -186,11 +186,11 @@ export default class NotClustered extends TableFile {
 
             let m = this.indexTable.length;
             this.indexTable.push(-1)
-            while ( m > pos.k) {
-                this.indexTable[m] = this.indexTable[m-1]
+            while (m > pos.k) {
+                this.indexTable[m] = this.indexTable[m - 1]
                 m--;
             }
-            this.indexTable[pos.k] = new IndexCouple(key, this.blocks.indexOf(this.blocks[this.blocks.length - 1]), this.blocks[this.blocks.length-1].nb - 1);
+            this.indexTable[pos.k] = new IndexCouple(key, this.blocks.indexOf(this.blocks[this.blocks.length - 1]), this.blocks[this.blocks.length - 1].nb - 1);
             console.table(this.indexTable)
             return true;
         }
@@ -198,8 +198,8 @@ export default class NotClustered extends TableFile {
 
     removeLogically(key, animate = false) {
         let {
-            found : found,
-                pos : pos
+            found: found,
+            pos: pos
         } = this.search(key);
 
         if (found) {
@@ -211,8 +211,8 @@ export default class NotClustered extends TableFile {
 
     editEnreg(key, field1, field2, removed = false, animate = false) {
         let {
-            found : found,
-            pos : pos
+            found: found,
+            pos: pos
         } = this.search(key);
 
         if (found) {
@@ -224,7 +224,7 @@ export default class NotClustered extends TableFile {
         return false;
     }
 
-    createIndexTableDOM(){
+    createIndexTableDOM() {
         this.indexTableHtml.selectAll('*').remove();
         for (let couple of this.indexTable) {
             let html = `           
