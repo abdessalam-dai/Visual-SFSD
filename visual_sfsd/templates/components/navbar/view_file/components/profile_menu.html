@@ -2,7 +2,7 @@
 
 <li class="">
     <button data-dropdown-toggle="profile-menu" type="button">
-        <img src="{% static 'imgs/profile.jpeg' %}" class="rounded-full w-10" alt="">
+        <img src="{% static 'imgs/user.png' %}" class="rounded-full w-10" alt="">
     </button>
     <div id="profile-menu" class="hidden relative" style="z-index: 9999;">
         <div class="rect-top"></div>
@@ -12,7 +12,7 @@
                 <li class="border-b-2">
                     <a href="{% url 'settings' %}"
                        class="flex flex-row px-4 py-2 space-x-4 justify-start items-center">
-                        <img src="{% static 'imgs/profile.jpeg' %}" class="w-10 rounded-full" alt="">
+                        <img src="{% static 'imgs/user.png' %}" class="w-10 rounded-full" alt="">
                         <div class="flex flex-col text-white">
                             <span class="font-semibold">{{ request.user.first_name }} {{ request.user.last_name }}</span>
                             <span class="font-normal ">{{ user.account.get_role_display }}</span>

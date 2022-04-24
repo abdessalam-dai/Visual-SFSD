@@ -160,3 +160,10 @@ def change_password(request):
             message = 'Your old password is wrong !'
 
     return HttpResponse(json.dumps(message), content_type='application/json')
+
+
+@login_required
+def delete_account(request):
+    user = request.user
+    user.delete()
+    return redirect('home')
