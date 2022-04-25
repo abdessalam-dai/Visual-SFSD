@@ -1,6 +1,5 @@
 import json
 
-from django import forms
 from django.contrib.auth.models import User
 from django.apps import apps
 from django.contrib.auth.decorators import login_required
@@ -46,7 +45,7 @@ def login_page(request):
 
 def logout_user(request):
     logout(request)
-    return redirect('home')
+    return redirect('login')
 
 
 def register(request):
@@ -62,7 +61,7 @@ def register(request):
             user.set_password(
                 form.cleaned_data['password']
             )
-            user.username = f"{user.first_name.lower()[0]}_{user.last_name.lower().replace(' ', '_')}"
+            # user.username = f"{user.first_name.lower()[0]}_{user.last_name.lower().replace(' ', '_')}"
             user.save()
 
             # create Account object associated for the user
@@ -187,4 +186,4 @@ def change_password(request):
 def delete_account(request):
     user = request.user
     user.delete()
-    return redirect('home')
+    return redirect('login')

@@ -2,13 +2,6 @@
 <div class="settings-section flex flex-row justify-center space-x-7 flex-wrap p-20">
     <div class="profile-info mb-7 p-10 mb-4 rounded-3xl bg-white text-center shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
         <h2 class="block text-center font-bold text-4xl">Profile</h2>
-        <div class="profile-img overflow-hidden rounded-full relative w-[220px] h-[220px] m-auto mt-5">
-            <img src="{% static 'imgs/user.png' %}" class="rounded-full w-full h-full" alt="">
-            <!-- overlay -->
-            <div class="profile-img-change flex bg-zinc-500 bg-opacity-70 cursor-pointer py-7 justify-center absolute top-[220px] left-0 w-full h-1/2 rounded-b-full">
-                <span class="text-2xl text-white">Change</span>
-            </div>
-        </div>
         <div class="mt-8">
             {% include 'accounts/settings/components/update_profile_form.html' %}
         </div>
@@ -30,12 +23,6 @@
         </div>
     </div>
 </div>
-
-<style>
-    .profile-img:hover .profile-img-change {
-        top: 110px;
-    }
-</style>
 
 
 {% include 'accounts/settings/components/change_password.html' %}

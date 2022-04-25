@@ -5,6 +5,17 @@ from django.forms import ModelForm
 
 class UserRegistrationForm(ModelForm):
     input_classes = 'focus:outline-blue-500 block m-auto p-5 w-full rounded-full custom-shadow'
+    username = forms.CharField(
+        label='Username',
+        min_length=2,
+        max_length=150,
+        widget=forms.TextInput(attrs={
+            'class': input_classes,
+            'placeholder': 'Username',
+            'autofocus': ''
+        }),
+    )
+
     first_name = forms.CharField(
         label='First Name',
         min_length=2,
@@ -12,7 +23,6 @@ class UserRegistrationForm(ModelForm):
         widget=forms.TextInput(attrs={
             'class': input_classes,
             'placeholder': 'First Name',
-            'autofocus': ''
         }),
     )
 
@@ -52,7 +62,7 @@ class UserRegistrationForm(ModelForm):
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'email')
+        fields = ('username', 'first_name', 'last_name', 'email')
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
@@ -114,13 +124,6 @@ class UpdateProfileForm(ModelForm):
     class Meta:
         model = User
         fields = ('username', 'first_name', 'last_name', 'email')
-
-    # # error here, it says username already exists
-    # def clean_username(self):
-    #     username = self.cleaned_data.get('username')
-    #     if User.objects.exclude(pk=self.user.pk).filter(username=username).exists():
-    #         raise forms.ValidationError("Username is not available")
-    #     return username
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
