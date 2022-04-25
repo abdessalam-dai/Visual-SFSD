@@ -9,22 +9,8 @@
                 <span class="text-2xl text-white">Change</span>
             </div>
         </div>
-        <div class="inputs mt-8">
-            <div class="mb-6 flex justify-center space-x-3">
-                <label for="name" class="font-bold text-2xl mt-1">Name</label>
-                <input id="name" class="border w-full rounded-xl border-[#232323] p-2" type="text" placeholder="Ouassim Hamdani">
-            </div>
-
-            <div class="mb-6 flex justify-center space-x-3">
-                <label for="name" class="font-bold text-2xl mt-1">Name</label>
-                <input id="name" class="border w-full rounded-xl border-[#232323] p-2" type="text" placeholder="Ouassim Hamdani">
-            </div>
-
-            <div class="flex justify-center space-x-3">
-                <label for="email" class="font-bold text-2xl mt-1">Email</label>
-                <input id="email" class="border w-full rounded-xl border-[#232323] p-2" type="email" placeholder="o_hamdani@estin.dz">
-            </div>
-
+        <div class="mt-8">
+            {% include 'accounts/settings/components/update_profile_form.html' %}
         </div>
     </div>
     <div>

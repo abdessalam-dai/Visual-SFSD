@@ -1,0 +1,42 @@
+<form method="POST" action="">
+    {% csrf_token %}
+
+     <div class="mb-8">
+        <div class="mb-3">
+            {{ form.username }}
+        </div>
+        <div class="text-red-500">
+            {{ form.username.errors|escape }}
+        </div>
+    </div>
+    <div class="flex flex-row space-x-5  mb-5">
+        <div>
+            <div class="mb-3">
+                {{ form.first_name }}
+            </div>
+            <div class="text-red-500">
+                {{ form.first_name.errors|escape }}
+            </div>
+        </div>
+        <div>
+            <div class="mb-3">
+                {{ form.last_name }}
+            </div>
+            <div class="text-red-500">
+                {{ form.last_name.errors|escape }}
+            </div>
+        </div>
+    </div>
+    <div class="mb-8">
+        <div class="mb-3">
+            {{ form.email }}
+        </div>
+        <div class="text-red-500">
+            {{ form.email.errors|escape }}
+        </div>
+    </div>
+    <button type="submit"
+            class="rounded-full bg-[#879EF1] hover:bg-[#BA68C8] transition-all text-white text-2xl py-4 px-[50px] cursor-pointer">
+        Update
+    </button>
+</form>

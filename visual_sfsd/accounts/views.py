@@ -1,5 +1,6 @@
 import json
 
+from django import forms
 from django.contrib.auth.models import User
 from django.apps import apps
 from django.contrib.auth.decorators import login_required
@@ -11,7 +12,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.views.decorators.http import require_POST
 
 from .models import Account
-from .forms import UserRegistrationForm
+from .forms import UserRegistrationForm, UpdateProfileForm
 
 File = apps.get_model(app_label='files', model_name='File')
 
@@ -83,7 +84,27 @@ def register(request):
 
 @login_required
 def settings(request):
-    return render(request, 'accounts/settings/index.html')
+    user = request.user
+
+    if request.method == 'POST':
+        form = UpdateProfileForm(request.POST, instance=user, user=user)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            f_name = form.cleaned_data['first_name']
+            l_name = form.cleaned_data['last_name']
+            email = form.cleaned_data['email']
+
+            user.username = username
+            user.first_name = f_name
+            user.last_name = l_name
+            user.email = email
+            user.save()
+    else:
+        form = UpdateProfileForm(instance=request.user, user=user)
+
+    context = {'form': form}
+
+    return render(request, 'accounts/settings/index.html', context=context)
 
 
 @login_required
