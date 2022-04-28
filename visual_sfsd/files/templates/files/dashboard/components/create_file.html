@@ -110,33 +110,28 @@
                 <div id="step-3-hashing" class="hidden">
                     <h1 class="font-bold text-3xl">Choose the type of <span class="text-purple-600">file</span></h1>
                     <ul class="flex flex-row justify-center mt-10">
-                        <li data-type="static"
+                        <li data-type="essai-linear"
                             id="file-type-btn"
-                            class="transition-all ease-in-out bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer rounded-l-2xl">
-                            Static
-                        </li>
-                        <li data-type="dynamic"
-                            id="file-type-btn"
-                            class="transition-all ease-in-out bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer rounded-r-2xl">
-                            Dynamic
+                            class="transition-all ease-in-out bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer rounded-2xl">
+                            Essai Linear
                         </li>
                     </ul>
                 </div>
                 <!-- END - step 3 -->
 
                 <!-- START - step 4 -->
-                <div id="step-4-sequential" class="hidden">
+                <div id="step-4" class="hidden">
                     <h1 class="font-bold text-3xl mb-8">File configuration</h1>
                     <div class="text-left mb-4">
                         <label for="max-nb-enregs"
                                class="block mb-2 text-lg font-medium text-gray-900 dark:text-gray-300">
-                            Max. number of elements
+                            Max. number of elements per block
                         </label>
                         <input name="max-nb-enregs"
                                id="max-nb-enregs"
                                autocomplete="off"
                                value="8"
-                               type="number" placeholder="Max. number of elements"
+                               type="number" placeholder="Max. number of elements per block"
                                min="4"
                                max="8"
                                class="w-full px-3 py-2 border border-slate-300 rounded-md text-lg shadow-sm placeholder-gray-400 px-4
@@ -162,31 +157,10 @@
                         />
                     </div>
 
-                    <button id="submit-create-file"
-                            type="submit"
-                            class="text-white mt-8 bg-[#733A8E] disabled:bg-gray-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-2xl w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                        Create
-                    </button>
-                </div>
-
-                <div id="step-4-indexed" class="hidden">
-                    <h1 class="font-bold text-3xl mb-8">File configuration</h1>
-                    <div class="text-left mb-4">
-                        <label for="max-index-table"
-                               class="block mb-2 text-lg font-medium text-gray-900 dark:text-gray-300">
-                            Max. index table
-                        </label>
-                        <input name="max-index-table"
-                               id="max-index-table"
-                               autocomplete="off"
-                               value="8"
-                               type="number" placeholder="Max. index table"
-                               min="8"
-                               max="160"
-                               class="w-full px-3 py-2 border border-slate-300 rounded-md text-lg shadow-sm placeholder-gray-400 px-4
-                                focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
-                                bg-gray-50"
-                        />
+                    <!-- For indexed files only -->
+                    <!-- Calculate and display the size of the index table -->
+                    <div id="index-table-size" class="hidden mt-2 text-lg font-medium text-gray-900">
+                        Index table size = <span>800</span>
                     </div>
 
                     <button id="submit-create-file"
@@ -195,12 +169,12 @@
                         Create
                     </button>
                 </div>
+
                 <!-- END - step 4 -->
             </div>
         </form>
     </div>
 </div>
-
 
 
 {#                    <div class="flex items-start hidden">#}

@@ -51,8 +51,6 @@ export default class TableFile extends SequentialFile {
     }
 
     createBoardsDOM(isIndexed = false) {
-        // if (isIndexed) this.createIndexTableDOM();
-
         // set number of blocks and number of elements in header
         let lastElementShown;
         d3.select("#nb-blocks")

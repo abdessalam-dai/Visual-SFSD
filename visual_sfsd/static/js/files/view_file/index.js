@@ -2,9 +2,10 @@ import TOF from "../SFSD/types/simple/TOF.js";
 import TnOF from "../SFSD/types/simple/TnOF.js";
 import LOF from "../SFSD/types/simple/LOF.js";
 import LnOF from "../SFSD/types/simple/LnOF.js";
-import {Block, Enreg} from "../SFSD/SFSD.js";
 import NotClustered from "../SFSD/types/indexed/NotClustered.js";
 import Clustered from "../SFSD/types/indexed/Clustered.js";
+import {Block, Enreg} from "../SFSD/SFSD.js";
+import IndexCouple from "../SFSD/structres/IndexCouple.js";
 import {animate} from "./shared/animationSpeed.js";
 import * as DomElements from "./DomElements.js";
 import "./shared/fileHead.js";
@@ -16,7 +17,6 @@ function isNumeric(value) {
     return /^-?\d+$/.test(value);
 }
 
-
 const getValue = (element) => {
     return parseInt(element.value);
 }
@@ -27,16 +27,14 @@ const getValue = (element) => {
 const buff = d3.select(".buf");
 const buff2 = d3.select(".buf2");
 const MSBoard = d3.select(".ms-container");
+const indexTableHtml = d3.select("#index-table");
 let toolTipIsVisible = false;
 let ToolTipToHide;
 
-
-const indexTableHtml = d3.select("#index-table");
-
 let newFile;
 
+// START - put the blocks in an array
 let blocks = [];
-
 for (let block of fileData["blocks"]) {
     let b;
     if (block !== null) {
@@ -53,8 +51,19 @@ for (let block of fileData["blocks"]) {
     }
     blocks.push(b);
 }
-
 console.log(blocks)
+// END - put the blocks in an array
+
+// START - put the index table in an array
+let indexTable = [];
+if (FILE_TYPE in ["clustered", "not_clustered"]) {
+    for (let couple of fileData["indexTable"]) {
+        let c = new IndexCouple(couple["key"], couple["i"], couple["j"]);
+        indexTable.push(c);
+    }
+    console.log(indexTable);
+}
+// END - put the index table in an array
 
 console.log(FILE_TYPE)
 
@@ -70,25 +79,25 @@ if (FILE_TYPE === "not_clustered") {
         parseInt(fileData["characteristics"]["nbBlocks"]),
         parseInt(fileData["characteristics"]["nbInsertions"]),
         blocks,
-        [],
-        40,
+        indexTable,
+        parseInt(fileData["characteristics"]["maxIndex"]),
         indexTableHtml
     );
 } else if (FILE_TYPE === "clustered") {
-  newFile = new Clustered(
-          FILE_NAME,
-          buff,
-          buff2,
-          MSBoard,
-          parseInt(fileData["characteristics"]["maxNbEnregs"]),
-          parseInt(fileData["characteristics"]["maxNbBlocks"]),
-          parseInt(fileData["characteristics"]["nbBlocks"]),
-          parseInt(fileData["characteristics"]["nbInsertions"]),
-          blocks,
-          [],
-          40,
-          indexTableHtml
-      );
+    newFile = new Clustered(
+        FILE_NAME,
+        buff,
+        buff2,
+        MSBoard,
+        parseInt(fileData["characteristics"]["maxNbEnregs"]),
+        parseInt(fileData["characteristics"]["maxNbBlocks"]),
+        parseInt(fileData["characteristics"]["nbBlocks"]),
+        parseInt(fileData["characteristics"]["nbInsertions"]),
+        blocks,
+        indexTable,
+        parseInt(fileData["characteristics"]["maxIndex"]),
+        indexTableHtml
+    );
 } else if (FILE_TYPE === "TOF") {
     newFile = new TOF(
         FILE_NAME,

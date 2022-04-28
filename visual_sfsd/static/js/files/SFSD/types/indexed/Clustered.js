@@ -1,13 +1,3 @@
-// import {
-//     MAX_NB_ENREGS_DEFAULT,
-//     NB_BLOCKS_DEFAULT,
-//     NB_INSERTIONS_DEFAULT,
-//     BLOCKS_DEFAULT,
-//     ENREG_SIZE,
-//     MAX_NB_BLOCKS,
-//     ENREG_HIGHLIGHT_GREEN,
-// } from '../../constants.js';
-import TableFile from "../../structres/TableFile.js";
 import Enreg from '../../structres/Enreg.js';
 import Block from '../../structres/Block.js';
 import {
@@ -19,9 +9,10 @@ import {
 } from "../../../constants.js";
 import IndexCouple from "../../structres/IndexCouple.js";
 import {delay, sleep} from "../../../view_file/shared/animationSpeed.js";
+import IndexedFile from "../../structres/IndexedFile.js";
 
 
-export default class Clustered extends TableFile {
+export default class Clustered extends IndexedFile {
     constructor(
         name,
         buff,
@@ -33,7 +24,7 @@ export default class Clustered extends TableFile {
         nbInsertions = NB_INSERTIONS_DEFAULT,
         blocks = BLOCKS_DEFAULT,
         indexTable = [],
-        maxIndex = NB_BLOCKS_DEFAULT * MAX_NB_ENREGS_DEFAULT,
+        maxIndex = MAX_NB_BLOCKS,
         indexTableHtml
     ) {
         super(
@@ -45,11 +36,11 @@ export default class Clustered extends TableFile {
             maxNbBlocks,
             nbBlocks,
             nbInsertions,
-            blocks
+            blocks,
+            indexTable,
+            maxIndex,
+            indexTableHtml
         );
-        this.indexTable = indexTable;
-        this.maxIndex = maxIndex;
-        this.indexTableHtml = indexTableHtml;
     }
 
     search(key, animate = false) {
@@ -442,26 +433,5 @@ export default class Clustered extends TableFile {
             return true;
         }
         return false;
-    }
-
-    createIndexTableDOM() {
-        this.indexTableHtml.selectAll('*').remove();
-        console.log(this.indexTable)
-        console.log(this.blocks)
-        for (let couple of this.indexTable) {
-            let html = `
-            <div class="cell bg-slate-200 text-center border-gray-700">
-                <div class="key bg-gray-100 w-12 h-20 min-w-fit text-gray-800 border-r-2 px-1 py-6 border-gray-500 border-b-2">
-                    ${couple.key}
-                </div>
-                <div class="pos-i px-2 py-2 w-12 h-10 min-w-fit border-r-2 border-gray-600 border-gray-500 border-b-2">
-                    ${couple.i}
-                </div>
-                <div class="pos-j px-2 py-2 w-12 h-10 min-w-fit border-r-2 border-gray-600 border-gray-500 border-b-2">
-                    ${couple.j}
-                </div>
-            </div>`
-            this.indexTableHtml.node().insertAdjacentHTML('beforeend', html);
-        }
     }
 }

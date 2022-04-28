@@ -47,6 +47,13 @@
                                 <span id="nb-elements"
                                       class="text-white">{{ dataPy.characteristics.maxNbEnregs }}</span>
                             </li>
+                            {% if file.file_access == 'indexed' %}
+                                <li class="flex rounded-b-md text-center flex-row justify-between px-2 py-1 border-b-2 items-center space-x-2">
+                                    <span class="text-sm text-blue-300">Index table size</span>
+                                    <span id="index-table-size"
+                                          class="text-white">{{ dataPy.characteristics.maxIndex }}</span>
+                                </li>
+                            {% endif %}
                         </ul>
                     </div>
                 </div>

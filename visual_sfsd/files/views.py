@@ -125,8 +125,8 @@ def dashboard(request):
         max_nb_enregs = request.POST.get('max-nb-enregs').strip()
         max_nb_blocks = request.POST.get('max-nb-blocks').strip()
 
-        if 1 <= len(f_name) <= 100 and f_access in ACCESS_TYPES.keys() and f_type in ACCESS_TYPES[
-            f_access] and 5 <= int(max_nb_blocks) <= 100 and 4 <= int(max_nb_enregs) <= 8:
+        if 1 <= len(f_name) <= 100 and f_access in ACCESS_TYPES.keys() and \
+                f_type in ACCESS_TYPES[f_access] and 5 <= int(max_nb_blocks) <= 100 and 4 <= int(max_nb_enregs) <= 8:
             data = {
                 "name": f_name,
                 "characteristics": {
@@ -135,12 +135,19 @@ def dashboard(request):
                     "nbBlocks": 0,
                     "nbInsertions": 0
                 },
+                "indexTable": [],
                 "blocks": [],
             }
 
             if f_type in ['LOF', 'LnOF']:
                 data["characteristics"]["headIndex"] = -1
                 data["characteristics"]["tailIndex"] = -1
+
+            if f_type == 'clustered':
+                data["characteristics"]["maxIndex"] = max_nb_blocks
+
+            if f_type == 'not_clustered':
+                data["characteristics"]["maxIndex"] = int(max_nb_blocks) * int(max_nb_enregs)
 
             file = File(
                 owner=request.user,
