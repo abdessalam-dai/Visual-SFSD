@@ -8,7 +8,9 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.core.mail import send_mail
 from django.views.decorators.http import require_POST
+from django.conf.global_settings import EMAIL_HOST_USER
 
 from .models import Account
 from .forms import UserRegistrationForm, UpdateProfileForm
@@ -67,6 +69,20 @@ def register(request):
             # create Account object associated for the user
             account = Account(user=user, role='student')
             account.save()
+
+            # send email to user
+            user_f_name = form.cleaned_data['first_name']
+            user_l_name = form.cleaned_data['last_name']
+            user_email = form.cleaned_data['email']
+            subject = "Your account has been created successfully"
+            message = f"Hello {user_f_name} {user_l_name}! Your account has been created successfully"
+            send_mail(
+                subject=subject,
+                message=message,
+                from_email=EMAIL_HOST_USER,
+                recipient_list=[user_email],
+                fail_silently=False,
+            )
 
             messages.success(request, "Your account has been created successfully, you can login now")
             return redirect('login')
