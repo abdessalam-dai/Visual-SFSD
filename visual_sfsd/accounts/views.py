@@ -1,13 +1,17 @@
+import json
+
 from django.contrib.auth.models import User
 from django.apps import apps
 from django.contrib.auth.decorators import login_required
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.views.decorators.http import require_POST
+
 from .models import Account
-from .forms import UserRegistrationForm
+from .forms import UserRegistrationForm, UpdateProfileForm
 
 File = apps.get_model(app_label='files', model_name='File')
 
@@ -41,7 +45,7 @@ def login_page(request):
 
 def logout_user(request):
     logout(request)
-    return redirect('home')
+    return redirect('login')
 
 
 def register(request):
@@ -57,7 +61,7 @@ def register(request):
             user.set_password(
                 form.cleaned_data['password']
             )
-            user.username = f"{user.first_name.lower()[0]}_{user.last_name.lower().replace(' ', '_')}"
+            # user.username = f"{user.first_name.lower()[0]}_{user.last_name.lower().replace(' ', '_')}"
             user.save()
 
             # create Account object associated for the user
@@ -79,7 +83,27 @@ def register(request):
 
 @login_required
 def settings(request):
-    return render(request, 'accounts/settings/index.html')
+    user = request.user
+
+    if request.method == 'POST':
+        form = UpdateProfileForm(request.POST, instance=user, user=user)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            f_name = form.cleaned_data['first_name']
+            l_name = form.cleaned_data['last_name']
+            email = form.cleaned_data['email']
+
+            user.username = username
+            user.first_name = f_name
+            user.last_name = l_name
+            user.email = email
+            user.save()
+    else:
+        form = UpdateProfileForm(instance=request.user, user=user)
+
+    context = {'form': form}
+
+    return render(request, 'accounts/settings/index.html', context=context)
 
 
 @login_required
@@ -131,3 +155,35 @@ def profile(request, username):
         return render(request, 'accounts/profile/index.html', context)
     except:
         raise Http404
+
+
+@login_required
+@require_POST
+def change_password(request):
+    user = request.user
+    message = {}
+
+    if request.method == 'POST':
+        old_password = request.POST.get('old_password')
+        new_password = request.POST.get('new_password')
+        retype_new_password = request.POST.get('re_new_password')
+
+        if user.check_password(old_password):
+            if new_password == retype_new_password and new_password != '':
+                user.set_password(new_password)
+                user.save()
+                message = 'Password was successfully changed'
+                update_session_auth_hash(request, request.user)  # This code will keep session when user change password
+            else:
+                message = 'Invalid Passwords !'
+        else:
+            message = 'Your old password is wrong !'
+
+    return HttpResponse(json.dumps(message), content_type='application/json')
+
+
+@login_required
+def delete_account(request):
+    user = request.user
+    user.delete()
+    return redirect('login')

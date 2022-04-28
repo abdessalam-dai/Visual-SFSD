@@ -1,8 +1,8 @@
 <div class="flex justify-start flex-wrap">
 
     {% for file in files %}
-        <a href="{% url 'view_file' file.id %}" class="mb-8 mx-3.5 w-[220px] h-[190px] rounded-3xl">
-            <div class="file-info rounded-3xl bg-white w-full h-full pt-4 pl-6 pb-10 pr-10  shadow-[0px_4px_4px_rgba(0,0,0,0.25)]"
+        <a href="{% url 'view_file' file.id %}" class="mb-8 mx-3.5 w-[220px] h-[190px] rounded-3xl bg-white hover:bg-gray-100 transition-all hover:translate-y-1 focus:translate-y-1 focus:bg-gray-100">
+            <div class="file-info rounded-3xl w-full h-full pt-4 pl-6 pb-10 pr-10  shadow-[0px_4px_4px_rgba(0,0,0,0.25)]"
                  draggable="true"
                  data-id="{{ file.id }}">
                 <h2 class="file-name font-bold text-4xl break-words">{{ file.name|truncatechars:10 }}</h2>

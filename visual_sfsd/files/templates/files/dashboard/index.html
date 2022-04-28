@@ -30,6 +30,7 @@
 
     <div class="p-20">
         {% include 'accounts/profile/components/files.html' with files=files %}
+        {% include 'files/dashboard/components/delete_file_area.html' with files=files %}
         {% include 'files/dashboard/components/pagination.html' with page=files %}
     </div>
     {% include 'files/dashboard/components/create_file.html' %}

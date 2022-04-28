@@ -4,7 +4,6 @@ import * as API from "./api.js";
 const files = document.querySelectorAll('.file-info');
 const deleteFileArea = document.getElementById('delete-file-section');
 let dragged;
-let index = 0;
 
 function dragStart(e) {
     dragged = e.target;

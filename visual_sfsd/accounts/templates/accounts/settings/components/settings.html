@@ -2,44 +2,28 @@
 <div class="settings-section flex flex-row justify-center space-x-7 flex-wrap p-20">
     <div class="profile-info mb-7 p-10 mb-4 rounded-3xl bg-white text-center shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
         <h2 class="block text-center font-bold text-4xl">Profile</h2>
-        <div class="profile-img overflow-hidden relative w-[220px] h-[220px] m-auto mt-5">
-            <img src="{% static 'imgs/profile.jpeg' %}" class="rounded-full w-full h-full" alt="">
-            <!-- overlay -->
-            <div class="profile-img-change flex bg-zinc-500 bg-opacity-70 cursor-pointer py-7 justify-center absolute top-[220px] left-0 w-full h-1/2 rounded-b-full">
-                <span class="text-2xl text-white">Change</span>
-            </div>
-        </div>
-        <div class="inputs mt-8">
-            <div class="mb-6 flex justify-center space-x-3">
-                <label for="name" class="font-bold text-2xl mt-1">Name</label>
-                <input id="name" class="border w-full rounded-xl border-[#232323] p-2" type="text" placeholder="Ouassim Hamdani">
-            </div>
-
-            <div class="flex justify-center space-x-3">
-                <label for="email" class="font-bold text-2xl mt-1">Email</label>
-                <input id="email" class="border w-full rounded-xl border-[#232323] p-2" type="email" placeholder="o_hamdani@estin.dz">
-            </div>
-
+        <div class="mt-8">
+            {% include 'accounts/settings/components/update_profile_form.html' %}
         </div>
     </div>
     <div>
         <div class="security p-16 pt-10 bg-white mb-7 rounded-3xl shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
             <h1 class="block text-center font-bold text-4xl">Security</h1>
             <div class="flex justify-center">
-                <button class="delete-account-btn text-white bg-[#5C5C5C] p-6 rounded-3xl mt-6">Chnage  password</button>
+                <button id="open-change-password-modal"
+                        class="text-white bg-[#5C5C5C] p-6 rounded-3xl mt-6">Change password</button>
             </div>
         </div>
         <div class="deletion-account p-16 pt-10 bg-white rounded-3xl shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
             <h1 class="block text-center font-bold text-4xl">Deletion</h1>
             <div class="flex justify-center">
-                <button class="delete-account-btn text-white bg-[#BC2F2F] p-6 rounded-3xl mt-6">Delete Account</button>
+                <button id="open-delete-account-modal"
+                        class="delete-account-btn text-white bg-[#BC2F2F] p-6 rounded-3xl mt-6">Delete Account</button>
             </div>
         </div>
     </div>
 </div>
 
-<style>
-    .profile-img:hover .profile-img-change {
-        top: 110px;
-    }
-</style>
+
+{% include 'accounts/settings/components/change_password.html' %}
+{% include 'accounts/settings/components/delete_account.html' %}
