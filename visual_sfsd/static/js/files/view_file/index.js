@@ -10,7 +10,6 @@ import {animate} from "./shared/animationSpeed.js";
 import * as DomElements from "./DomElements.js";
 import "./shared/fileHead.js";
 import "./shared/MC.js";
-import EssaiLinear from "../SFSD/types/hashing/static/direct-hash/EssaiLinear.js";
 
 
 // START - useful functions
@@ -29,7 +28,6 @@ const buff = d3.select(".buf");
 const buff2 = d3.select(".buf2");
 const MSBoard = d3.select(".ms-container");
 const indexTableHtml = d3.select("#index-table");
-const hashTableHTML = d3.select("#hash-table");
 let toolTipIsVisible = false;
 let ToolTipToHide;
 
@@ -68,27 +66,9 @@ if (FILE_TYPE in ["clustered", "not_clustered"]) {
 // END - put the index table in an array
 
 console.log(FILE_TYPE)
-console.log(FILE_ACCESS)
 
-if (FILE_TYPE === "static") {
 
-    newFile = new EssaiLinear(
-        FILE_NAME,
-        buff,
-        buff2,
-        MSBoard,
-        parseInt(fileData["characteristics"]["maxNbEnregs"]),
-        parseInt(fileData["characteristics"]["maxNbBlocks"]),
-        parseInt(fileData["characteristics"]["nbBlocks"]),
-        parseInt(fileData["characteristics"]["nbInsertions"]),
-        blocks,
-        [],
-        hashTableHTML
-    );
-}
-
-else if (FILE_TYPE === "not_clustered") {
-
+if (FILE_TYPE === "not_clustered") {
     newFile = new NotClustered(
         FILE_NAME,
         buff,
@@ -172,7 +152,7 @@ else if (FILE_TYPE === "not_clustered") {
     );
 }
 
-// console.log(newFile.getJsonFormat());
+console.log(newFile.getJsonFormat());
 newFile.createBoardsDOM(FILE_ACCESS === 'indexed');
 
 // END - Create file
@@ -577,7 +557,6 @@ const handleScrollButtons = () => {
 }
 
 handleScrollButtons();
-
 // END - Scroll buttons
 
 
