@@ -4,6 +4,7 @@ import LOF from "../SFSD/types/simple/LOF.js";
 import LnOF from "../SFSD/types/simple/LnOF.js";
 import NotClustered from "../SFSD/types/indexed/NotClustered.js";
 import Clustered from "../SFSD/types/indexed/Clustered.js";
+import EssaiLinear from "../SFSD/types/hashing/EssaiLinear.js";
 import {Block, Enreg} from "../SFSD/SFSD.js";
 import IndexCouple from "../SFSD/structres/IndexCouple.js";
 import {animate} from "./shared/animationSpeed.js";
@@ -132,7 +133,7 @@ if (FILE_TYPE === "not_clustered") {
         parseInt(fileData["characteristics"]["headIndex"]),
         parseInt(fileData["characteristics"]["tailIndex"])
     );
-} else {
+} else if (FILE_TYPE === "LnOF") {
     newFile = new LnOF(
         FILE_NAME,
         buff,
@@ -145,6 +146,19 @@ if (FILE_TYPE === "not_clustered") {
         blocks,
         parseInt(fileData["characteristics"]["headIndex"]),
         parseInt(fileData["characteristics"]["tailIndex"])
+    );
+} else if (FILE_TYPE === "static") {
+    newFile = new EssaiLinear(
+        FILE_NAME,
+        buff,
+        buff2,
+        MSBoard,
+        parseInt(fileData["characteristics"]["maxNbEnregs"]),
+        parseInt(fileData["characteristics"]["maxNbBlocks"]),
+        parseInt(fileData["characteristics"]["nbBlocks"]),
+        parseInt(fileData["characteristics"]["nbInsertions"]),
+        blocks,
+        [],
     );
 }
 
