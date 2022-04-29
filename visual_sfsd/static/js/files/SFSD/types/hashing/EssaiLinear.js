@@ -35,7 +35,13 @@ export default class EssaiLinear extends TableFile {
             nbInsertions,
             blocks
         );
+        this.init();
+    }
 
+    init() {
+        while (this.blocks.length < this.maxNbBlocks) {
+            this.blocks.push(new Block([]));
+        }
     }
 
     search(key, animate = false) {
@@ -46,7 +52,7 @@ export default class EssaiLinear extends TableFile {
         while (!found && !stop) {
             let currBlock = this.blocks[i];
             let j = 0;
-            // inner seach in the block
+            // inner search in the block
             while (j <= currBlock.nb && !found) {
                 if (key === currBlock.enregs[j].key) {
                     found = true;
@@ -95,6 +101,6 @@ export default class EssaiLinear extends TableFile {
     }
 
     hashFunction(key) {
-
+        return key % this.maxNbBlocks;
     }
 }
