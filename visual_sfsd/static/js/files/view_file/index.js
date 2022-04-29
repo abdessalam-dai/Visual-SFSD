@@ -56,17 +56,13 @@ console.log(blocks)
 
 // START - put the index table in an array
 let indexTable = [];
-if (FILE_TYPE in ["clustered", "not_clustered"]) {
+if (FILE_ACCESS === "indexed") {
     for (let couple of fileData["indexTable"]) {
         let c = new IndexCouple(couple["key"], couple["i"], couple["j"]);
         indexTable.push(c);
     }
-    console.log(indexTable);
 }
 // END - put the index table in an array
-
-console.log(FILE_TYPE)
-
 
 if (FILE_TYPE === "not_clustered") {
     newFile = new NotClustered(
@@ -153,7 +149,10 @@ if (FILE_TYPE === "not_clustered") {
 }
 
 console.log(newFile.getJsonFormat());
-newFile.createBoardsDOM(FILE_ACCESS === 'indexed');
+newFile.createBoardsDOM();
+if (FILE_ACCESS === "indexed") {
+    newFile.createIndexTableDOM();
+}
 
 // END - Create file
 
@@ -387,7 +386,7 @@ const handleGenerateData = () => {
                 );
             }
 
-            newFile.createBoardsDOM(FILE_ACCESS === 'indexed');
+            newFile.createBoardsDOM();
 
             changeButtonsState(false);
         }
@@ -480,7 +479,8 @@ const handleRemovePhysically = () => {
 
             let removeSuccess = await newFile.removePhysically(key, animate);
 
-            newFile.createBoardsDOM(FILE_ACCESS === 'indexed');
+            newFile.createBoardsDOM();
+            if (FILE_ACCESS === 'indexed') newFile.createIndexTableDOM();
 
             console.log(removeSuccess);
 
@@ -511,7 +511,8 @@ const handleInsert = () => {
 
             changeButtonsState(false);
 
-            newFile.createBoardsDOM(FILE_ACCESS === 'indexed');
+            newFile.createBoardsDOM();
+            if (FILE_ACCESS === 'indexed') newFile.createIndexTableDOM();
         }
     });
 }
@@ -536,7 +537,8 @@ const handleEdit = () => {
 
             changeButtonsState(false);
 
-            newFile.createBoardsDOM(FILE_ACCESS === 'indexed');
+            newFile.createBoardsDOM();
+            if (FILE_ACCESS === 'indexed') newFile.createIndexTableDOM();
         }
     });
 }

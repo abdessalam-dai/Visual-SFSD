@@ -1,7 +1,7 @@
 {% load static %}
 <div class="ms w-2/3 flex flex-col">
     {% if file.file_access == 'indexed' %}
-        <div class="my-5 self-center">
+        <div class="my-5 index-table-container overflow-x-scroll flex justify-start py-3">
             {% include "files/view_file/components/index-table.html" %}
         </div>
     {% endif %}

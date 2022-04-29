@@ -3,7 +3,6 @@ import * as DomElements from "../DomElements.js";
 
 let dropDownCharacteristicsIsVisible = false;
 DomElements.entete.addEventListener("click", function () {
-    console.log(DomElements.imageDropDown)
     const fileHeadDropDown = DomElements.fileHeadDropDown;
     if (fileHeadDropDown.classList.contains("hidden")) {
         fileHeadDropDown.classList.remove("hidden");

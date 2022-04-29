@@ -38,21 +38,23 @@ export default class IndexedFile extends TableFile {
         this.indexTableHtml = indexTableHtml;
     }
 
+    isInsertionAllowed() {
+        return this.nbInsertions < this.maxIndex;
+    }
+
     createIndexTableDOM() {
         this.indexTableHtml.selectAll('*').remove();
-        console.log(this.indexTable)
-        console.log(this.blocks)
         for (let couple of this.indexTable) {
             let html = `
-            <div class="cell bg-slate-200 text-center border-gray-700">
-                <div class="key bg-gray-100 w-12 h-20 min-w-fit text-gray-800 border-r-2 px-1 py-6 border-gray-500 border-b-2">
-                    ${couple.key}
+            <div class="cell bg-gray-100 text-center border-gray-700">
+                <div class="key overflow-hidden w-12 h-20 min-w-fit text-gray-800 border-r-2 px-1 py-6 border-gray-500 border-b-2">
+                    <div>${couple.key}</div>
                 </div>
-                <div class="pos-i px-2 py-2 w-12 h-10 min-w-fit border-r-2 border-gray-600 border-gray-500 border-b-2">
-                    ${couple.i}
+                <div class="pos-i  overflow-hidden px-2 py-2 w-12 h-10 min-w-fit border-r-2 border-gray-600 border-gray-500 border-b-2">
+                    <div>${couple.i}</div>
                 </div>
-                <div class="pos-j px-2 py-2 w-12 h-10 min-w-fit border-r-2 border-gray-600 border-gray-500 border-b-2">
-                    ${couple.j}
+                <div class="pos-j  overflow-hidden px-2 py-2 w-12 h-10 min-w-fit border-r-2 border-gray-600 border-gray-500 border-b-2">
+                    <div>${couple.j}</div>
                 </div>
             </div>`
             this.indexTableHtml.node().insertAdjacentHTML('beforeend', html);
