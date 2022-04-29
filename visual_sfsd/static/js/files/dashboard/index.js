@@ -1,5 +1,5 @@
 import * as DE from "./DomElements.js";
-import {dummyDataForm, fillWithDummyData} from "./DomElements.js";
+// import {dummyDataForm, fillWithDummyData} from "./DomElements.js";
 
 
 // form state
@@ -15,15 +15,16 @@ const resetForm = () => {
     DE.fType.value = "TOF";
     DE.maxNbEnregs.value = 8;
     DE.maxNbBlocks.value = 50;
+    DE.indexTableSize.value = 8 * 50;
 
-    // change the visibility of the steps
+    // hide all the steps
     DE.step1.classList.remove('hidden');
     DE.step2.classList.add('hidden');
     DE.step3Sequential.classList.add('hidden');
     DE.step3Indexed.classList.add('hidden');
     DE.step3Hashing.classList.add('hidden');
-    DE.step4Sequential.classList.add('hidden');
-    // DE.step4Indexed.classList.add('hidden');
+    DE.step4.classList.add('hidden');
+    DE.indexTableSize.classList.add('hidden');
     // hide overlay
     DE.createFileModalOverlay.classList.add("hidden");
     DE.createFileModal.classList.add('hidden');
@@ -82,7 +83,7 @@ DE.submitFileNameBtn.addEventListener('click', function (e) {
 });
 DE.fName.addEventListener('keypress', function (e) {
     if (e.key === 'Enter') {
-        e.preventDefault(); // prevent submitting the form
+        e.preventDefault();
         handleFileNameSubmit();
     }
 });
@@ -91,25 +92,19 @@ DE.fName.addEventListener('keypress', function (e) {
 Array.from(DE.fileAccessBtns).forEach((fileAccessBtn) => {
     fileAccessBtn.addEventListener('click', function (e) {
         let access = this.dataset.access;
+        DE.step2.classList.add('hidden');
         switch (access) {
-            case "sequential":
-                DE.fAccess.value = "sequential";
-                DE.step2.classList.add('hidden');
-                DE.step3Sequential.classList.remove('hidden');
-                break;
             case "indexed":
                 DE.fAccess.value = "indexed";
-                DE.step2.classList.add('hidden');
                 DE.step3Indexed.classList.remove('hidden');
                 break;
             case "hashing":
                 DE.fAccess.value = "hashing";
-                DE.step2.classList.add('hidden');
                 DE.step3Hashing.classList.remove('hidden');
                 break;
-            default:
+            default: // sequential
                 DE.fAccess.value = "sequential";
-                DE.step2.classList.remove('hidden');
+                DE.step3Sequential.classList.remove('hidden');
         }
     });
 });
@@ -118,18 +113,25 @@ Array.from(DE.fileAccessBtns).forEach((fileAccessBtn) => {
 Array.from(DE.fileTypeBtns).forEach((fileTypeBtn) => {
     fileTypeBtn.addEventListener('click', function (e) {
         let type_ = this.dataset.type;
+        DE.fType.value = type_;
         switch (type_) {
             case "TOF":
             case "TnOF":
             case "LOF":
             case "LnOF":
-                DE.fType.value = type_;
                 DE.step3Sequential.classList.add('hidden');
-                DE.step4Sequential.classList.remove('hidden');
+                DE.step4.classList.remove('hidden');
                 break;
-            default:
-                DE.fType.value = "TOF";
+            case "clustered":
+            case "not_clustered":
+                DE.step3Indexed.classList.add('hidden');
+                DE.step4.classList.remove('hidden');
+                DE.indexTableSize.classList.remove('hidden');
+                break;
+            // default:
+            //     DE.fType.value = "TOF";
         }
+        fType = DE.fType.value;
 
         handleStep4();
     });
@@ -142,6 +144,12 @@ const handleStep4 = () => {
     let maxNbEnregs = parseInt(DE.maxNbEnregs.value.trim());
     DE.submitCreateFile.disabled = isNaN(maxNbBlocks) || maxNbBlocks < 5 || maxNbBlocks > 100
         || isNaN(maxNbEnregs) || maxNbEnregs < 4 || maxNbEnregs > 8;
+
+    if (!DE.submitCreateFile.disabled && fType === 'not_clustered') {
+        DE.indexTableSize.querySelector("span").textContent = String(maxNbEnregs * maxNbBlocks);
+    } else if (!DE.submitCreateFile.disabled && fType === 'clustered') {
+        DE.indexTableSize.querySelector("span").textContent = String(maxNbBlocks);
+    }
 }
 DE.maxNbBlocks.addEventListener('keyup', function () {
     handleStep4();
