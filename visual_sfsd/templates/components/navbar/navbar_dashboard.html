@@ -2,11 +2,20 @@
 
 <nav class="fixed top-0 left-0 w-full flex bg-white p-4 z-10">
     <div class="w-[400px]"></div>
-    <div class="search-section flex grow">
-        <div class="flex py-3 px-5 space-x-2 rounded-md" style="background-color: #DCD9D9">
-            <img src="{% static 'imgs/navbar-dashboard/search.svg' %}" alt="Search">
-            <input class="border-0 outline-0 bg-transparent pl-2" type="search" placeholder="Search"/>
-        </div>
+    <div class="flex grow">
+        <form method="GET" action="{% url 'dashboard' %}">
+            <div class="flex py-3 px-5 space-x-2 rounded-md" style="background-color: #DCD9D9">
+                {% csrf_token %}
+                <button type="submit">
+                    <img src="{% static 'imgs/navbar-dashboard/search.svg' %}" alt="Search">
+                </button>
+                <input class="border-0 outline-0 bg-transparent pl-2"
+                       type="search"
+                       placeholder="Search"
+                       name="query"
+                />
+            </div>
+        </form>
     </div>
     <a href="{% url 'profile' request.user.username %}"
        class="profile flex mr-4 items-center px-3 hover:bg-gray-200 rounded-md transition-all">

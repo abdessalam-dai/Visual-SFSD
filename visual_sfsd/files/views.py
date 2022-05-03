@@ -1,4 +1,5 @@
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -162,7 +163,16 @@ def dashboard(request):
 
             return redirect('view_file', pk=file.id)
 
-    files_all = request.user.file_set.all().order_by('-date_created')
+    if request.GET.get('query') is not None:
+        query = request.GET.get('query')
+
+        files_all = request.user.file_set.filter(
+            Q(name=query) |
+            Q(file_type__icontains=query) |
+            Q(file_access__icontains=query)
+        ).order_by('-date_created')
+    else:
+        files_all = request.user.file_set.all().order_by('-date_created')
 
     paginator = Paginator(files_all, 20)
     page = request.GET.get('page')
@@ -176,6 +186,35 @@ def dashboard(request):
         'files': files
     }
     return render(request, 'files/dashboard/index.html', context)
+
+#
+# @login_required
+# def search(request):
+#     query = request.GET.get('query')
+#
+#     # files_all = request.user.file_set.all().order_by('-date_created')
+#
+#     if query is not None:
+#         # files_all = File.objects.filter(
+#         files_all = request.user.file_set.filter(
+#             Q(name=query) |
+#             Q(file_type__icontains=query) |
+#             Q(file_access__icontains=query)
+#         ).order_by('-date_created')
+#
+#         paginator = Paginator(files_all, 20)
+#         page = request.GET.get('page')
+#         try:
+#             files = paginator.page(page)
+#         except PageNotAnInteger:
+#             files = paginator.page(1)
+#         except EmptyPage:
+#             files = paginator.page(paginator.num_pages)
+#         context = {
+#             'files': files
+#         }
+#         return render(request, 'files/dashboard/index.html', context)
+#     return redirect('dashboard')
 
 
 # this is used to delete a file (real time) in the dashboard
