@@ -147,7 +147,7 @@ if (FILE_TYPE === "not_clustered") {
         parseInt(fileData["characteristics"]["headIndex"]),
         parseInt(fileData["characteristics"]["tailIndex"])
     );
-} else if (FILE_TYPE === "static") {
+} else if (FILE_TYPE === "essai_linear") {
     newFile = new EssaiLinear(
         FILE_NAME,
         buff,
@@ -409,35 +409,6 @@ const handleGenerateData = () => {
 }
 
 handleGenerateData();
-
-
-if (FILE_TYPE === 'not_clustered') {// FOR TESTING NOT CLUSTERED INDEX TYPES OF FILES
-    // let data = generateData(8, 0, 11);
-    //
-    // newFile.blocks.push(new Block([], 8));
-    // let j = 0;
-    // for (const enreg of data) {
-    //     // await newFile.insert(
-    //     //     enreg.key,
-    //     //     enreg.field1,
-    //     //     enreg.field2,
-    //     //     false,
-    //     //     false
-    //     // )
-    //     // console.log(enreg)
-    //     console.log(newFile)
-    //     newFile.indexTable.push(new IndexCouple(enreg.key, 0, j));
-    //     j++;
-    //     newFile.blocks[0].enregs.push(new Enreg(enreg.key, enreg.field1, enreg.field2, false))
-    // }
-
-    // newFile.indexTable = newFile.indexTable.sort((a, b) => a.key - b.key);
-    // console.table(newFile.indexTable);
-    // console.table(newFile.blocks[0].enregs)
-    // newFile.createBoardsDOM();
-    // console.log(newFile.search(9));
-    // END - Fill with dummy data
-}
 
 
 // START - Search for element

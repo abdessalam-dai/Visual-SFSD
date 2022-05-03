@@ -201,7 +201,6 @@ export default class TableFile extends SequentialFile {
                     .style("cursor", "pointer")
                     .style("position", "relative")
                     .on("click", function (e, enreg) {
-                        console.log(`before if and else`, toolTipEnregHidden, e.target);
                         if (toolTipEnregHidden) {
                             let html = `
                                 <div id="last-element-shown" class="no-select" style="position: absolute; top: 40px; width: 192px; z-index: 900">
