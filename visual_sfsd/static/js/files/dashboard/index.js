@@ -128,6 +128,9 @@ Array.from(DE.fileTypeBtns).forEach((fileTypeBtn) => {
                 DE.step4.classList.remove('hidden');
                 DE.indexTableSize.classList.remove('hidden');
                 break;
+            case "essai_linear":
+                DE.step3Hashing.classList.add('hidden');
+                DE.step4.classList.remove('hidden');
             // default:
             //     DE.fType.value = "TOF";
         }

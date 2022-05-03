@@ -135,6 +135,7 @@ export default class SequentialFile {
 
     updateBlockInMS(i, block) {
         let blockElement = this.MSBoard.select(`.bloc:nth-child(${i + 1})`);
+        console.log(blockElement)
 
         blockElement.select(".bloc-body ul")
             .selectAll("li")

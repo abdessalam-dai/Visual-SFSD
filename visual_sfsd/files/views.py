@@ -117,7 +117,7 @@ def clone_file(request, pk):
 def dashboard(request):
     ACCESS_TYPES = {'sequential': ["TOF", "TnOF", "LOF", "LnOF"],
                     'indexed': ["clustered", "not_clustered"],
-                    'hashing': ["static", "dynamic"]}
+                    'hashing': ["essai_linear"]}
     if request.method == 'POST':
         f_name = request.POST.get('name')
         f_access = request.POST.get('access').strip()
@@ -135,7 +135,6 @@ def dashboard(request):
                     "nbBlocks": 0,
                     "nbInsertions": 0
                 },
-                "indexTable": [],
                 "blocks": [],
             }
 
@@ -144,9 +143,11 @@ def dashboard(request):
                 data["characteristics"]["tailIndex"] = -1
 
             if f_type == 'clustered':
+                data["indexTable"] = []
                 data["characteristics"]["maxIndex"] = max_nb_blocks
 
             if f_type == 'not_clustered':
+                data["indexTable"] = []
                 data["characteristics"]["maxIndex"] = int(max_nb_blocks) * int(max_nb_enregs)
 
             file = File(

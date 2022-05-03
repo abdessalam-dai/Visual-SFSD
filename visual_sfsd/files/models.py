@@ -9,8 +9,7 @@ LOF = 'LOF'
 LnOF = 'LnOF'
 clustered = 'clustered'
 not_clustered = 'not_clustered'
-static = 'static'
-dynamic = 'dynamic'
+essai_linear = 'essai_linear'
 
 
 FILE_TYPE_CHOICES = [
@@ -20,8 +19,7 @@ FILE_TYPE_CHOICES = [
     (LnOF, 'LnOF'),
     (clustered, 'Clustered'),
     (not_clustered, 'Not Clustered'),
-    (static, 'Static'),
-    (dynamic, 'Dynamic'),
+    (essai_linear, 'Essai Linear'),
 ]
 
 sequential = 'sequential'

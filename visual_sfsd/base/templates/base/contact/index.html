@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Contact Us - VisualSFSD</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    {% load static %}
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+
+    <!-- Style sheets -->
+    <link rel="stylesheet" href="{% static 'css/accounts/login.css' %}">
+</head>
+
+<body class="select-none">
+{#{% include 'components/messages.html' %}#}
+<div class="h-screen flex flex-row-reverse bg-[#D2DCFF]">
+    <div class="w-full text-center flex flex-col justify-center py-20 px-10 2xl:rounded-l-[75px] bg-[white] 2xl:w-1/2">
+        <div>
+            <h1 class="text-center font-bold text-6xl mb-12">Contact Us</h1>
+            <div class="w-full 2xl:w-2/3 2xl:px-[50px] m-auto mb-5">
+                {% include 'components/messages.html' %}
+            </div>
+            <div class="flex justify-center items-center">
+                <form method="POST"
+                      class="w-full 2xl:w-2/3 2xl:px-[50px]">
+                    {% csrf_token %}
+
+                    {% for tag in form %}
+                        <div class=" mb-8">
+                            <div class="mb-3">
+                                {{ tag }}
+                            </div>
+                            <div class="text-red-500">
+                                {{ tag.errors|escape }}
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                    <button type="submit"
+                            class="rounded-full bg-[#879EF1] hover:bg-[#BA68C8] transition-all text-white text-2xl py-4 px-[50px] cursor-pointer">
+                        Send
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="side-image w-0 flex justify-center items-center 2xl:w-1/2">
+        <img src="{% static 'imgs/accounts/contact.svg' %}" alt="Register">
+    </div>
+</div>
+</body>
+</html>
+

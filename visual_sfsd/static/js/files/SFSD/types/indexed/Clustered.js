@@ -88,8 +88,8 @@ export default class Clustered extends IndexedFile {
 
     }
 
-    searchMS(key, animate = false) {
-        let searchResult = this.search(key);
+    async searchMS(key, animate = false) {
+        let searchResult = await this.search(key, animate);
         let indexInIndexTable = searchResult.pos.k;
         if (indexInIndexTable === -1) {
             // the case where the there is no block yet
@@ -99,7 +99,6 @@ export default class Clustered extends IndexedFile {
                     i: 0,
                     j: 0
                 }
-
             }
         }
         console.log({indexInIndexTable}, this.indexTable)
@@ -361,7 +360,7 @@ export default class Clustered extends IndexedFile {
                             this.blocks[i] = currBlock;  // save current block in the blocks array
                             writeTimes++;
 
-                            // before going to the next iteraion we make sure that we update the index table
+                            // before going to the next iteration we make sure that we update the index table
                             this.indexTable[i].key = this.blocks[i].enregs[currBlock.nb - 1].key;
                             this.indexTable[i].i = i;
                             this.indexTable[i].j = currBlock.nb - 1;
@@ -404,34 +403,5 @@ export default class Clustered extends IndexedFile {
             this.createIndexTableDOM()
             return true;
         }
-    }
-
-
-    removeLogically(key, animate = false) {
-        let {
-            found: found,
-            pos: pos
-        } = this.search(key);
-
-        if (found) {
-            this.blocks[pos.i].enregs[pos.j].removed = true;
-            return true;
-        }
-        return false;
-    }
-
-    editEnreg(key, field1, field2, removed = false, animate = false) {
-        let {
-            found: found,
-            pos: pos
-        } = this.search(key);
-
-        if (found) {
-            this.blocks[pos.i].enregs[pos.j].field1 = field1;
-            this.blocks[pos.i].enregs[pos.j].field2 = field2;
-            // this.blocks[pos.i].enregs[pos.j].removed = removed;
-            return true;
-        }
-        return false;
     }
 }

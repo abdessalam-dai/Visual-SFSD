@@ -401,6 +401,7 @@ const handleGenerateData = () => {
             }
 
             newFile.createBoardsDOM();
+            if (FILE_ACCESS === 'indexed') newFile.createIndexTableDOM();
 
             changeButtonsState(false);
         }
@@ -469,6 +470,7 @@ const handleRemove = () => {
             changeButtonsState(true);
 
             let key = parseInt(DomElements.keyToRemove.value);
+            console.log(key)
 
             let removeSuccess = await newFile.removeLogically(key, animate);
 
