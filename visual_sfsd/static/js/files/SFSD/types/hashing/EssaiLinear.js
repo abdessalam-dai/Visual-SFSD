@@ -77,7 +77,7 @@ export default class EssaiLinear extends TableFile {
             }
             // if there is still space in the current block we stop search
             // this the criteria of the essay linear method
-            if (currBlock.nb < MAX_NB_ENREGS_DEFAULT) {
+            if (currBlock.nb < this.maxNbEnregs) {
                 stop = true;
             } else {
                 i = i - 1;
@@ -98,7 +98,7 @@ export default class EssaiLinear extends TableFile {
     }
 
     isInsertionAllowed() {
-        return this.nbInsertions < this.maxNbBlocks * this.maxNbEnregs;
+        return this.nbInsertions !== this.nbBlocks * this.maxNbEnregs;
     }
 
     async insert(key, field1, field2, removed = false, animate) {
@@ -128,14 +128,14 @@ export default class EssaiLinear extends TableFile {
         }
     }
 
-    removePhysically(key, animate = false) {
-        let {found, pos} = this.search(key);
+    async removePhysically(key, animate = false) {
+        let {found, pos} = await this.search(key);
         let i = pos.i;
         let j = pos.j;
         console.log(found, i, j)
         if (found) {
             // the i block is full ?
-            if (this.blocks[i].nb === MAX_NB_ENREGS_DEFAULT) {
+            if (this.blocks[i].nb === this.maxNbEnregs) {
                 let k = i - 1;
                 if (k < 0) {
                     k = MAX_NB_BLOCKS - 1;
@@ -166,7 +166,7 @@ export default class EssaiLinear extends TableFile {
                     }
                     // end of the inner loop
 
-                    if (this.blocks[k].nb < MAX_NB_ENREGS_DEFAULT) {
+                    if (this.blocks[k].nb < this.maxNbEnregs) {
                         firstStop = true;
                     } else {
                         k = k - 1;
@@ -188,7 +188,6 @@ export default class EssaiLinear extends TableFile {
             }
 
         }
-
     }
 
     hashFunction(key) {
