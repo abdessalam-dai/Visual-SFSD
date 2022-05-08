@@ -6,11 +6,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <title>VisualSFSD</title>
 </head>
-<body class="bg-gray-100">
+<body class="bg-gray-100 ">
 <nav class="bg-fuchsia-700 px-2 sm:px-4 py-2.5">
     <div class="container flex flex-wrap justify-between items-center mx-auto">
         <a href="" class="flex items-center">
@@ -46,53 +45,72 @@
                     <a href="#"
                        class="block py-2 pr-4 pl-3 text-white border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-500 md:p-0 transition-all duration-200 hover:font-bold">Creators</a>
                 </li>
+
+
             </ul>
         </div>
     </div>
 </nav>
 <div class="container flex mx-0 mt-10 content-center justify-center items-center">
     <div class="flex flex-col content-center">
-        <h1 class="text-center text-3xl pl-7 font-medium text-blue-600">VisualSFSD</h1>
-        <a class="mt-10"
-            href="{% url 'dashboard' %}">
+        <h1 class="text-center text-3xl pl-7 font-medium text-blue-600">Visualize SFSD</h1>
+        <div class="mt-10">
             <button id="a"
                     class="bg-gray-800 hover: hover:px-24 translate-x-10 hover:translate-x-20 hover:font-medium  transition-all duration-200 rounded-3xl  text-l px-8 text-white p-2">
                 Start
             </button>
             <button id="b" class="bg-blue-700 hover: rounded-3xl text-l px-10 text-white p-2">SFSD</button>
-        </a>
+        </div>
     </div>
     <img src="{% static 'imgs/home/hero.svg' %}" class="ml-64 w-2/5 " alt="">
 </div>
 <div class="wave m-0 p-0">
     <img src="{% static 'imgs/home/wave.svg' %}" class="w-screen m-0 p-0 overflow-x-hidden " alt="">
 </div>
-<div class=" main bg-bgColor border-0">
+<div class=" main  border-0  " style="background-color:rgb(172, 56, 127) ;">
     <div class="container p-10 ">
         <h1 class="text-3xl font-semibold text-teal-400 text-center">About</h1>
         <div class="flex items-center">
-            <p class="text-xl px-10  text-white">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Error
-                consectetur reprehenderit impedit quos neque corporis debitis accusamus rerum provident soluta odio
-                totam minima, vero, repellat libero nobis aliquid quidem assumenda?</p>
-            <img class="w-2/5" src="{% static 'imgs/home/about.svg' %}" alt="">
+            <p class="text-xl px-10  text-white">Visual SFSD is a website which was created for students in the second
+                year in the higher school of informatics to help them understanding the subject of SFSD by doing
+                visualisation of differrent algorithmics that exist in this subject and at the same time to prepare for
+                the contest exam to higher education which takes place every single year.</p>
+            <img class="w-72" src="{% static 'imgs/home/About us page-amico.svg' %}" alt="">
         </div>
     </div>
 </div>
-<div class=" main bg-blue-500 border-0">
+<div class=" main  border-0" style="background-color:rgb(172, 56, 127)">
     <div class="container p-10 ">
-        <h1 class="text-3xl font-semibold text-gray-800 text-center">Guide</h1>
+        <h1 class="text-3xl font-semibold text-teal-400 text-center">Guide</h1>
         <div class="flex items-center">
-            <img class="w-2/5" src="{% static 'imgs/home/guide.svg' %}" alt="">
+            <img class="w-72 " src="{% static 'imgs/home/guide.svg' %}" alt="">
 
-            <p class="text-xl text-center text-white">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Error
-                consectetur reprehenderit impedit quos neque corporis debitis accusamus rerum provident soluta odio
-                totam minima, vero, repellat libero nobis aliquid quidem assumenda?</p>
+            <p class="text-xl text-center text-white">
+                Visual SFSD is a website which was created for students in the second year in the higher school of
+                informatics to help them understanding the subject of SFSD by doing visualisation of differrent
+                algorithmics that exist in this subject and at the same time to prepare for the contest exam to higher
+                education which takes place every single year.
+
+            </p>
         </div>
     </div>
 </div>
-<div class="  border-0">
+<div class="  border-0 " style="background-color: rgb(172, 56, 127);">
     <div class="container p-10 ">
-        <h1 class="text-3xl font-semibold text-gray-800 text-center">Creators</h1>
+        <h1 class="text-3xl font-bold text-center text-teal-400 ">Creators</h1>
+        <div class=" grid grid-cols-3 gap-8 mt-10">
+
+            <div><img class="rounded-3xl" src="{% static 'imgs/home/portrait-cheerful-man-white-shirt-standing.jpg' %}">
+                <h2 class="text-2xl text-white text-center">Bilal Chatbi</h2></div>
+            <div><img class="rounded-3xl" src="{% static 'imgs/home/portrait-cheerful-man-white-shirt-standing.jpg' %}">
+                <h2 class="text-2xl text-white text-center">Ouassim Hamdani</h2></div>
+            <div><img class="rounded-3xl" src="{% static 'imgs/home/portrait-cheerful-man-white-shirt-standing.jpg' %}">
+                <h2 class="text-2xl text-white text-center">Dai abdesslam</h2></div>
+            <div><img class="rounded-3xl" src="{% static 'imgs/home/portrait-cheerful-man-white-shirt-standing.jpg' %}">
+                <h2 class="text-2xl text-white text-center">Louzani Zineddine</h2></div>
+            <div><img class="rounded-3xl" src="{% static 'imgs/home/portrait-cheerful-man-white-shirt-standing.jpg' %}">
+                <h2 class="text-2xl text-white text-center">Benayache Houssam"</h2></div>
+        </div>
 
     </div>
 </div>
