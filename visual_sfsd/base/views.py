@@ -7,8 +7,8 @@ def home(request):
     return render(request, 'base/home/index.html')
 
 
-def page_not_found_view(request, exception):
-    return HttpResponse("404")
+def page_not_found(request, exception):
+    return render(request, 'base/404/index.html')
 
 
 def contact(request):
