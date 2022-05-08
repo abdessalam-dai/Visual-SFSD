@@ -43,7 +43,7 @@ export default class Clustered extends IndexedFile {
         );
     }
 
-    search(key, animate = false) {
+    searchIndex(key, animate = false) {
         console.log('starting the search process')
         let start = 0, end = this.indexTable.length - 1;
         // Iterate while start not meets end
@@ -88,8 +88,8 @@ export default class Clustered extends IndexedFile {
 
     }
 
-    async searchMS(key, animate = false) {
-        let searchResult = await this.search(key, animate);
+    async search(key, animate = false) {
+        let searchResult = await this.searchIndex(key, animate);
         let indexInIndexTable = searchResult.pos.k;
         if (indexInIndexTable === -1) {
             // the case where the there is no block yet
@@ -102,7 +102,7 @@ export default class Clustered extends IndexedFile {
             }
         }
         console.log({indexInIndexTable}, this.indexTable)
-        let found = this.search(key).found;
+        let found = searchResult.found;
         let block = this.blocks[this.indexTable[indexInIndexTable].i]
 
 
@@ -147,7 +147,7 @@ export default class Clustered extends IndexedFile {
             }
             // If Target Is Not Found
 
-            if (endIndex + 1 >= MAX_NB_ENREGS_DEFAULT) {
+            if (endIndex + 1 >= block.nb) {
                 return {
                     found: false,
                     pos: {
@@ -177,7 +177,7 @@ export default class Clustered extends IndexedFile {
             return false;
         }
 
-        let searchResults = await this.searchMS(key, animate);
+        let searchResults = await this.search(key, animate);
         console.log(searchResults);
         let found = searchResults.found,
             i = searchResults.pos.i,
