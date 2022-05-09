@@ -6,14 +6,38 @@
         <form method="GET" action="{% url 'dashboard' %}">
             <div class="flex py-3 px-5 space-x-2 rounded-md" style="background-color: #DCD9D9">
                 {% csrf_token %}
-                <button type="submit">
-                    <img src="{% static 'imgs/navbar-dashboard/search.svg' %}" alt="Search">
-                </button>
-                <input class="border-0 outline-0 bg-transparent pl-2"
+
+                <select name="file_access"
+                        class="form-select appearance-none cursor-pointer
+      block
+      w-full
+      px-3
+      py-1.5
+      text-base
+      font-normal
+      text-gray-700
+      bg-white bg-clip-padding bg-no-repeat
+      border border-solid border-gray-300
+      rounded
+      transition
+      ease-in-out
+      m-0
+      focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" aria-label="Type">
+                    <option {% if file_access == "all" %}selected{% endif %} value="all">All</option>
+                    <option {% if file_access == "sequential" %}selected{% endif %} value="sequential">Sequential
+                    </option>
+                    <option {% if file_access == "indexed" %}selected{% endif %} value="indexed">Indexed</option>
+                    <option {% if file_access == "hashing" %}selected{% endif %} value="hashing">Hashing</option>
+                </select>
+                <input class="border-0 outline-0 bg-transparent pl-2 focus:ring-0"
                        type="search"
-                       placeholder="Search"
+                       placeholder="Search my files"
                        name="query"
+                       value="{{ query }}"
                 />
+                <button type="submit" class="w-[7rem] flex items-center justify-center">
+                    <img class="w-4/6" src="{% static 'imgs/navbar-dashboard/search.svg' %}" alt="Search">
+                </button>
             </div>
         </form>
     </div>
@@ -28,3 +52,14 @@
         </div>
     </a>
 </nav>
+
+<style>
+
+
+    input[type="search"]::-webkit-search-decoration,
+    input[type="search"]::-webkit-search-cancel-button,
+    input[type="search"]::-webkit-search-results-button,
+    input[type="search"]::-webkit-search-results-decoration {
+        -webkit-appearance: none;
+    }
+</style>

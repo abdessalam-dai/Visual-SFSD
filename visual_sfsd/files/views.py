@@ -163,16 +163,22 @@ def dashboard(request):
 
             return redirect('view_file', pk=file.id)
 
-    if request.GET.get('query') is not None:
-        query = request.GET.get('query')
+    # search / display files
+    query = request.GET.get('query') if request.GET.get('query') is not None else ''
+    file_access = request.GET.get("file_access") if request.GET.get("file_access") is not None else ''
 
+    files_all = request.user.file_set.filter(
+        Q(name=query) |
+        Q(file_type__icontains=query) |
+        Q(file_access__icontains=query)
+    ).order_by('-date_created')
+
+    if file_access and file_access != 'all':
         files_all = request.user.file_set.filter(
-            Q(name=query) |
-            Q(file_type__icontains=query) |
-            Q(file_access__icontains=query)
+            Q(name__icontains=query)
+        ).filter(
+            file_access=file_access
         ).order_by('-date_created')
-    else:
-        files_all = request.user.file_set.all().order_by('-date_created')
 
     paginator = Paginator(files_all, 20)
     page = request.GET.get('page')
@@ -183,38 +189,11 @@ def dashboard(request):
     except EmptyPage:
         files = paginator.page(paginator.num_pages)
     context = {
+        'query': query,
+        'file_access': file_access,
         'files': files
     }
     return render(request, 'files/dashboard/index.html', context)
-
-#
-# @login_required
-# def search(request):
-#     query = request.GET.get('query')
-#
-#     # files_all = request.user.file_set.all().order_by('-date_created')
-#
-#     if query is not None:
-#         # files_all = File.objects.filter(
-#         files_all = request.user.file_set.filter(
-#             Q(name=query) |
-#             Q(file_type__icontains=query) |
-#             Q(file_access__icontains=query)
-#         ).order_by('-date_created')
-#
-#         paginator = Paginator(files_all, 20)
-#         page = request.GET.get('page')
-#         try:
-#             files = paginator.page(page)
-#         except PageNotAnInteger:
-#             files = paginator.page(1)
-#         except EmptyPage:
-#             files = paginator.page(paginator.num_pages)
-#         context = {
-#             'files': files
-#         }
-#         return render(request, 'files/dashboard/index.html', context)
-#     return redirect('dashboard')
 
 
 # this is used to delete a file (real time) in the dashboard
