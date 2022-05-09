@@ -43,9 +43,81 @@ export default class NotClustered extends IndexedFile {
         );
     }
 
-    // async search(key, animate=false) {
-    //     return this.searchIndexTable(key, animate)
-    // }
+    async search(key, animate = false) {
+        let start = 0, end = this.indexTable.length - 1;
+
+        // Iterate while start not meets end
+        while (start <= end) {
+
+            // Find the mid. index
+            let mid = Math.floor((start + end) / 2);
+
+            let currCell = this.indexTableHtml
+                .select(`.cell:nth-child(${mid + 1})`)
+
+            // If element is present at mid, return True
+            if (this.indexTable[mid].key === key) {
+                if (animate) {
+                    currCell
+                        .transition()
+                        .duration(600 * delay)
+                        .style("background", ENREG_HIGHLIGHT_GREEN)
+                        .transition()
+                        .delay(600 * delay)
+                        .duration(300 * delay)
+                        .style("background", "");
+                    await sleep(1000);
+                }
+
+                if (animate) {
+                    this.updateMCDescription("Element was found", "success");
+                }
+
+                return {
+                    readTimes: 0,
+                    found: true,
+                    pos: {
+                        i: this.indexTable[mid].i,
+                        j: this.indexTable[mid].j,
+                        k: mid, // position in index table
+                    }
+                }
+            }
+
+            // Else look in left or right half accordingly
+            else if (this.indexTable[mid].key < key)
+                start = mid + 1;
+            else
+                end = mid - 1;
+
+            if (animate) {
+                currCell
+                    .transition()
+                    .duration(600 * delay)
+                    .style("background", ENREG_HIGHLIGHT_RED)
+                    .transition()
+                    .delay(600 * delay)
+                    .duration(300 * delay)
+                    .style("background", "");
+                await sleep(1000);
+            }
+        }
+
+        if (animate) {
+            this.updateMCDescription("Element was not found", "error");
+        }
+
+        return { //if start > end we set the insert position to start
+            readTimes: 0,
+            found: false,
+            pos: {
+                i: -1,
+                j: -1,
+                k: start, // position in index table
+            }
+        }
+    }
+
 
     async insert(key, field1, field2, removed = false, animate = false) {
         let readTimes = 0,
@@ -150,8 +222,8 @@ export default class NotClustered extends IndexedFile {
             this.indexTable.push(-1);
 
             this.indexTableHtml
-                        .select(`.cell:nth-child(${pos.k + 1})`)
-                        .classed("bg-orange-400", true);
+                .select(`.cell:nth-child(${pos.k + 1})`)
+                .classed("bg-orange-400", true);
             while (m > pos.k) {
                 this.indexTable[m] = this.indexTable[m - 1];
 

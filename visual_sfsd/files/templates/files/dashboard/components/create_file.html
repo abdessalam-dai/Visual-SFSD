@@ -1,10 +1,16 @@
 {% load static %}
 
-<button id="create-file-btn"
-        class="save-file-btn shadow-2xl bg-white z-5 right-20 bottom-20 rounded-full transition-all fixed w-[100px] h-[100px] flex justify-center items-center hover:bg-[#eee]"
-        title="Create file">
-    <img src="{% static 'imgs/dashboard/plus.svg' %}" alt="Create">
+<button data-tooltip-target="tooltip-create-file"
+        data-tooltip-placement="left"
+        id="create-file-btn"
+        class="save-file-btn shadow-2xl bg-white z-5 right-20 bottom-20 rounded-full transition-all fixed w-[100px] h-[100px] flex justify-center items-center hover:bg-[#eee]">
+    <img src="{% static 'imgs/dashboard/plus.svg' %}" alt="">
 </button>
+<div id="tooltip-create-file" role="tooltip"
+     class="inline-block absolute invisible z-10 py-2 px-3 text-md font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+    New file
+    <div class="tooltip-arrow" data-popper-arrow></div>
+</div>
 
 <div id="create-file-modal-overlay"
      class="create-file-modal-overlay fixed hidden top-0 left-0 w-full h-screen z-30"></div>

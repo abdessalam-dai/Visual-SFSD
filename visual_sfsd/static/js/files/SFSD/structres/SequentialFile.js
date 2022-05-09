@@ -65,6 +65,7 @@ export default class SequentialFile {
 
             return true;
         } else {
+            this.updateMCDescription(`No element with key=${key} was found`, "error");
             return false;
         }
     }
@@ -102,6 +103,7 @@ export default class SequentialFile {
 
             return true;
         } else {
+            this.updateMCDescription(`No element with key=${key} was found`, "error");
             return false;
         }
     }

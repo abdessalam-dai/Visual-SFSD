@@ -82,6 +82,9 @@
     <!-- jQuery -->
     <script src="{% static 'js/lib/jquery-3.6.0.min.js' %}"></script>
 
+    <!-- d3 -->
+    <script src="{% static 'js/lib/d3.v7.min.js' %}"></script>
+
     <!-- JS Cookie -->
     <script src="{% static 'js/lib/js.cookie.min.js' %}"></script>
     <script>
@@ -105,6 +108,7 @@
     {% block scripts %}
 
     {% endblock %}
+    <script defer type="module" src="{% static 'js/toasts.js' %}"></script>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

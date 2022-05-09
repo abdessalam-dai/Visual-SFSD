@@ -1,7 +1,13 @@
 {% load static %}
 
-<a href="{% url 'clone_file' file.id %}"
-   title="Clone file"
+<a data-tooltip-target="tooltip-clone-file"
+   data-tooltip-placement="right"
+   href="{% url 'clone_file' file.id %}"
    class="save-file-btn shadow-2xl bg-[#BA68C8] z-5 left-10 bottom-20 rounded-full transition-all fixed w-[80px] h-[80px] flex justify-center items-center">
-    <img class="w-1/2" src="{% static 'imgs/view_file/copy.png' %}" alt="Save">
+    <img class="w-1/2" src="{% static 'imgs/view_file/copy.png' %}" alt="">
 </a>
+<div id="tooltip-clone-file" role="tooltip"
+     class="inline-block absolute invisible z-10 py-2 px-3 text-md font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+    Clone file
+    <div class="tooltip-arrow" data-popper-arrow></div>
+</div>

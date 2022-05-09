@@ -1,3 +1,6 @@
+import {addToast} from "../../toasts.js";
+
+
 export const deleteFile = (pk) => {
     $.ajax({
         type: 'POST',
@@ -8,6 +11,7 @@ export const deleteFile = (pk) => {
         datatype: 'json',
         success: function (response) {
             console.log(response["status"]);
+            addToast("File has been deleted", "danger");
         },
         error: function (response) {
             console.log("Something went wrong");

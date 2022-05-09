@@ -7,8 +7,6 @@
 {% endblock title %}
 
 {% block scripts %}
-    <script src="{% static 'js/lib/d3.v7.min.js' %}"></script>
-
     <script>
         let fileData = {{ data|safe }};
         const FILE_NAME = "{{ file.name }}";

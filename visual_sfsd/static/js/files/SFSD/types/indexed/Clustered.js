@@ -1,7 +1,12 @@
 import Enreg from '../../structres/Enreg.js';
 import Block from '../../structres/Block.js';
 import {
-    BLOCKS_DEFAULT, ENREG_HIGHLIGHT_GREEN, ENREG_HIGHLIGHT_GREY, ENREG_HIGHLIGHT_PURPLE,
+    BLOCKS_DEFAULT,
+    ENREG_HIGHLIGHT_GREEN,
+    ENREG_HIGHLIGHT_GREY,
+    ENREG_HIGHLIGHT_ORANGE,
+    ENREG_HIGHLIGHT_PURPLE,
+    ENREG_HIGHLIGHT_RED,
     MAX_NB_BLOCKS,
     MAX_NB_ENREGS_DEFAULT,
     NB_BLOCKS_DEFAULT,
@@ -43,15 +48,30 @@ export default class Clustered extends IndexedFile {
         );
     }
 
-    searchIndex(key, animate = false) {
-        console.log('starting the search process')
+    async searchIndex(key, animate = false) {
         let start = 0, end = this.indexTable.length - 1;
+
         // Iterate while start not meets end
         while (start <= end) {
-            // Find the mid index
+            // Find the mid. index
             let mid = Math.floor((start + end) / 2);
+
+            let currCell = this.indexTableHtml
+                .select(`.cell:nth-child(${mid + 1})`);
+
             // If element is present at mid, return True
             if (this.indexTable[mid].key === key) {
+                if (animate) {
+                    currCell
+                        .transition()
+                        .duration(600 * delay)
+                        .style("background", ENREG_HIGHLIGHT_GREEN)
+                        .transition()
+                        .delay(600 * delay)
+                        .duration(300 * delay)
+                        .style("background", "");
+                    await sleep(1000);
+                }
                 return {
                     found: true,
                     pos: {
@@ -66,8 +86,21 @@ export default class Clustered extends IndexedFile {
                 start = mid + 1;
             else
                 end = mid - 1;
+
+            if (animate) {
+                currCell
+                    .transition()
+                    .duration(600 * delay)
+                    .style("background", ENREG_HIGHLIGHT_RED)
+                    .transition()
+                    .delay(600 * delay)
+                    .duration(300 * delay)
+                    .style("background", "");
+                await sleep(1000);
+            }
         }
-        if (start > end) { //this can be removed but i left so you understand algorithm
+
+        if (start > end) { //this can be removed, but I left it, so you understand algorithm
             if (start > this.indexTable.length - 1) { // when the searched key is bigger than the keys in the index table
                 return { //insertion at the very end
                     found: false,
@@ -75,8 +108,7 @@ export default class Clustered extends IndexedFile {
                         k: this.indexTable.length - 1 // position in index table, we return the last bloc
                     }
                 }
-            } else { //insertion normally, we take the block refered to by element k in the index (call indexTable[k].i)
-
+            } else { //insertion normally, we take the block referred to by element k in the index (call indexTable[k].i)
                 return {
                     found: false,
                     pos: {
@@ -91,7 +123,17 @@ export default class Clustered extends IndexedFile {
     async search(key, animate = false) {
         let searchResult = await this.searchIndex(key, animate);
         let indexInIndexTable = searchResult.pos.k;
+
+        let readTimes = 0;
+
+        let blockElement;
+        let bufferElement;
+        let midElement;
+
         if (indexInIndexTable === -1) {
+            if (animate) {
+                this.updateMCDescription("Element was not found", "error");
+            }
             // the case where the there is no block yet
             return {
                 found: false,
@@ -101,13 +143,18 @@ export default class Clustered extends IndexedFile {
                 }
             }
         }
-        console.log({indexInIndexTable}, this.indexTable)
-        let found = searchResult.found;
-        let block = this.blocks[this.indexTable[indexInIndexTable].i]
 
+        let found = searchResult.found;
+
+        let i = this.indexTable[indexInIndexTable].i;
+        let block = this.blocks[i];
+        readTimes++;
 
         if (found) {
             // found is true no insertion is possible
+            if (animate) {
+                this.updateMCDescription("Element was found", "success");
+            }
             return {
                 found: true,
                 pos: {
@@ -115,57 +162,122 @@ export default class Clustered extends IndexedFile {
                     j: searchResult.pos.j
                 }
             }
-        } else {
-            // binary search
-            // Define Start and End Index
-            let startIndex = 0;
-            let endIndex = block.enregs.length - 1;
+        }
 
-            // While Start Index is less than or equal to End Index
-            while (startIndex <= endIndex) {
-                let middleIndex = Math.floor((startIndex + endIndex) / 2);
-                if (key === block.enregs[middleIndex].key) {
-                    return {
-                        found: true,
-                        pos: {
-                            i: indexInIndexTable,
-                            j: middleIndex,
-                        }
-                    }
-                }
+        if (animate) {
+            this.updateIOTimes(readTimes, 0);
 
-                // Search Right Side Of Array
-                else if (key > block.enregs[middleIndex].key) {
-                    // Assign Start Index and increase the Index by 1 to narrow search
-                    startIndex = middleIndex + 1;
-                }
-                // Search Left Side Of Array
-                if (key < block.enregs[middleIndex].key) {
-                    // Assign End Index and increase the Index by 1 to narrow search
-                    endIndex = middleIndex - 1;
-                }
+            blockElement = this.MSBoard.select(`.bloc:nth-child(${i + 1})`)
+
+            await this.traverseBlockAnimation(i, delay);
+
+            bufferElement = this.updateBufferElement(blockElement);
+
+            await sleep(1000);
+        }
+
+        // binary search
+        // Define Start and End Index
+        let startIndex = 0;
+        let endIndex = block.enregs.length - 1;
+
+        // While Start Index is less than or equal to End Index
+        while (startIndex <= endIndex) {
+            let middleIndex = Math.floor((startIndex + endIndex) / 2);
+
+            let currKey = block.enregs[middleIndex].key;
+            let j = middleIndex;
+
+            if (animate) {
+                midElement = bufferElement.select(".bloc-body ul")
+                    .select(`li:nth-child(${j + 1})`);
             }
-            // If Target Is Not Found
 
-            if (endIndex + 1 >= block.nb) {
+            if (key === currKey) {
+                if (animate) {
+                    midElement
+                        .transition()
+                        .duration(600 * delay)
+                        .style("background", ENREG_HIGHLIGHT_GREEN)
+                        .transition()
+                        .delay(600 * delay)
+                        .duration(300 * delay)
+                        .style("background", ENREG_HIGHLIGHT_GREY);
+                    await sleep(1000);
+                }
+
+                if (animate) {
+                    this.updateMCDescription("Element was found", "success");
+                }
+
                 return {
-                    found: false,
+                    readTimes: readTimes,
+                    found: true,
                     pos: {
-                        i: this.indexTable[indexInIndexTable].i + 1,
-                        j: 0,
+                        i: indexInIndexTable,
+                        j: middleIndex,
                     }
                 }
             }
 
+            // Search Right Side Of Array
+            else if (key > currKey) {
+                // Assign Start Index and increase the Index by 1 to narrow search
+                startIndex = middleIndex + 1;
+            }
+            // Search Left Side Of Array
+            if (key < currKey) {
+                // Assign End Index and increase the Index by 1 to narrow search
+                endIndex = middleIndex - 1;
+            }
+
+            if (animate) {
+                midElement
+                    .transition()
+                    .duration(600 * delay)
+                    .style("background", ENREG_HIGHLIGHT_RED)
+                    .transition()
+                    .delay(600 * delay)
+                    .duration(300 * delay)
+                    .style("background", ENREG_HIGHLIGHT_GREY);
+                await sleep(1000);
+            }
+        }
+        // If Target Is Not Found
+
+        if (animate) {
+            this.updateMCDescription("Element was not found", "error");
+        }
+        if (endIndex + 1 === this.maxNbEnregs) {
             return {
+                readTimes: readTimes,
                 found: false,
                 pos: {
-                    i: this.indexTable[indexInIndexTable].i,
-                    j: endIndex + 1,
+                    i: this.indexTable[indexInIndexTable].i + 1,
+                    j: 0
                 }
             }
         }
 
+        if (endIndex + 1 > block.nb) {
+            return {
+                readTimes: readTimes,
+                found: false,
+                pos: {
+                    i: this.indexTable[indexInIndexTable].i + 1,
+                    j: 0,
+                }
+            }
+        }
+
+        return {
+            readTimes: readTimes,
+            found: false,
+            pos: {
+                i: this.indexTable[indexInIndexTable].i,
+                j: endIndex + 1,
+            }
+        }
     }
 
     async insert(key, field1, field2, removed = false, animate) {
@@ -178,7 +290,6 @@ export default class Clustered extends IndexedFile {
         }
 
         let searchResults = await this.search(key, animate);
-        console.log(searchResults);
         let found = searchResults.found,
             i = searchResults.pos.i,
             j = searchResults.pos.j;
@@ -238,7 +349,6 @@ export default class Clustered extends IndexedFile {
                     lastIndex = currBlock.nb - 1;
                     lastEnreg = currBlock.enregs[lastIndex]; // save last enreg.
                     k = lastIndex;
-
 
                     while (k > j) {
                         currBlock.enregs[k] = currBlock.enregs[k - 1];

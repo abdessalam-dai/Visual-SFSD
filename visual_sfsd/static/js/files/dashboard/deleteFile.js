@@ -1,4 +1,5 @@
 import * as API from "./api.js";
+import {addToast} from "../../toasts.js";
 
 
 const files = document.querySelectorAll('.file-info');

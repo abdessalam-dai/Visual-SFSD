@@ -3,48 +3,96 @@
 <div class="items-center tools rounded-r-lg mt-8 bg-gray-600 shadow-2xl w-auto">
     <ul class="toolbar-options flex flex-col space-y-5 items-center w-14 py-3">
         <li class="toolbar-tool no-select">
-            <div class="w-9 h-9 rounded-md bg-gray-300 hover:h-11 hover:w-11 transition-all">
+            <div data-tooltip-target="tooltip-generate-data"
+                 data-tooltip-placement="right"
+                 class="w-9 h-9 rounded-md bg-gray-300 hover:h-11 hover:w-11 transition-all">
                 <img class="toolbar-icon"
-                     src="{% static 'imgs/view_file/toolbar/fillDummyData.png' %}" alt="" title="Fill with dummy data">
+                     src="{% static 'imgs/view_file/toolbar/fillDummyData.png' %}" alt="">
             </div>
             {% include "files/view_file/components/tooltip-form-generate-data.html" %}
         </li>
+        <div id="tooltip-generate-data" role="tooltip"
+             class="inline-block absolute invisible z-10 py-2 px-3 text-md font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+            Fill with dummy data
+            <div class="tooltip-arrow" data-popper-arrow></div>
+        </div>
+
         <li class="toolbar-tool  no-select">
-            <div class="w-9 h-9 rounded-md bg-gray-300 hover:h-11 hover:w-11 transition-all">
+            <div data-tooltip-target="tooltip-search"
+                 data-tooltip-placement="right"
+                 class="w-9 h-9 rounded-md bg-gray-300 hover:h-11 hover:w-11 transition-all">
                 <img class="toolbar-icon"
-                     src="{% static 'imgs/view_file/toolbar/searchElement.svg' %}" alt="" title="Search element">
+                     src="{% static 'imgs/view_file/toolbar/searchElement.svg' %}" alt="">
             </div>
             {% include "files/view_file/components/tooltip-form-search.html" %}
         </li>
+        <div id="tooltip-search" role="tooltip"
+             class="inline-block absolute invisible z-10 py-2 px-3 text-md font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+            Search element
+            <div class="tooltip-arrow" data-popper-arrow></div>
+        </div>
+
         <li class="toolbar-tool  no-select">
-            <div class="w-9 h-9 rounded-md bg-gray-300 hover:h-11 hover:w-11 transition-all">
+            <div data-tooltip-target="tooltip-remove-logically"
+                 data-tooltip-placement="right"
+                 class="w-9 h-9 rounded-md bg-gray-300 hover:h-11 hover:w-11 transition-all">
                 <img class="toolbar-icon"
-                     src="{% static 'imgs/view_file/toolbar/removeLogically.png' %}" alt="" title="Remove logically">
+                     src="{% static 'imgs/view_file/toolbar/removeLogically.png' %}" alt="">
             </div>
             {% include "files/view_file/components/tooltip-form-remove-logically.html" %}
         </li>
+        <div id="tooltip-remove-logically" role="tooltip"
+             class="inline-block absolute invisible z-10 py-2 px-3 text-md font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+            Remove logically
+            <div class="tooltip-arrow" data-popper-arrow></div>
+        </div>
+
 
         <li class="toolbar-tool {% if file.file_type == 'LOF' or file.file_type == 'LnOF' or file.file_access == 'indexed' %} hidden {% endif %}  no-select">
-            <div class="w-9 h-9 rounded-md bg-gray-300 hover:h-11 hover:w-11 transition-all">
+            <div data-tooltip-target="tooltip-remove-physically"
+                 data-tooltip-placement="right"
+                 class="w-9 h-9 rounded-md bg-gray-300 hover:h-11 hover:w-11 transition-all">
                 <img class="toolbar-icon"
-                     src="{% static 'imgs/view_file/toolbar/removePhysically.png' %}" alt="" title="Remove physically">
+                     src="{% static 'imgs/view_file/toolbar/removePhysically.png' %}" alt="">
             </div>
             {% include "files/view_file/components/tooltip-form-remove-physically.html" %}
         </li>
+        <div id="tooltip-remove-physically" role="tooltip"
+             class="inline-block absolute invisible z-10 py-2 px-3 text-md font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+            Remove physically
+            <div class="tooltip-arrow" data-popper-arrow></div>
+        </div>
+
         <li class="toolbar-tool  no-select">
-            <div class="w-9 h-9 rounded-md bg-gray-300 hover:h-11 hover:w-11 transition-all">
+            <div data-tooltip-target="tooltip-add-element"
+                 data-tooltip-placement="right"
+                 class="w-9 h-9 rounded-md bg-gray-300 hover:h-11 hover:w-11 transition-all">
                 <img class="toolbar-icon"
-                     src="{% static 'imgs/view_file/toolbar/addElement.svg' %}" alt="" title="Add element">
+                     src="{% static 'imgs/view_file/toolbar/addElement.svg' %}" alt="">
             </div>
             {% include "files/view_file/components/tooltip-form-insert.html" %}
         </li>
+        <div id="tooltip-add-element" role="tooltip"
+             class="inline-block absolute invisible z-10 py-2 px-3 text-md font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+            Add element
+            <div class="tooltip-arrow" data-popper-arrow></div>
+        </div>
+
         <li class="toolbar-tool  no-select">
-            <div class="w-9 h-9 rounded-md bg-gray-300 hover:h-11 hover:w-11 transition-all">
+            <div data-tooltip-target="tooltip-edit"
+                 data-tooltip-placement="right"
+                 class="w-9 h-9 rounded-md bg-gray-300 hover:h-11 hover:w-11 transition-all">
                 <img class="toolbar-icon"
-                     src="{% static 'imgs/view_file/toolbar/editElement.svg' %}" alt="" title="Edit element">
+                     src="{% static 'imgs/view_file/toolbar/editElement.svg' %}" alt="">
             </div>
             {% include "files/view_file/components/tooltip-form-edit.html" %}
         </li>
+        <div id="tooltip-edit" role="tooltip"
+             class="inline-block absolute invisible z-10 py-2 px-3 text-md font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+            Edit element
+            <div class="tooltip-arrow" data-popper-arrow></div>
+        </div>
+
     </ul>
 </div>
 
@@ -76,7 +124,7 @@
     .rect {
         width: 0;
         height: 0;
-        border-top:12px solid transparent ;
+        border-top: 12px solid transparent;
         border-right: 25px solid #c084fc;
         border-bottom: 12px solid transparent;
         z-index: 1;
