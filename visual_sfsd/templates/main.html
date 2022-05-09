@@ -118,23 +118,25 @@
 </head>
 
 <body>
+<div class="dotted-loader" id="screen_loading"></div>
 
 {% block navbar %}
 
 {% endblock navbar %}
 
-<div>
+<div id="main" class="hidden">
     {% include 'components/messages.html' %}
 
-    {#    <div class="dotted-loader"></div>#}
 
     {% block content %}
 
     {% endblock %}
+
 </div>
 
 {% comment %}{% include 'components/footer.html' %}{% endcomment %}
 
+    <script src="{% static 'js/screenLoader.js' %}"></script>
 </body>
 
 </html>

@@ -280,6 +280,10 @@ export default class Clustered extends IndexedFile {
         }
     }
 
+    isInsertionAllowed() {
+        return this.nbBlocks < this.maxNbBlocks;
+    }
+
     async insert(key, field1, field2, removed = false, animate) {
         if (!this.isInsertionAllowed()) {
             if (animate) {
