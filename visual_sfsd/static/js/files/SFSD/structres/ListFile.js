@@ -4,7 +4,7 @@ import {
     NB_INSERTIONS_DEFAULT,
     BLOCKS_DEFAULT,
     MAX_NB_BLOCKS,
-    ENREG_HIGHLIGHT_GREEN,
+    ENREG_HIGHLIGHT_GREEN, ENREG_HIGHLIGHT_GREY,
 } from '../../constants.js';
 import SequentialFile from "./SequentialFile.js";
 
@@ -286,7 +286,7 @@ export default class ListFile extends SequentialFile {
         this.MSBoard.selectAll('.bloc')
             .data(this.blocks)
             .append("div")
-            .attr("class", "bloc-body w-full h-80 bg-gray-400 rounded-b-lg")
+            .attr("class", `bloc-body w-full h-80 bg-[${ENREG_HIGHLIGHT_GREY}] rounded-b-lg`)
             .append("ul")
             .attr("class", "text-lg font-medium text-center")
             .each(function (block) {
@@ -296,7 +296,7 @@ export default class ListFile extends SequentialFile {
                         .data(block.enregs)
                         .enter()
                         .append("li")
-                        .attr("class", "border-b-2 h-10 flex justify-center flex-col")
+                        .attr("class", `border-b-2 border-gray-700  bg-[${ENREG_HIGHLIGHT_GREY}] h-10 flex justify-center flex-col`)
                         .style("opacity", "0")
                         .style("color", function (enreg) {
                             return enreg.removed ? "#a70000" : "black"
@@ -312,7 +312,7 @@ export default class ListFile extends SequentialFile {
                         })
                         .on("mouseout", function () {
                             d3.select(this)
-                                .style("background", "#9CA3AF")
+                                .style("background", "#EDEAEA")
                         })
                         .each(function () {
                             cpt++
@@ -386,10 +386,10 @@ export default class ListFile extends SequentialFile {
         this.MSBoard.selectAll(".bloc")
             .data(this.blocks)
             .select(".bloc-body")
-            .classed("bg-gray-400", function (block) {
+            .classed(`bg-[${ENREG_HIGHLIGHT_GREY}]`, function (block) {
                 return block !== null;
             })
-            .classed("bg-gray-300", function (block) {
+            .classed(`bg-[${ENREG_HIGHLIGHT_GREY}]`, function (block) {
                 return block === null;
             });
     }
@@ -523,7 +523,7 @@ export default class ListFile extends SequentialFile {
             .text("NB=1");
 
         bufferElement.append("div")
-            .attr("class", "bloc-body w-full h-80 bg-gray-400 rounded-b-lg")
+            .attr("class", `bloc-body w-full h-80 bg-[${ENREG_HIGHLIGHT_GREY}] rounded-b-lg`)
             .append("ul")
             .attr("class", "text-lg font-medium text-center")
             .append("li")

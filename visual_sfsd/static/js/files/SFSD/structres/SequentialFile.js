@@ -129,10 +129,12 @@ export default class SequentialFile {
 
     updateIOTimes(readTimes, writeTimes) {
         d3.select(".complexity-in-reading")
-            .text(`Number of reads : ${readTimes}`);
+            .select("span")
+            .text(`${readTimes}`)
 
         d3.select(".complexity-in-writing")
-            .text(`Number of writes : ${writeTimes}`);
+            .select("span")
+            .text(`${writeTimes}`);
     }
 
     updateBlockInMS(i, block) {

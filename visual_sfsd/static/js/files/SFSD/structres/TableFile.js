@@ -5,7 +5,7 @@ import {
     BLOCKS_DEFAULT,
     ENREG_SIZE,
     MAX_NB_BLOCKS,
-    ENREG_HIGHLIGHT_GREEN,
+    ENREG_HIGHLIGHT_GREEN, ENREG_HIGHLIGHT_GREY,
 } from '../../constants.js';
 import SequentialFile from "./SequentialFile.js";
 import {delay} from "../../view_file/shared/animationSpeed.js";
@@ -239,7 +239,7 @@ export default class TableFile extends SequentialFile {
         this.MSBoard.selectAll('.bloc')
             .data(this.blocks)
             .append("div")
-            .attr("class", "bloc-body w-full h-80 bg-gray-400 rounded-b-lg")
+            .attr("class", `bloc-body w-full h-80 bg-[${ENREG_HIGHLIGHT_GREY}] rounded-b-lg`)
             .append("ul")
             .attr("class", "text-lg font-medium text-center")
             .each(function (block) {
@@ -248,7 +248,7 @@ export default class TableFile extends SequentialFile {
                     .data(block.enregs)
                     .enter()
                     .append("li")
-                    .attr("class", "border-b-2 h-10 flex justify-center flex-col")
+                    .attr("class", "border-b-2 border-gray-700 h-10 flex justify-center flex-col")
                     .style("opacity", "0")
                     .style("color", function (enreg) {
                         return enreg.removed ? "#a70000" : "black"
@@ -264,7 +264,7 @@ export default class TableFile extends SequentialFile {
                     })
                     .on("mouseout", function () {
                         d3.select(this)
-                            .style("background", "#9CA3AF")
+                            .style("background", "#EDEAEA")
                     })
                     .each(function () {
                         cpt++
