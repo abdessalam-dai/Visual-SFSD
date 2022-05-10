@@ -21,7 +21,7 @@ File = apps.get_model(app_label='files', model_name='File')
 def login_page(request):
     # if user is already logged in, redirect him to the home page
     if request.user.is_authenticated:
-        return redirect('home')
+        return redirect('dashboard')
 
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -53,7 +53,7 @@ def logout_user(request):
 def register(request):
     # if user is already logged in, redirect him to the home page
     if request.user.is_authenticated:
-        return redirect('home')
+        return redirect('dashboard')
 
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)

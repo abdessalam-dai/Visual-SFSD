@@ -287,9 +287,9 @@ export default class EssaiLinear extends TableFile {
                 // start of the outer loop
                 while (m < kthBlock.nb && !secondStop) {
                     let y = kthBlock.enregs[m];
-                    if ((this.hashFunction(y.key) < k < i) ||
-                        (k < i <= this.hashFunction(y.key)) ||
-                        (i <= this.hashFunction(y.key) < k)
+                    if ((this.hashFunction(y.key) < k && k < i) ||
+                        (k < i && i <= this.hashFunction(y.key)) ||
+                        (i <= this.hashFunction(y.key) && this.hashFunction(y.key) < k)
                     ) {
                         this.blocks[i].enregs[j] = y;
                         writeTimes++;
