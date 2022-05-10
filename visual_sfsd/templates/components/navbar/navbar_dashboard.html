@@ -9,7 +9,7 @@
                 <button type="submit">
                     <img src="{% static 'imgs/navbar-dashboard/search.svg' %}" alt="Search">
                 </button>
-                <input class="border-0 outline-0 bg-transparent pl-2"
+                <input  class="focus:ring-0  border-0 bg-transparent pl-2"
                        type="search"
                        placeholder="Search"
                        name="query"
@@ -18,7 +18,7 @@
         </form>
     </div>
     <a href="{% url 'profile' request.user.username %}"
-       class="profile flex mr-4 items-center px-3 hover:bg-gray-200 rounded-md transition-all">
+       class="profile flex mr-4 items-center px-3 hover:bg-gray-200 transition-all hover:px-4 rounded-md transition-all">
         <div class="img-profile mr-5">
             <img src="{% static 'imgs/user.png' %}" class="rounded-full w-12" alt="">
         </div>
@@ -28,3 +28,13 @@
         </div>
     </a>
 </nav>
+<style>
+    input:focus {
+        border: none  !important;
+        outline: none !important;
+    }
+    
+</style>
+<script>
+    
+</script>

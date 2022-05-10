@@ -3,8 +3,10 @@
 <button data-tooltip-target="tooltip-create-file"
         data-tooltip-placement="left"
         id="create-file-btn"
-        class="save-file-btn shadow-2xl bg-white z-5 right-20 bottom-20 rounded-full transition-all fixed w-[100px] h-[100px] flex justify-center items-center hover:bg-[#eee]">
-    <img src="{% static 'imgs/dashboard/plus.svg' %}" alt="">
+        class="save-file-btn shadow-2xl bg-white z-5 right-20 bottom-20 rounded-full transition-all fixed w-[100px] h-[100px] flex justify-center items-center hover:bg-[#8846DD] hover:rotate-90">
+        <svg class="plus-btn" width="46" height="46" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M26 3C26 2.20435 25.6839 1.44129 25.1213 0.878679C24.5587 0.31607 23.7956 0 23 0C22.2044 0 21.4413 0.31607 20.8787 0.878679C20.3161 1.44129 20 2.20435 20 3V20H3C2.20435 20 1.44129 20.3161 0.878679 20.8787C0.31607 21.4413 0 22.2044 0 23C0 23.7956 0.31607 24.5587 0.878679 25.1213C1.44129 25.6839 2.20435 26 3 26H20V43C20 43.7957 20.3161 44.5587 20.8787 45.1213C21.4413 45.6839 22.2044 46 23 46C23.7956 46 24.5587 45.6839 25.1213 45.1213C25.6839 44.5587 26 43.7957 26 43V26H43C43.7957 26 44.5587 25.6839 45.1213 25.1213C45.6839 24.5587 46 23.7956 46 23C46 22.2044 45.6839 21.4413 45.1213 20.8787C44.5587 20.3161 43.7957 20 43 20H26V3Z" fill="#293CE4"/>
+            </svg>            
 </button>
 <div id="tooltip-create-file" role="tooltip"
      class="inline-block absolute invisible z-10 py-2 px-3 text-md font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
@@ -16,13 +18,13 @@
      class="create-file-modal-overlay fixed hidden top-0 left-0 w-full h-screen z-30"></div>
 
 <div id="create-file-modal"
-     class="no-select create-file-modal hidden fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] flex items-center justify-center z-30 rounded-full">
+     class="no-select fade create-file-modal hidden fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] flex items-center justify-center z-30 rounded-full">
     <div class="bg-white rounded-3xl text-center">
         <form method="POST" action="">
             {% csrf_token %}
             <div class="p-20">
                 <!-- START - step 1 -->
-                <div id="step-1" class="">
+                <div id="step-1" class=" fade">
                     <div>
                         <h1 class="font-bold text-3xl">File Name</h1>
                         <input name="name"
@@ -46,7 +48,7 @@
                 <!-- START - step 2 -->
                 <!-- hidden input for file access type -->
                 <input name="access" id="file-access" type="text" value="sequential" class="hidden">
-                <div id="step-2" class="hidden">
+                <div id="step-2" class="hidden fade">
                     <h1 class="font-bold text-3xl">Choose the type of <span
                             class="text-purple-600">file organization</span>
                     </h1>
@@ -73,7 +75,7 @@
                 <!-- hidden input for file type -->
                 <input name="type" id="file-type" type="text" value="TOF" class="hidden">
                 <!-- START - step 3 -->
-                <div id="step-3-sequential" class="hidden">
+                <div id="step-3-sequential" class="hidden fade">
                     <h1 class="font-bold text-3xl">Choose the type of <span class="text-purple-600">file</span></h1>
                     <ul class="flex flex-row justify-center mt-10">
                         <li data-type="TOF"
@@ -98,7 +100,7 @@
                         </li>
                     </ul>
                 </div>
-                <div id="step-3-indexed" class="hidden">
+                <div id="step-3-indexed" class="hidden fade">
                     <h1 class="font-bold text-3xl">Choose the type of <span class="text-purple-600">file</span></h1>
                     <ul class="flex flex-row justify-center mt-10">
                         <li data-type="clustered"
@@ -113,7 +115,7 @@
                         </li>
                     </ul>
                 </div>
-                <div id="step-3-hashing" class="hidden">
+                <div id="step-3-hashing" class="hidden fade">
                     <h1 class="font-bold text-3xl">Choose the type of <span class="text-purple-600">file</span></h1>
                     <ul class="flex flex-row justify-center mt-10">
                         <li data-type="essai_linear"
@@ -126,7 +128,7 @@
                 <!-- END - step 3 -->
 
                 <!-- START - step 4 -->
-                <div id="step-4" class="hidden">
+                <div id="step-4" class="hidden fade">
                     <h1 class="font-bold text-3xl mb-8">File configuration</h1>
                     <div class="text-left mb-4">
                         <label for="max-nb-enregs"
@@ -243,3 +245,24 @@
 {#                        </div>#}
 {#                    </div>#}
 
+<style>
+    .save-file-btn:hover svg path{
+        fill: white;
+    }
+
+    .fade {
+        opacity: 0;
+        animation: animateForm 500ms normal forwards;
+        animation-iteration-count:1 ;
+        transition: all;
+        transition-duration: 300ms;
+    }
+    @keyframes animateForm {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+</style>
