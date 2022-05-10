@@ -130,13 +130,16 @@ export default class ListFile extends SequentialFile {
                     d3.select(this)
                         .append("div")
                         .attr("class", "tool-tip-index")
+                        .classed("rounded-lg", true)
+                        .classed("px-4 py-2", true)
                         .style("position", "absolute")
+                        .style("bottom", "35px")
+                        .style("left", "-7px")
                         .style("width", "180px")
                         .style("z-index", "10")
                         .style("visibility", "hidden")
-                        .style("background", "#38BDF8")
-                        .style("color", "#9333EA")
-                        .style("padding", "5px")
+                        .style("background", "black")
+                        .style("color", "white")
                         .style("z-index", "99")
                         .text("Logical address");
                 }
@@ -180,7 +183,7 @@ export default class ListFile extends SequentialFile {
                         .select("div")
                         .text(function (block, blockIndex) {
                             if (index <= maxNbBlocks && index >= 0) {
-                                return "Physical address (real)";
+                                return "Physical address";
                             } else {
                                 return "Logical address";
                             }
@@ -196,16 +199,21 @@ export default class ListFile extends SequentialFile {
                     d3.select(this)
                         .append("div")
                         .attr("class", "tool-tip-nb")
+                        .classed("rounded-lg", true)
+                        .classed("px-4 py-2", true)
                         .style("position", "absolute")
-                        .style("left", "-115px")
-                        .style("width", "160px")
+                        .style("bottom", "35px")
+                        .style("right", "-15px")
+                        .style("width", "180px")
+                        .style("z-index", "10")
                         .style("visibility", "hidden")
-                        .style("background", "#38BDF8")
-                        .style("color", "#9333EA")
-                        .style("padding", "5px")
-                        .text("Number of Enregs.");
+                        .style("background", "black")
+                        .style("color", "white")
+                        .style("z-index", "99")
+                        .text("Number of elements");
                 }
             });
+
 
         this.MSBoard.selectAll(".bloc-nb")
             .on("mouseover", function (e) {
@@ -235,12 +243,50 @@ export default class ListFile extends SequentialFile {
 
         // Add blocks bodies and fill them with data
         let cpt = 1;
-        let toolTipEnregHidden = true;
+
+        let dropDown = (enreg) => {
+            return `
+                <button id="dropdownDefault" class="outline-none" data-dropdown-toggle="enreg-dropdown-${enreg.key}">                
+                </button>
+                <div id="enreg-dropdown-${enreg.key}" class="z-10 fade rounded-b-md hidden bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700"
+                style="position: absolute; top: 40px; width: 192px; z-index: 900">
+                    <ul class="border-b-md text-sm bg-gray-800 rounded-b-md text-white dark:text-gray-200" aria-labelledby="dropdownDefault">
+                          <li class="border-b-2">
+                            <span
+                            class="flex flex-row justify-between block px-4 py-2">
+                                    <span class="text-sm text-blue-300">key</span>
+                                    <span>${enreg.key}</span>
+                            </span>
+                          </li>
+                          <li class="border-b-2">
+                            <span
+                            class="flex flex-row justify-between block px-4 py-2">
+                                    <span class="text-sm text-blue-300">field1</span>
+                                    <span style="word-wrap: anywhere">${enreg.field1}</span>
+                            </span>
+                          </li>
+                          <li class="border-b-2">
+                           <span
+                           class="flex flex-row justify-between block px-4 py-2">
+                                   <span class="text-sm text-blue-300">field2</span>
+                                   <span style="word-wrap: anywhere">${enreg.field2}</span>
+                           </span>
+                         </li>
+                         <li class="border-b-2 rounded-b-md">
+                           <span
+                           class="flex flex-row justify-between block px-4 py-2">
+                                   <span class="text-sm text-blue-300">removed</span>
+                                   <span>${enreg.removed}</span>
+                           </span>
+                         </li>
+                    </ul>
+                </div>`
+        }
 
         this.MSBoard.selectAll('.bloc')
             .data(this.blocks)
             .append("div")
-            .attr("class", "bloc-body w-full h-80 bg-gray-400")
+            .attr("class", "bloc-body w-full h-80 bg-gray-400 rounded-b-lg")
             .append("ul")
             .attr("class", "text-lg font-medium text-center")
             .each(function (block) {
@@ -257,36 +303,8 @@ export default class ListFile extends SequentialFile {
                         })
                         .style("cursor", "pointer")
                         .style("position", "relative")
-                        .on("click", function (e, enreg) {
-                            console.log(`before if and else`, toolTipEnregHidden, e.target);
-                            if (toolTipEnregHidden) {
-                                let html = `
-                                <div id="last-element-shown" class="no-select" style="position: absolute; top: 40px; width: 192px; z-index: 900">
-                                    <ul class="rounded-md text-center bg-gray-800 " style="z-index: 12;">
-                                        <li class="flex flex-row justify-between  border-b-2 px-2 py-1 text-sm text-white">
-                                            <span class="text-sm text-blue-300">key</span>
-                                            <span>${enreg.key}</span>
-                                        </li>
-                                        <li class="flex flex-row justify-between  border-b-2 px-2 py-1 text-sm text-white">
-                                            <span class="text-sm text-blue-300">field1</span>
-                                            <span style="word-wrap: anywhere">${enreg.field1}</span>
-                                        </li>
-                                        <li class="flex flex-row justify-between  border-b-2 px-2 py-1 text-sm text-white">
-                                            <span class="text-sm text-blue-300">field2</span>
-                                            <span style="word-wrap: anywhere">${enreg.field2}</span>
-                                        </li>
-                                        <li class="flex flex-row justify-between  border-b-2 px-2 py-1 text-sm text-white">
-                                            <span class="text-sm text-blue-300">removed</span>
-                                            <span>${enreg.removed}</span>
-                                        </li>
-                                    </ul>
-                                </div>`;
-                                this.children[0].insertAdjacentHTML('afterend', html)
-                                toolTipEnregHidden = false;
-                            } else {
-                                document.querySelector('#last-element-shown').remove();
-                                toolTipEnregHidden = true;
-                            }
+                        .each(function (enreg) {
+                            d3.select(this).node().insertAdjacentHTML('beforeend', dropDown(enreg));
                         })
                         .on("mouseover", function () {
                             d3.select(this)
@@ -304,13 +322,13 @@ export default class ListFile extends SequentialFile {
                                 .duration(cpt * 10)
                                 .style("opacity", "1")
                         })
+                        .select("button")
                         .append("span")
                         .text(function (enreg) {
-                            return enreg.key
+                            return enreg.key;
                         });
                 }
             });
-
 
         // Add blocks footers (to display next block index)
         this.MSBoard.selectAll(".bloc")
