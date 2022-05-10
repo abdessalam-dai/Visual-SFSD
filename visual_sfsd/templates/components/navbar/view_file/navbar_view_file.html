@@ -1,7 +1,7 @@
 {% load static %}
 
 
-<nav class="bg-purple-600 px-2 sm:px-4 py-2.5 no-select">
+<nav class="bg-[#7F409D] px-2 sm:px-4 py-2.5 no-select " style="z-index: 1000000005453445;">
     <div class="container flex flex-wrap items-center mx-auto justify-between">
         {% include 'components/navbar/view_file/components/file_info.html' %}
 
@@ -35,4 +35,64 @@
         border-right: 12px solid transparent;
         z-index: 9999;
     }
+ 
+  
+    .show {
+        animation: showMenu 300ms forwards;
+        transition: all;
+        
+    }
+    .showFile {
+        animation: showFileMenu 300ms forwards;
+        transition: all;
+    }
+    
+    @keyframes showMenu {
+            from {
+                opacity: 0;
+                top:-200px;
+            }
+            50% {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+                top:4.5px
+            }
+        }
+        @keyframes showFileMenu {
+            from {
+                opacity: 0;
+                top:-200px;
+            }
+            50% {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+                top:44px
+            }
+        }
+
 </style>
+<script>
+    // set the dropdown menu element
+
+    // set the dropdown menu element
+    const targetEl = document.getElementById('dropdownMenu');
+
+// set the element that trigger the dropdown menu on click
+const triggerEl = document.getElementById('dropdownButton');
+
+// options with default values
+const options = {
+  placement: 'bottom',
+  onHide: () => {
+      console.log('dropdown has been hidden');
+  },
+  onShow: () => {
+      console.log('dropdown has been shown');
+  }
+};
+
+</script>

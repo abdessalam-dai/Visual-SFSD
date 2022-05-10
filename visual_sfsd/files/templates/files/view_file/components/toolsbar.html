@@ -1,6 +1,6 @@
 {% load static %}
 
-<div class="items-center tools rounded-r-lg mt-8 bg-gray-600 shadow-2xl w-auto">
+<div class="items-center tools rounded-r-lg mt-8 bg-slate-600 shadow-2xl w-auto">
     <ul class="toolbar-options flex flex-col space-y-5 items-center w-14 py-3">
         <li class="toolbar-tool no-select">
             <div data-tooltip-target="tooltip-generate-data"
@@ -129,4 +129,17 @@
         border-bottom: 12px solid transparent;
         z-index: 1;
     }
+    .fade {
+        transition: all;
+        animation: fadeAn 200ms forwards;
+    }
+    @keyframes fadeAn {
+        0%{
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+    
 </style>

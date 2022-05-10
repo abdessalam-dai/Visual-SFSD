@@ -104,6 +104,18 @@ input[type=number] {
     transform: scale(.95);
 }
 
+.show-adr {
+    animation: showAdr 500ms forwards;
+}
+@keyframes showAdr {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+
+
 .fade {
     animation: fade forwards 200ms;
 }
