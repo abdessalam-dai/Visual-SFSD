@@ -214,22 +214,22 @@
         <h3 class="text-center text-blue-900 text-2xl font-medium">{% if query|length == 0 or file_access|length == 0 %}
             You don't have any files{% elif query|length > 0 %}No results were found{% endif %}</h3>
     </div>
-{% endif %}
-<div class="flex justify-start mt-12 flex-wrap">
+{% else %}
+    <div class="flex justify-start mt-12 flex-wrap">
 
     {% for file in files %}
-        {% for file in files %}
-            <a href="{% url 'view_file' file.id %}"
-               class="mb-8 mx-3.5 w-[220px] h-[190px] rounded-3xl bg-white  transition-all hover:-translate-y-1 focus:-translate-y-1 ">
-                <div class="file-info rounded-3xl w-full h-full pt-4 pl-6 pb-10 pr-10  shadow-[0px_4px_4px_rgba(0,0,0,0.25)]"
-                     draggable="true"
-                     data-id="{{ file.id }}">
-                    <h2 class="file-name font-bold text-4xl break-words">{{ file.name|truncatechars:10 }}</h2>
-                    <p class="file-structure text-lg font-normal">{{ file.get_file_access_display }}</p>
-                    <p class="file-type text-lg font-normal">{{ file.get_file_type_display }}</p>
-                    <span class="text-indigo-900">{{ file.date_created|date:"Y-m-d" }}</span>
-                </div>
-            </a>
-        {% endfor %}
+        <a href="{% url 'view_file' file.id %}"
+           class="mb-8 mx-3.5 w-[220px] h-[190px] rounded-3xl bg-white  transition-all hover:-translate-y-1 focus:-translate-y-1 ">
+            <div class="file-info rounded-3xl w-full h-full pt-4 pl-6 pb-10 pr-10  shadow-[0px_4px_4px_rgba(0,0,0,0.25)]"
+                 draggable="true"
+                 data-id="{{ file.id }}">
+                <h2 class="file-name font-bold text-4xl break-words">{{ file.name|truncatechars:10 }}</h2>
+                <p class="file-structure text-lg font-normal">{{ file.get_file_access_display }}</p>
+                <p class="file-type text-lg font-normal">{{ file.get_file_type_display }}</p>
+                <span class="text-indigo-900">{{ file.date_created|date:"Y-m-d" }}</span>
+            </div>
+        </a>
     {% endfor %}
+{% endif %}
+
 </div>
