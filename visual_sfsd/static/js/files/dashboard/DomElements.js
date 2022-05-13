@@ -24,6 +24,7 @@ export const fAccess = document.querySelector("#file-access");
 export const maxNbEnregs = document.querySelector("#max-nb-enregs");
 export const maxNbBlocks = document.querySelector("#max-nb-blocks");
 export const indexTableSize = document.querySelector("#index-table-size");
+export const indexTableSizeContainer = document.querySelector("#index-table-size-container");
 
 
 export const submitFileNameBtn = document.querySelector("#submit-file-name-btn");

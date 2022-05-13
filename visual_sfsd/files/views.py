@@ -125,9 +125,13 @@ def dashboard(request):
         f_type = request.POST.get('type').strip()
         max_nb_enregs = request.POST.get('max-nb-enregs').strip()
         max_nb_blocks = request.POST.get('max-nb-blocks').strip()
+        index_table_size = request.POST.get('index-table-size').strip()
 
         if 1 <= len(f_name) <= 100 and f_access in ACCESS_TYPES.keys() and \
-                f_type in ACCESS_TYPES[f_access] and 5 <= int(max_nb_blocks) <= 100 and 4 <= int(max_nb_enregs) <= 8:
+                f_type in ACCESS_TYPES[f_access] \
+                and 5 <= int(max_nb_blocks) <= 100 \
+                and 4 <= int(max_nb_enregs) <= 8 \
+                and 5 <= int(index_table_size) <= 100:
             data = {
                 "name": f_name,
                 "characteristics": {
@@ -143,13 +147,9 @@ def dashboard(request):
                 data["characteristics"]["headIndex"] = -1
                 data["characteristics"]["tailIndex"] = -1
 
-            if f_type == 'clustered':
+            if f_access == 'indexed':
                 data["indexTable"] = []
-                data["characteristics"]["maxIndex"] = max_nb_blocks
-
-            if f_type == 'not_clustered':
-                data["indexTable"] = []
-                data["characteristics"]["maxIndex"] = int(max_nb_blocks) * int(max_nb_enregs)
+                data["characteristics"]["maxIndex"] = index_table_size
 
             file = File(
                 owner=request.user,

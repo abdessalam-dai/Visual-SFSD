@@ -11,6 +11,8 @@ import {animate} from "./shared/animationSpeed.js";
 import * as DomElements from "./DomElements.js";
 import "./shared/fileHead.js";
 import "./shared/MC.js";
+import {addToast} from "../../toasts.js";
+import {keyToSearch} from "./DomElements.js";
 
 
 // START - useful functions
@@ -29,6 +31,10 @@ const buff = d3.select(".buf");
 const buff2 = d3.select(".buf2");
 const MSBoard = d3.select(".ms-container");
 const indexTableHtml = d3.select("#index-table");
+let indexTableContainer;
+if (FILE_ACCESS === 'indexed') {
+    indexTableContainer = d3.select(".index-table-container");
+}
 let toolTipIsVisible = false;
 let ToolTipToHide;
 
@@ -78,7 +84,8 @@ if (FILE_TYPE === "not_clustered") {
         blocks,
         indexTable,
         parseInt(fileData["characteristics"]["maxIndex"]),
-        indexTableHtml
+        indexTableHtml,
+        indexTableContainer
     );
 } else if (FILE_TYPE === "clustered") {
     newFile = new Clustered(
@@ -93,7 +100,8 @@ if (FILE_TYPE === "not_clustered") {
         blocks,
         indexTable,
         parseInt(fileData["characteristics"]["maxIndex"]),
-        indexTableHtml
+        indexTableHtml,
+        indexTableContainer
     );
 } else if (FILE_TYPE === "TOF") {
     newFile = new TOF(
@@ -173,7 +181,7 @@ if (FILE_ACCESS === "indexed") {
 
 const changeButtonsState = (state) => {
     if (state) { // if an option is clicked, hide all tooltips
-        hideAllToolbarTooltips();
+        // hideAllToolbarTooltips();
     }
     DomElements.generateDataBtn.disabled = state
     DomElements.searchBtn.disabled = state
@@ -184,56 +192,9 @@ const changeButtonsState = (state) => {
 }
 
 
-// START - Handle toolbar
-Array.from(DomElements.toolbarIcons).forEach(option => {
-    option.addEventListener('click', (e) => {
-        let tooltip = option.parentNode.parentNode.children[1];
+// // START - Handle toolbar
 
-        if (toolTipIsVisible) {
-            document.querySelectorAll('.tooltip-visible').forEach(tooltip => {
-                tooltip.classList.remove('tooltip-visible');
-                toolTipIsVisible = false;
-                tooltip.classList.add('hidden');
-            });
-        }
-
-        if (tooltip.classList.contains("hidden")) {
-            tooltip.classList.remove(("hidden"));
-            tooltip.classList.add("tooltip-visible");
-            ToolTipToHide = tooltip;
-            toolTipIsVisible = true;
-        } else {
-            tooltip.classList.add(("hidden"));
-            tooltip.classList.remove("tooltip-visible");
-            toolTipIsVisible = false;
-            ToolTipToHide = "";
-        }
-    })
-})
-
-
-document.addEventListener('click', (e) => {
-    if (!e.target.classList.contains("toolbar-icon") && e.target.tagName !== 'INPUT' && toolTipIsVisible) {
-        ToolTipToHide.classList.add("hidden");
-        ToolTipToHide.classList.remove("tooltip-visible");
-        toolTipIsVisible = false;
-    }
-})
-
-
-// make sure that the z-index for toolbar tooltips is higher
-document.querySelectorAll(".toolbar-tooltip").forEach((tooltip) => {
-    tooltip.style.zIndex = "101";
-});
-
-const hideAllToolbarTooltips = () => {
-    DomElements.toolbarOptions.forEach((option) => {
-        let tooltip = option.querySelector(".toolbar-tooltip");
-        tooltip.classList.add("hidden");
-    });
-}
-
-// END - Handle toolbar
+// // END - Handle toolbar
 
 
 // START - validate data while changing (key, field1, field2)
@@ -325,7 +286,9 @@ const validateEdit = () => {
 validateGenerateData();
 validateSearch();
 validateKeyToRemove();
-validateKeyToRemovePhysically();
+if (FILE_TYPE !== "LOF" && FILE_TYPE !== "LnOF" && FILE_ACCESS !== 'indexed') {
+    validateKeyToRemovePhysically();
+}
 validateInsert();
 validateEdit();
 // END - validate data while changing (key, field1, field2)
@@ -339,7 +302,7 @@ const randInt = (min, max) => {
 }
 
 const generateData = (n, min, max) => {
-    const randomData = ["DAWDI", "bousla", "kacimi", "yanis", "farouk", "rami", "ali", "MOHEMMED", "massinisa", "yuva", "aksil", "tari", "sebaa", "mouloud", "hamid", "ahmed", "bilal", "abdessalam", "zinneddin", "yahia", "houssam", "wassim"]
+    const randomData = ["Aberdeen", "Abilene", "Akron", "Albany", "Allentown", "Amarillo", "Anaheim", "Anchorage", "Ann Arbor", "Antioch", "Appleton", "Arlington", "Arvada", "Asheville", "Athens", "Atlanta", "Augusta", "Aurora", "Austin", "Baltimore", "Beaumont", "Bel Air", "Bellevue", "Berkeley", "Bethlehem", "Billings", "Boise", "Boston", "Boulder", "Bradenton", "Bremerton", "Brighton", "Bryan", "Buffalo", "Burbank", "Cambridge", "Canton", "Cary", "Champaign", "Chandler", "Charlotte", "Chicago", "Cleveland", "Columbia", "Columbus", "Concord", "Corona", "Dallas", "Daly City", "Danbury", "Davenport", "Dayton", "Deltona", "Denton", "Denver", "Detroit", "Downey", "Duluth", "Durham", "El Monte", "El Paso", "Elizabeth", "Elk Grove", "Elkhart", "Erie", "Escondido", "Eugene", "Fairfield", "Fargo", "Fitchburg", "Flint", "Fontana", "Frederick", "Fremont", "Fresno", "Fullerton", "Garland", "Gastonia", "Gilbert", "Glendale", "Grayslake", "Green Bay", "GreenBay", "Hampton", "Harlingen", "Hartford", "Hayward", "Hemet", "Henderson", "Hesperia", "Hialeah", "Hickory", "Hollywood", "Honolulu", "Houma", "Houston", "Howell", "Inglewood", "Irvine", "Irving", "Jackson", "Jefferson", "Joliet", "Kailua", "Kalamazoo", "Kaneohe", "Kennewick", "Kenosha", "Killeen", "Kissimmee", "Knoxville", "Lacey", "Lafayette", "Lakeland", "Lakewood", "Lancaster", "Lansing", "Laredo", "Las Vegas", "Layton", "Lexington", "Lincoln", "Lorain", "Lowell", "Lubbock", "Macon", "Madison", "Marina", "McAllen", "McHenry", "Medford", "Melbourne", "Memphis", "Merced", "Mesa", "Mesquite", "Miami", "Milwaukee", "Miramar", "Mobile", "Modesto", "Monroe", "Monterey", "Murrieta", "Muskegon", "Naples", "Nashua", "Nashville", "New Haven", "New York", "Newark", "Newburgh", "Norfolk", "Normal", "Norman", "Norwalk", "Norwich", "Oakland", "Ocala", "Oceanside", "Odessa", "Ogden", "Olathe", "Olympia", "Omaha", "Ontario", "Orange", "Orem", "Orlando", "Oxnard", "Palm Bay", "Palmdale", "Pasadena", "Paterson", "Pensacola", "Peoria", "Phoenix", "Plano", "Pomona", "Portland", "Provo", "Pueblo", "Racine", "Raleigh", "Reading", "Redding", "Reno", "Richland", "Richmond", "Riverside", "Roanoke", "Rochester", "Rockford", "Roseville", "Saginaw", "Salem", "Salinas", "San Diego", "San Jose", "Santa Ana", "Sarasota", "Savannah", "Scranton", "Seaside", "Seattle", "Sebastian", "Spokane", "St. Louis", "St. Paul", "Stamford", "Stockton", "Sunnyvale", "Syracuse", "Tacoma", "Tampa", "Temecula", "Tempe", "Thornton", "Toledo", "Topeka", "Torrance", "Trenton", "Tucson", "Tulsa", "Tyler", "Utica", "Vallejo", "Vancouver", "Visalia", "Waco", "Warren", "Waterbury", "Waterloo", "Wichita", "Winston", "Worcester", "Yakima", "Yonkers", "York"];
 
     let arrOfKeys = [];
     let arr = [];
@@ -379,32 +342,40 @@ const handleGenerateData = () => {
             max = getValue(DomElements.maxKey);
 
         let dataIsValid = (n <= max - min + 1) && n <= newFile.maxNbBlocks * newFile.maxNbEnregs;
-
-        if (dataIsValid && elementsNumberValid && minKeyValid && maxKeyValid) {
-            changeButtonsState(true);
-
-            // remove all previous data from the file
-            newFile.reset();
-
-            let data = generateData(n, min, max);
-
-            console.log(data)
-
-            for (const enreg of data) {
-                await newFile.insert(
-                    enreg.key,
-                    enreg.field1,
-                    enreg.field2,
-                    false,
-                    false
-                );
-            }
-
-            newFile.createBoardsDOM();
-            if (FILE_ACCESS === 'indexed') newFile.createIndexTableDOM();
-
-            changeButtonsState(false);
+        if (FILE_TYPE === 'not_clustered') {
+            dataIsValid = (n <= max - min + 1) && n <= newFile.maxIndex;
+        } else if (FILE_TYPE === 'clustered') {
+            dataIsValid = (n <= max - min + 1) && n <= newFile.maxIndex * newFile.maxNbEnregs;
         }
+
+        if (!(dataIsValid && elementsNumberValid && minKeyValid && maxKeyValid)) {
+            addToast("Invalid inputs (check the file's characteristics)", "danger");
+            return;
+        }
+
+        changeButtonsState(true);
+
+        // remove all previous data from the file
+        newFile.reset();
+
+        let data = generateData(n, min, max);
+
+        console.log(data)
+
+        for (const enreg of data) {
+            await newFile.insert(
+                enreg.key,
+                enreg.field1,
+                enreg.field2,
+                false,
+                false
+            );
+        }
+
+        newFile.createBoardsDOM();
+        if (FILE_ACCESS === 'indexed') newFile.createIndexTableDOM();
+
+        changeButtonsState(false);
     });
 }
 
@@ -414,19 +385,22 @@ handleGenerateData();
 // START - Search for element
 const handleSearch = () => {
     DomElements.searchBtn.addEventListener("click", async function () {
-        if (keyToSearchValid) {
-            changeButtonsState(true);
-
-            let key = parseInt(DomElements.keyToSearch.value);
-
-            let {
-                found: found,
-                pos: pos,
-                readTimes: readTimes
-            } = await newFile.search(key, animate);
-            console.log(found, pos)
-            changeButtonsState(false)
+        if (!keyToSearchValid) {
+            addToast("Invalid input", "danger");
+            return;
         }
+
+        changeButtonsState(true);
+
+        let key = parseInt(DomElements.keyToSearch.value);
+
+        let {
+            found: found,
+            pos: pos,
+            readTimes: readTimes
+        } = await newFile.search(key, animate);
+        console.log(found, pos)
+        changeButtonsState(false)
     });
 }
 
@@ -437,18 +411,21 @@ handleSearch();
 // START - Remove element
 const handleRemove = () => {
     DomElements.removeBtn.addEventListener("click", async function () {
-        if (keyToRemoveValid) {
-            changeButtonsState(true);
-
-            let key = parseInt(DomElements.keyToRemove.value);
-            console.log(key)
-
-            let removeSuccess = await newFile.removeLogically(key, animate);
-
-            console.log(removeSuccess)
-
-            changeButtonsState(false);
+        if (!keyToRemoveValid) {
+            addToast("Invalid input", "danger");
+            return;
         }
+
+        changeButtonsState(true);
+
+        let key = parseInt(DomElements.keyToRemove.value);
+        console.log(key)
+
+        let removeSuccess = await newFile.removeLogically(key, animate);
+
+        console.log(removeSuccess)
+
+        changeButtonsState(false);
     });
 }
 
@@ -459,20 +436,23 @@ handleRemove()
 // START - Remove element physically
 const handleRemovePhysically = () => {
     DomElements.removePhysicallyBtn.addEventListener("click", async function () {
-        if (keyToRemovePhysicallyValid) {
-            changeButtonsState(true);
-
-            let key = parseInt(DomElements.keyToRemovePhysically.value);
-
-            let removeSuccess = await newFile.removePhysically(key, animate);
-
-            newFile.createBoardsDOM();
-            if (FILE_ACCESS === 'indexed') newFile.createIndexTableDOM();
-
-            console.log(removeSuccess);
-
-            changeButtonsState(false);
+        if (!keyToRemovePhysicallyValid) {
+            addToast("Invalid input", "danger");
+            return;
         }
+
+        changeButtonsState(true);
+
+        let key = parseInt(DomElements.keyToRemovePhysically.value);
+
+        let removeSuccess = await newFile.removePhysically(key, animate);
+
+        newFile.createBoardsDOM();
+        if (FILE_ACCESS === 'indexed') newFile.createIndexTableDOM();
+
+        console.log(removeSuccess);
+
+        changeButtonsState(false);
     });
 }
 
@@ -485,22 +465,25 @@ if (FILE_TYPE !== 'LOF' && FILE_TYPE !== 'LnOF') {
 // START - Inert Enreg.
 const handleInsert = () => {
     DomElements.insertBtn.addEventListener("click", async function () {
-        if (keyToInsertValid && field1ToInsertValid && field2ToInsertValid) {
-            changeButtonsState(true);
-
-            let key = parseInt(DomElements.keyToInsert.value);
-            let field1 = DomElements.field1ToInsert.value;
-            let field2 = DomElements.field2ToInsert.value;
-
-            let insertingResult = await newFile.insert(key, field1, field2, false, animate);
-
-            console.log(insertingResult)
-
-            changeButtonsState(false);
-
-            newFile.createBoardsDOM();
-            if (FILE_ACCESS === 'indexed') newFile.createIndexTableDOM();
+        if (!(keyToInsertValid && field1ToInsertValid && field2ToInsertValid)) {
+            addToast("Invalid inputs", "danger");
+            return;
         }
+
+        changeButtonsState(true);
+
+        let key = parseInt(DomElements.keyToInsert.value);
+        let field1 = DomElements.field1ToInsert.value;
+        let field2 = DomElements.field2ToInsert.value;
+
+        let insertingResult = await newFile.insert(key, field1, field2, false, animate);
+
+        console.log(insertingResult)
+
+        changeButtonsState(false);
+
+        newFile.createBoardsDOM();
+        if (FILE_ACCESS === 'indexed') newFile.createIndexTableDOM();
     });
 }
 
@@ -511,22 +494,25 @@ handleInsert()
 // START - Edit Enreg.
 const handleEdit = () => {
     DomElements.editBtn.addEventListener("click", async function () {
-        if (keyToEditValid && field1ToEditValid && field2ToEditValid) {
-            changeButtonsState(true);
-
-            let key = parseInt(DomElements.keyToEdit.value);
-            let field1 = DomElements.field1ToEdit.value;
-            let field2 = DomElements.field2ToEdit.value;
-
-            let editingResults = await newFile.editEnreg(key, field1, field2, false, animate);
-
-            console.log(editingResults);
-
-            changeButtonsState(false);
-
-            newFile.createBoardsDOM();
-            if (FILE_ACCESS === 'indexed') newFile.createIndexTableDOM();
+        if (!(keyToEditValid && field1ToEditValid && field2ToEditValid)) {
+            addToast("Invalid inputs", "danger");
+            return;
         }
+
+        changeButtonsState(true);
+
+        let key = parseInt(DomElements.keyToEdit.value);
+        let field1 = DomElements.field1ToEdit.value;
+        let field2 = DomElements.field2ToEdit.value;
+
+        let editingResults = await newFile.editEnreg(key, field1, field2, false, animate);
+
+        console.log(editingResults);
+
+        changeButtonsState(false);
+
+        newFile.createBoardsDOM();
+        if (FILE_ACCESS === 'indexed') newFile.createIndexTableDOM();
     });
 }
 
@@ -534,7 +520,7 @@ handleEdit();
 // END - Edit Enreg.
 
 
-// START - Scroll buttons
+// START - Scroll buttons for MS
 const handleScrollButtons = () => {
     DomElements.scrollLeftBtn.addEventListener('click', function () {
         MSBoard.node().scrollLeft -= 224
@@ -546,7 +532,20 @@ const handleScrollButtons = () => {
 }
 
 handleScrollButtons();
-// END - Scroll buttons
+// END - Scroll buttons for MS
+
+// START - Scroll buttons for index table
+const handleScrollButtonsIndexTable = () => {
+    DomElements.indexTableScrollLeftBtn.addEventListener('click', function () {
+        indexTableContainer.node().scrollLeft -= 48;
+    });
+
+    DomElements.indexTableScrollRightBtn.addEventListener('click', function () {
+        indexTableContainer.node().scrollLeft += 48;
+    });
+}
+if (FILE_ACCESS === 'indexed') handleScrollButtonsIndexTable();
+// END - Scroll buttons for index table
 
 
 export {newFile};

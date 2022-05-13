@@ -2,7 +2,7 @@ import TableFile from '../../structres/TableFile.js';
 import Enreg from '../../structres/Enreg.js';
 import Block from '../../structres/Block.js';
 import {
-    ENREG_HIGHLIGHT_GREEN,
+    ENREG_HIGHLIGHT_GREEN, ENREG_HIGHLIGHT_GREY,
     ENREG_HIGHLIGHT_PURPLE,
     ENREG_HIGHLIGHT_RED
 } from "../../../constants.js";
@@ -43,6 +43,7 @@ export default class TnOF extends TableFile {
                     midElement = bufferElement.select(".bloc-body ul")
                         .select(`li:nth-child(${j + 1})`);
                 }
+                console.log(midElement)
                 if (key === currBlock.enregs[j].key) {
                     found = true;
                     elementBGColor = ENREG_HIGHLIGHT_GREEN;
@@ -59,8 +60,8 @@ export default class TnOF extends TableFile {
                         .transition()
                         .delay(600 * delay)
                         .duration(300 * delay)
-                        .style("background", "#9CA3AF");
-                    await sleep(1000);
+                        .style("background", ENREG_HIGHLIGHT_GREY);
+                    await sleep(1500);
                 }
             }
 

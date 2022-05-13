@@ -39,3 +39,5 @@ export const editBtn = document.querySelector("#edit-btn");
 
 export const scrollLeftBtn = document.querySelector("#scroll-left-btn");
 export const scrollRightBtn = document.querySelector("#scroll-right-btn");
+export const indexTableScrollLeftBtn = document.querySelector("#index-table-scroll-left-btn");
+export const indexTableScrollRightBtn = document.querySelector("#index-table-scroll-right-btn");

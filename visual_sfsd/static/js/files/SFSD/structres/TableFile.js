@@ -53,7 +53,6 @@ export default class TableFile extends SequentialFile {
 
     createBoardsDOM() {
         // set number of blocks and number of elements in header
-        let lastElementShown;
         d3.select("#nb-blocks")
             .text(this.nbBlocks);
         d3.select("#nb-elements")
@@ -62,7 +61,7 @@ export default class TableFile extends SequentialFile {
         this.MSBoard.selectAll("*").remove();
 
         const blocDiv = `
-        <div class="bloc no-select w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0" style="height: 352px;">
+        <div class="bloc no-select w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0 h-[352px]">
             <div
                 class="bloc-header text-white px-3 items-center font-medium h-8 rounded-t-lg w-full flex flex-row justify-between bg-slate-900">
                 <span class="bloc-index no-select" style="position: relative"></span>
@@ -201,7 +200,7 @@ export default class TableFile extends SequentialFile {
             return `
                 <button id="dropdownDefault" class="outline-none" data-dropdown-toggle="enreg-dropdown-${enreg.key}">                
                 </button>
-                <div id="enreg-dropdown-${enreg.key}" class="z-10 fade rounded-b-md hidden bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700"
+                <div id="enreg-dropdown-${enreg.key}" class="enreg-dropdown z-10 fade rounded-b-md hidden bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700"
                 style="position: absolute; top: 40px; width: 192px; z-index: 900">
                     <ul class="border-b-md text-sm bg-gray-800 rounded-b-md text-white dark:text-gray-200" aria-labelledby="dropdownDefault">
                           <li class="border-b-2">
@@ -248,7 +247,7 @@ export default class TableFile extends SequentialFile {
                     .data(block.enregs)
                     .enter()
                     .append("li")
-                    .attr("class", "border-b-2 border-gray-700 h-10 flex justify-center flex-col")
+                    .attr("class", `border-b-2 bg-[${ENREG_HIGHLIGHT_GREY}] border-gray-700 h-10 flex justify-center flex-col`)
                     .style("opacity", "0")
                     .style("color", function (enreg) {
                         return enreg.removed ? "#a70000" : "black"
@@ -260,11 +259,11 @@ export default class TableFile extends SequentialFile {
                     })
                     .on("mouseover", function () {
                         d3.select(this)
-                            .style("background", "gray")
+                            .style("background", "#9CA3AF")
                     })
                     .on("mouseout", function () {
                         d3.select(this)
-                            .style("background", "#EDEAEA")
+                            .style("background", ENREG_HIGHLIGHT_GREY)
                     })
                     .each(function () {
                         cpt++
@@ -275,6 +274,7 @@ export default class TableFile extends SequentialFile {
                             .style("opacity", "1")
                     })
                     .select("button")
+                    .classed("overflow-hidden flex flex-col justify-center items-center w-full h-full", true)
                     .append("span")
                     .text(function (enreg) {
                         return enreg.key;
@@ -318,8 +318,7 @@ export default class TableFile extends SequentialFile {
         if (bufferIndex === 1) {
             this.buff.selectAll("*").remove()
             let buff = this.buff.append("div")
-                .attr("class", "bloc w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0")
-                .style("height", "352px")
+                .attr("class", "bloc w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0 h-[352px]")
                 .html(blockElement.html());
 
             buff.select(".bloc-header .bloc-index")
@@ -333,12 +332,13 @@ export default class TableFile extends SequentialFile {
 
             buff.selectAll(".bloc-body ul li")
                 .style("overflow", "hidden");
+
+            buff.selectAll(".enreg-dropdown").remove();
             return buff;
         } else {
             this.buff2.selectAll("*").remove()
             let buff = this.buff2.append("div")
-                .attr("class", "bloc w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0")
-                .style("height", "352px")
+                .attr("class", "bloc w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0 h-[352px]")
                 .html(blockElement.html());
 
             buff.select(".bloc-header .bloc-index")
@@ -352,6 +352,8 @@ export default class TableFile extends SequentialFile {
 
             buff.selectAll(".bloc-body ul li")
                 .style("overflow", "hidden");
+
+            buff.selectAll(".enreg-dropdown").remove();
             return buff;
         }
     }
@@ -371,8 +373,7 @@ export default class TableFile extends SequentialFile {
     createNewBlockInBuff(newEnreg) {
         this.buff.selectAll("*").remove()
         let bufferElement = this.buff.append("div")
-            .attr("class", "bloc w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0")
-            .style("height", "352px");
+            .attr("class", "bloc w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0 h-[352px]");
 
         bufferElement.append("div")
             .attr("class", "bloc-header text-white px-3 items-center font-medium h-8 rounded-t-lg w-full flex flex-row justify-between bg-slate-900");
@@ -388,12 +389,11 @@ export default class TableFile extends SequentialFile {
             .text("NB=1");
 
         bufferElement.append("div")
-            .attr("class", "bloc-body w-full h-80 bg-gray-400 rounded-b-lg")
+            .attr("class", `bloc-body w-full h-80 bg-[${ENREG_HIGHLIGHT_GREY}] rounded-b-lg`)
             .append("ul")
             .attr("class", "text-lg font-medium text-center")
             .append("li")
-            .style("background", ENREG_HIGHLIGHT_GREEN)
-            .attr("class", "border-b-2 h-10 flex justify-center flex-col")
+            .attr("class", `border-b-2 bg-[${ENREG_HIGHLIGHT_GREEN}] border-gray-700 h-10 flex justify-center flex-col`)
             .append("span")
             .text(`${newEnreg.key}`);
     }

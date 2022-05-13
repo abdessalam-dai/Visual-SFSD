@@ -2,7 +2,7 @@ import ListFile from '../../structres/ListFile.js';
 import Enreg from '../../structres/Enreg.js';
 import Block from '../../structres/Block.js';
 import {
-    ENREG_HIGHLIGHT_GREEN, ENREG_HIGHLIGHT_RED,
+    ENREG_HIGHLIGHT_GREEN, ENREG_HIGHLIGHT_GREY, ENREG_HIGHLIGHT_RED,
 } from "../../../constants.js";
 import {delay, sleep} from "../../../view_file/shared/animationSpeed.js";
 
@@ -70,7 +70,7 @@ export default class LnOF extends ListFile {
                         .transition()
                         .delay(600 * delay)
                         .duration(300 * delay)
-                        .style("background", "#9CA3AF");
+                        .style("background", ENREG_HIGHLIGHT_GREY);
                     await sleep(1000);
                 }
             }

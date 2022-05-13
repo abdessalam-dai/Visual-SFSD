@@ -85,7 +85,7 @@ export default class ListFile extends SequentialFile {
         this.MSBoard.selectAll("*").remove();
 
         const blocDiv = `
-        <div class="bloc no-select w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0" style="height: 352px;">
+        <div class="bloc no-select w-48 shadow-lg shadow-black/50 rounded-t-lg flex-shrink-0" style="height: 352px;">
             <div
                 class="bloc-header text-white px-3 items-center font-medium h-8 rounded-t-lg w-full flex flex-row justify-between bg-slate-900">
                 <span class="bloc-index" style="position: relative"></span>
@@ -248,7 +248,7 @@ export default class ListFile extends SequentialFile {
             return `
                 <button id="dropdownDefault" class="outline-none" data-dropdown-toggle="enreg-dropdown-${enreg.key}">                
                 </button>
-                <div id="enreg-dropdown-${enreg.key}" class="z-10 fade rounded-b-md hidden bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700"
+                <div id="enreg-dropdown-${enreg.key}" class="enreg-dropdown z-10 fade rounded-b-md hidden bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700"
                 style="position: absolute; top: 40px; width: 192px; z-index: 900">
                     <ul class="border-b-md text-sm bg-gray-800 rounded-b-md text-white dark:text-gray-200" aria-labelledby="dropdownDefault">
                           <li class="border-b-2">
@@ -286,7 +286,7 @@ export default class ListFile extends SequentialFile {
         this.MSBoard.selectAll('.bloc')
             .data(this.blocks)
             .append("div")
-            .attr("class", `bloc-body w-full h-80 bg-[${ENREG_HIGHLIGHT_GREY}] rounded-b-lg`)
+            .attr("class", `bloc-body w-full h-80 bg-[${ENREG_HIGHLIGHT_GREY}]`)
             .append("ul")
             .attr("class", "text-lg font-medium text-center")
             .each(function (block) {
@@ -323,6 +323,7 @@ export default class ListFile extends SequentialFile {
                                 .style("opacity", "1")
                         })
                         .select("button")
+                        .classed("overflow-hidden flex flex-col justify-center items-center w-full h-full", true)
                         .append("span")
                         .text(function (enreg) {
                             return enreg.key;
@@ -463,8 +464,7 @@ export default class ListFile extends SequentialFile {
         if (bufferIndex === 1) {
             this.buff.selectAll("*").remove()
             let buff = this.buff.append("div")
-                .attr("class", "bloc w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0")
-                .style("height", "352px")
+                .attr("class", "bloc w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0 h-[352px]")
                 .html(blockElement.html());
 
             buff.select(".bloc-header .bloc-index")
@@ -479,12 +479,13 @@ export default class ListFile extends SequentialFile {
             buff.selectAll(".bloc-body ul li")
                 .style("overflow-y", "hidden")
                 .style("overflow-x", "hidden");
+
+            buff.selectAll(".enreg-dropdown").remove();
             return buff;
         } else {
             this.buff2.selectAll("*").remove()
             let buff = this.buff2.append("div")
-                .attr("class", "bloc w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0")
-                .style("height", "352px")
+                .attr("class", "bloc w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0 h-[352px]")
                 .html(blockElement.html());
 
             buff.select(".bloc-header .bloc-index")
@@ -495,6 +496,8 @@ export default class ListFile extends SequentialFile {
             buff.selectAll(".bloc-header span")
                 .select("div")
                 .remove();
+
+            buff.selectAll(".enreg-dropdown").remove();
             return buff;
         }
     }

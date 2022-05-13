@@ -1,3 +1,6 @@
+import {addToast} from "../../toasts.js";
+
+
 export const editFileName = (name) => {
     $.ajax({
         type: 'POST',
@@ -7,10 +10,10 @@ export const editFileName = (name) => {
         },
         dataType: 'json',
         success: function (response) {
-            console.log("File name changed");
+            addToast("File name has been changed", "success");
         },
         error: function (response) {
-            console.log("Unable to change file name");
+            addToast("Couldn't change file name", "danger");
         }
     });
 }
@@ -24,10 +27,10 @@ export const saveFileData = (fileData) => {
         },
         datatype: 'json',
         success: function (response) {
-            console.log(response["status"]);
+            addToast("Changes have been saved", "success");
         },
         error: function (response) {
-            console.log("Something went wrong");
+            addToast("Couldn't save changes", "danger");
         }
     });
 }
@@ -39,16 +42,15 @@ export const toggleFileVisibility = () => {
     $.ajax({
         type: 'POST',
         url: TOGGLE_FILE_VISIBILITY_URL,
-        data: {
-
-        },
+        data: {},
         datatype: 'json',
         success: function (response) {
-            console.log(response["status"]);
+            const msg = toggleFileVisibilityBtn.checked ? 'File is now public' : 'File is now private';
+            addToast(msg, "success");
         },
         error: function (response) {
             toggleFileVisibilityBtn.checked = !toggleFileVisibilityBtn.checked;
-            console.log("Something went wrong");
+            addToast("Something went wrong", "danger");
         }
     });
 }

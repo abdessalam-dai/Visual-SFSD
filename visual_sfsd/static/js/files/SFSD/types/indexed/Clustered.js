@@ -4,7 +4,6 @@ import {
     BLOCKS_DEFAULT,
     ENREG_HIGHLIGHT_GREEN,
     ENREG_HIGHLIGHT_GREY,
-    ENREG_HIGHLIGHT_ORANGE,
     ENREG_HIGHLIGHT_PURPLE,
     ENREG_HIGHLIGHT_RED,
     MAX_NB_BLOCKS,
@@ -30,7 +29,8 @@ export default class Clustered extends IndexedFile {
         blocks = BLOCKS_DEFAULT,
         indexTable = [],
         maxIndex = MAX_NB_BLOCKS,
-        indexTableHtml
+        indexTableHtml,
+        indexTableContainer
     ) {
         super(
             name,
@@ -44,7 +44,8 @@ export default class Clustered extends IndexedFile {
             blocks,
             indexTable,
             maxIndex,
-            indexTableHtml
+            indexTableHtml,
+            indexTableContainer
         );
     }
 
@@ -58,6 +59,10 @@ export default class Clustered extends IndexedFile {
 
             let currCell = this.indexTableHtml
                 .select(`.cell:nth-child(${mid + 1})`);
+
+            if (animate) {
+                this.scrollToCell(currCell);
+            }
 
             // If element is present at mid, return True
             if (this.indexTable[mid].key === key) {
@@ -96,7 +101,7 @@ export default class Clustered extends IndexedFile {
                     .delay(600 * delay)
                     .duration(300 * delay)
                     .style("background", "");
-                await sleep(1000);
+                await sleep(2000);
             }
         }
 
@@ -186,11 +191,10 @@ export default class Clustered extends IndexedFile {
             let middleIndex = Math.floor((startIndex + endIndex) / 2);
 
             let currKey = block.enregs[middleIndex].key;
-            let j = middleIndex;
 
             if (animate) {
                 midElement = bufferElement.select(".bloc-body ul")
-                    .select(`li:nth-child(${j + 1})`);
+                    .select(`li:nth-child(${middleIndex + 1})`);
             }
 
             if (key === currKey) {

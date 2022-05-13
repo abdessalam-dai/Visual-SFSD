@@ -38,11 +38,11 @@
             <i class="fa-solid text-4xl fa-gear w-11 ml-6 mr-3"></i>
             <h3 class="text-2xl font-bold">Settings</h3>
         </a>
-        <a href="#"
+        <a href="{% url 'contact' %}"
            class="hover:bg-white transition-all duration-300 hover:text-[#8846DD] rounded-l-full flex h-20 mt-6 items-center
                 {% if active_page == 'help' %}text-[#8846DD] bg-white active{% else %}not-active text-white bg-[#8846DD]{% endif %}">
             <i class="fa-solid fa-circle-question text-4xl w-11 ml-6 mr-3"></i>
-            <h3 class="text-2xl font-bold">Help</h3>
+            <h3 class="text-2xl font-bold">Feedback</h3>
         </a>
 
         <div class="fixed left-0 bottom-10 w-[300px]"> <!-- width depends on the side bar's width -->

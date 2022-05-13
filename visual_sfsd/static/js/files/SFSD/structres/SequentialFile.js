@@ -39,6 +39,7 @@ export default class SequentialFile {
 
         if (found) {
             this.blocks[i].enregs[j].removed = true;
+            readTimes++;
             writeTimes = 1;
 
             if (animate) {
@@ -139,7 +140,6 @@ export default class SequentialFile {
 
     updateBlockInMS(i, block) {
         let blockElement = this.MSBoard.select(`.bloc:nth-child(${i + 1})`);
-        console.log(blockElement)
 
         blockElement.select(".bloc-body ul")
             .selectAll("li")
@@ -151,7 +151,7 @@ export default class SequentialFile {
             .data(block.enregs)
             .enter()
             .append("li")
-            .attr("class", "border-b-2 h-10 flex justify-center flex-col")
+            .attr("class", `border-b-2 bg-[${ENREG_HIGHLIGHT_GREY}] border-gray-700 h-10 flex justify-center flex-col`)
             .style("color", function (enreg) {
                 return enreg.removed ? "#a70000" : "black"
             })

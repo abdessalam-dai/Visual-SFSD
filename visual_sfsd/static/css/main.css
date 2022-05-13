@@ -53,9 +53,13 @@ input[type=number] {
     border-radius: 10px;
 }
 
-.ms-container {
+.index-table-container {
     scroll-behavior: smooth;
+}
+
+.ms-container {
     padding: 45px 10px;
+    scroll-behavior: smooth;
 }
 
 .algorithm {
@@ -114,7 +118,7 @@ input[type=number] {
     50% {
         opacity: 0;
     }
-
+}
 
 .fade {
     animation: fade forwards 200ms;
@@ -128,4 +132,24 @@ input[type=number] {
     100% {
         opacity: 1;
     }
+}
+
+.toast {
+    animation: toastUp forwards 300ms;
+}
+
+@keyframes toastUp {
+    0% {
+        transform: translateY(100px);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}
+
+.bloc-body ul li:nth-child(8) {
+    border-bottom: none !important;
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
 }

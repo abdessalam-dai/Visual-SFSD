@@ -25,7 +25,8 @@ export default class NotClustered extends IndexedFile {
         blocks = BLOCKS_DEFAULT,
         indexTable = [],
         maxIndex = NB_BLOCKS_DEFAULT * MAX_NB_ENREGS_DEFAULT,
-        indexTableHtml
+        indexTableHtml,
+        indexTableContainer
     ) {
         super(
             name,
@@ -39,7 +40,8 @@ export default class NotClustered extends IndexedFile {
             blocks,
             indexTable,
             maxIndex,
-            indexTableHtml
+            indexTableHtml,
+            indexTableContainer
         );
     }
 
@@ -53,7 +55,11 @@ export default class NotClustered extends IndexedFile {
             let mid = Math.floor((start + end) / 2);
 
             let currCell = this.indexTableHtml
-                .select(`.cell:nth-child(${mid + 1})`)
+                .select(`.cell:nth-child(${mid + 1})`);
+
+            if (animate) {
+                this.scrollToCell(currCell);
+            }
 
             // If element is present at mid, return True
             if (this.indexTable[mid].key === key) {
@@ -99,7 +105,7 @@ export default class NotClustered extends IndexedFile {
                     .delay(600 * delay)
                     .duration(300 * delay)
                     .style("background", "");
-                await sleep(1000);
+                await sleep(2000);
             }
         }
 
@@ -118,6 +124,9 @@ export default class NotClustered extends IndexedFile {
         }
     }
 
+    isInsertionAllowed() {
+        return this.nbInsertions < this.maxIndex;
+    }
 
     async insert(key, field1, field2, removed = false, animate = false) {
         let readTimes = 0,

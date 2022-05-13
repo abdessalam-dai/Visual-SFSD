@@ -23,6 +23,13 @@
 {#{% include 'components/messages.html' %}#}
 <div class="h-screen flex flex-row-reverse bg-[#D2DCFF]">
     <div class="w-full text-center flex flex-col justify-center py-20 px-10 2xl:rounded-l-[75px] bg-[white] 2xl:w-1/2">
+        <div class="flex mb-10 flex-row px-5 justify-start">
+            <a href="{% url 'dashboard' %}"
+               class="rounded-lg bg-gray-700 space-x-3 px-3 shadow-lg py-1 flex flex-row justify-center items-center">
+                <span class="font-medium text-white text-lg">Dashboard</span>
+                <img class="w-5" src="{% static 'imgs/404/arrow-return-left.svg' %}" alt="">
+            </a>
+        </div>
         <div>
             <h1 class="text-center font-bold text-6xl mb-12">Contact Us</h1>
             <div class="w-full 2xl:w-2/3 2xl:px-[50px] m-auto mb-5">
@@ -53,7 +60,7 @@
         </div>
     </div>
     <div class="side-image w-0 flex justify-center items-center 2xl:w-1/2">
-        <img src="{% static 'imgs/accounts/contact.svg' %}" alt="Register">
+        <img src="{% static 'imgs/accounts/contact.svg' %}" alt="Contact">
     </div>
 </div>
 </body>

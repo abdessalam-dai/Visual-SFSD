@@ -1,4 +1,5 @@
 import * as DE from "./DomElements.js";
+import {indexTableSizeContainer} from "./DomElements.js";
 // import {dummyDataForm, fillWithDummyData} from "./DomElements.js";
 
 
@@ -15,7 +16,7 @@ const resetForm = () => {
     DE.fType.value = "TOF";
     DE.maxNbEnregs.value = 8;
     DE.maxNbBlocks.value = 50;
-    DE.indexTableSize.value = 8 * 50;
+    DE.indexTableSize.value = 50;
 
     // hide all the steps
     DE.step1.classList.remove('hidden');
@@ -24,7 +25,7 @@ const resetForm = () => {
     DE.step3Indexed.classList.add('hidden');
     DE.step3Hashing.classList.add('hidden');
     DE.step4.classList.add('hidden');
-    DE.indexTableSize.classList.add('hidden');
+    DE.indexTableSizeContainer.classList.add('hidden');
     // hide overlay
     DE.createFileModalOverlay.classList.add("hidden");
     DE.createFileModal.classList.add('hidden');
@@ -126,7 +127,7 @@ Array.from(DE.fileTypeBtns).forEach((fileTypeBtn) => {
             case "not_clustered":
                 DE.step3Indexed.classList.add('hidden');
                 DE.step4.classList.remove('hidden');
-                DE.indexTableSize.classList.remove('hidden');
+                DE.indexTableSizeContainer.classList.remove('hidden');
                 break;
             case "essai_linear":
                 DE.step3Hashing.classList.add('hidden');
@@ -145,20 +146,29 @@ Array.from(DE.fileTypeBtns).forEach((fileTypeBtn) => {
 const handleStep4 = () => {
     let maxNbBlocks = parseInt(DE.maxNbBlocks.value.trim());
     let maxNbEnregs = parseInt(DE.maxNbEnregs.value.trim());
-    DE.submitCreateFile.disabled = isNaN(maxNbBlocks) || maxNbBlocks < 5 || maxNbBlocks > 100
-        || isNaN(maxNbEnregs) || maxNbEnregs < 4 || maxNbEnregs > 8;
+    let indexTableSize = parseInt(DE.indexTableSize.value.trim());
 
-    if (!DE.submitCreateFile.disabled && fType === 'not_clustered') {
-        DE.indexTableSize.querySelector("span").textContent = String(maxNbEnregs * maxNbBlocks);
-    } else if (!DE.submitCreateFile.disabled && fType === 'clustered') {
-        DE.indexTableSize.querySelector("span").textContent = String(maxNbBlocks);
-    }
+    console.log(indexTableSize)
+
+    DE.submitCreateFile.disabled = isNaN(maxNbBlocks) || maxNbBlocks < 5 || maxNbBlocks > 100
+        || isNaN(maxNbEnregs) || maxNbEnregs < 4 || maxNbEnregs > 8
+        || isNaN(indexTableSize) || indexTableSize < 5 || indexTableSize > 100;
+
+    // if (!DE.submitCreateFile.disabled && fType === 'not_clustered') {
+    //     DE.indexTableSize.querySelector("span").textContent = String(maxNbEnregs * maxNbBlocks);
+    // } else if (!DE.submitCreateFile.disabled && fType === 'clustered') {
+    //     DE.indexTableSize.querySelector("span").textContent = String(maxNbBlocks);
+    // }
 }
 DE.maxNbBlocks.addEventListener('keyup', function () {
     handleStep4();
 });
 
 DE.maxNbEnregs.addEventListener('keyup', function () {
+    handleStep4();
+});
+
+DE.indexTableSize.addEventListener('keyup', function () {
     handleStep4();
 })
 

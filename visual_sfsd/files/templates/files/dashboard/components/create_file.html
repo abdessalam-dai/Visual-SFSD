@@ -164,12 +164,29 @@
                                 bg-gray-50"
                         />
                     </div>
-
                     <!-- For indexed files only -->
-                    <!-- Calculate and display the size of the index table -->
-                    <div id="index-table-size" class="hidden mt-2 text-lg font-medium text-gray-900">
-                        Index table size = <span>800</span>
+                    <div class="text-left mb-4 hidden" id="index-table-size-container">
+                        <label for="index-table-size"
+                               class="block mb-2 text-lg font-medium text-gray-900 dark:text-gray-300">
+                            Index table size
+                        </label>
+                        <input name="index-table-size"
+                               id="index-table-size"
+                               autocomplete="off"
+                               value="50"
+                               type="number" placeholder="Index table size"
+                               min="5"
+                               max="100"
+                               class="w-full px-3 py-2 border border-slate-300 rounded-md text-lg shadow-sm placeholder-gray-400 px-4
+                                focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
+                                bg-gray-50"
+                        />
                     </div>
+
+{#                    <!-- For indexed files only -->#}
+{#                    <div id="index-table-size" class="hidden mt-2 text-lg font-medium text-gray-900">#}
+{#                        Index table size = <span>800</span>#}
+{#                    </div>#}
 
                     <button id="submit-create-file"
                             type="submit"

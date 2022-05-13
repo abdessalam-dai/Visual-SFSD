@@ -1,38 +1,45 @@
 {% load static %}
-<div class="mc no-select flex flex-col justify-between"
-     style="width: 27rem; z-index: 2; background: #9EACF3;">
-    <div class="mc-description text-center font-medium"
-         style="padding: 10px 10px; ; color: #fff; font-size: 1.2em"></div>
-    {% include "files/view_file/components/complexity.html" %}
-    <div class="buffers flex flex-row space-x-4 justify-center">
-        <div class="buf flex flex-row justify-center">
-            <div class="bloc w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0" style="height: 352px;">
-                <div class="bloc-header text-white px-3 items-center font-medium  h-8 rounded-t-lg w-full flex flex-row justify-between bg-slate-900">
-                    <span class="bloc-index">Buffer 1</span>
-                    <span class="bloc-nb">NB=0</span>
+<div class="mc no-select w-[27rem] overflow-hidden"
+     style="z-index: 2;">
+    <div class="h-[95%]">
+        <div id="mc-body"
+             class="mc-open overflow-hidden h-full bg-[#9EACF3] flex  flex-col justify-center space-y-12">
+            {% include "files/view_file/components/complexity.html" %}
+            <div class="buffers flex flex-row space-x-4 justify-center">
+                <div class="buf flex flex-row justify-center">
+                    <div class="bloc w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0" style="height: 352px;">
+                        <div class="bloc-header text-white px-3 items-center font-medium  h-8 rounded-t-lg w-full flex flex-row justify-between bg-slate-900">
+                            <span class="bloc-index">Buffer 1</span>
+                            <span class="bloc-nb">NB=0</span>
+                        </div>
+                        <div class="bloc-body w-full h-80 bg-[#EDEAEA] rounded-b-lg">
+                            <ul class="text-lg font-medium text-center">
+                            </ul>
+                        </div>
+                    </div>
                 </div>
-                <div class="bloc-body w-full h-80 bg-[#EDEAEA] rounded-b-lg">
-                    <ul class="text-lg font-medium text-center">
-                    </ul>
+                <div class="buf2 flex flex-row justify-center">
+                    <div class="bloc w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0" style="height: 352px;">
+                        <div class="bloc-header text-white px-3 items-center font-medium  h-8 rounded-t-lg w-full flex flex-row justify-between bg-slate-900">
+                            <span class="bloc-index">Buffer 2</span>
+                            <span class="bloc-nb">NB=0</span>
+                        </div>
+                        <div class="bloc-body w-full h-80 bg-[#EDEAEA] rounded-b-lg">
+                            <ul class="text-lg font-medium text-center">
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="buf2 flex flex-row justify-center">
-            <div class="bloc w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0" style="height: 352px;">
-                <div class="bloc-header text-white px-3 items-center font-medium  h-8 rounded-t-lg w-full flex flex-row justify-between bg-slate-900">
-                    <span class="bloc-index">Buffer 2</span>
-                    <span class="bloc-nb">NB=0</span>
-                </div>
-                <div class="bloc-body w-full h-80 bg-[#EDEAEA] rounded-b-lg">
-                    <ul class="text-lg font-medium text-center">
-                    </ul>
-                </div>
-            </div>
+            <div class="mc-description text-center font-medium text-white"
+                 style="padding: 10px 10px; font-size: 1.2em"></div>
         </div>
     </div>
-    <div class="mc-footer flex py-3 px-2 flex-row justify-between items-center">
-        <img title="Show or hide MC" src="{% static 'imgs/upMS.svg' %}" class="w-6" alt="" style="transform: rotate(180deg); cursor:pointer;">
-        <span title="Random Access Memory" class="text-sm font-semibold text-gray-800 bottom-0 text-lg" >MC</span>
+    <div style="z-index: 3; transform: translate(0, 0)"
+            class="mc-footer bg-[#9EACF3] flex h-[5%] py-3 px-2 flex-row justify-between items-center">
+        <img id="toggle-mc" title="Show or hide MC" src="{% static 'imgs/upMS.svg' %}" class="transition-all w-6" alt=""
+             style="transform: rotate(180deg); cursor:pointer;">
+        <span title="Random Access Memory" class="text-sm font-semibold text-gray-800 bottom-0 text-lg">MC</span>
     </div>
 </div>
 
@@ -48,11 +55,12 @@
 </script>
 
 <script>
-    calcMsHeight = () => {
-        let windowHeight = window.innerHeight
-        let navbarHeight = document.querySelector('nav').offsetHeight
+    // calculating MC height
+    calcMCHeight = () => {
+        let windowHeight = window.innerHeight;
+        let navbarHeight = document.querySelector('nav').offsetHeight;
         document.querySelector('.mc').style.height = String(windowHeight - navbarHeight) + "px"
     }
-    calcMsHeight()
-    window.onresize = calcMsHeight
+    calcMCHeight();
+    window.onresize = calcMCHeight;
 </script>

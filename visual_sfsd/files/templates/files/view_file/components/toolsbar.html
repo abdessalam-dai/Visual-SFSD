@@ -6,8 +6,15 @@
             <div data-tooltip-target="tooltip-generate-data"
                  data-tooltip-placement="right"
                  class="w-9 h-9 rounded-md bg-gray-300 hover:h-11 hover:w-11 transition-all">
-                <img class="toolbar-icon"
-                     src="{% static 'imgs/view_file/toolbar/fillDummyData.png' %}" alt="">
+
+                <button id="fill-with-dummy-data-trigger"
+                        data-dropdown-toggle="fill-with-dummy-data-form"
+                        data-dropdown-placement="right"
+                        class="w-full p-1 outline-none"
+                        type="button">
+                    <img class="toolbar-icon"
+                         src="{% static 'imgs/view_file/toolbar/fillDummyData.png' %}" alt="">
+                </button>
             </div>
             {% include "files/view_file/components/tooltip-form-generate-data.html" %}
         </li>
@@ -21,8 +28,14 @@
             <div data-tooltip-target="tooltip-search"
                  data-tooltip-placement="right"
                  class="w-9 h-9 rounded-md bg-gray-300 hover:h-11 hover:w-11 transition-all">
-                <img class="toolbar-icon"
-                     src="{% static 'imgs/view_file/toolbar/searchElement.svg' %}" alt="">
+                <button id="search-element-trigger"
+                        data-dropdown-toggle="search-element-form"
+                        data-dropdown-placement="right-start"
+                        class="w-full p-1 outline-none"
+                        type="button">
+                    <img class="toolbar-icon"
+                         src="{% static 'imgs/view_file/toolbar/searchElement.svg' %}" alt="">
+                </button>
             </div>
             {% include "files/view_file/components/tooltip-form-search.html" %}
         </li>
@@ -36,8 +49,14 @@
             <div data-tooltip-target="tooltip-remove-logically"
                  data-tooltip-placement="right"
                  class="w-9 h-9 rounded-md bg-gray-300 hover:h-11 hover:w-11 transition-all">
-                <img class="toolbar-icon"
-                     src="{% static 'imgs/view_file/toolbar/removeLogically.png' %}" alt="">
+                <button id="remove-logically-trigger"
+                        data-dropdown-toggle="remove-logically-form"
+                        data-dropdown-placement="right-start"
+                        class="w-full p-1 outline-none"
+                        type="button">
+                    <img class="toolbar-icon"
+                         src="{% static 'imgs/view_file/toolbar/removeLogically.png' %}" alt="">
+                </button>
             </div>
             {% include "files/view_file/components/tooltip-form-remove-logically.html" %}
         </li>
@@ -48,27 +67,41 @@
         </div>
 
 
-        <li class="toolbar-tool {% if file.file_type == 'LOF' or file.file_type == 'LnOF' or file.file_access == 'indexed' %} hidden {% endif %}  no-select">
-            <div data-tooltip-target="tooltip-remove-physically"
-                 data-tooltip-placement="right"
-                 class="w-9 h-9 rounded-md bg-gray-300 hover:h-11 hover:w-11 transition-all">
-                <img class="toolbar-icon"
-                     src="{% static 'imgs/view_file/toolbar/removePhysically.png' %}" alt="">
+
+            <li class="toolbar-tool no-select {% if not file.file_type == 'LOF' and not file.file_type == 'LnOF' and not file.file_access == 'indexed' %}  {% else %}hidden{% endif %}">
+                <div data-tooltip-target="tooltip-remove-physically"
+                     data-tooltip-placement="right"
+                     class="w-9 h-9 rounded-md bg-gray-300 hover:h-11 hover:w-11 transition-all">
+                    <button id="remove-physically-trigger"
+                            data-dropdown-toggle="remove-physically-form"
+                            data-dropdown-placement="right-start"
+                            class="w-full p-1 outline-none"
+                            type="button">
+                        <img class="toolbar-icon"
+                             src="{% static 'imgs/view_file/toolbar/removePhysically.png' %}" alt="">
+                    </button>
+                </div>
+                {% include "files/view_file/components/tooltip-form-remove-physically.html" %}
+            </li>
+            <div id="tooltip-remove-physically" role="tooltip"
+                 class="inline-block absolute invisible z-10 py-2 px-3 text-md font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                Remove physically
+                <div class="tooltip-arrow" data-popper-arrow></div>
             </div>
-            {% include "files/view_file/components/tooltip-form-remove-physically.html" %}
-        </li>
-        <div id="tooltip-remove-physically" role="tooltip"
-             class="inline-block absolute invisible z-10 py-2 px-3 text-md font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-            Remove physically
-            <div class="tooltip-arrow" data-popper-arrow></div>
-        </div>
+{#        {% endif %}#}
 
         <li class="toolbar-tool  no-select">
             <div data-tooltip-target="tooltip-add-element"
                  data-tooltip-placement="right"
                  class="w-9 h-9 rounded-md bg-gray-300 hover:h-11 hover:w-11 transition-all">
-                <img class="toolbar-icon"
-                     src="{% static 'imgs/view_file/toolbar/addElement.svg' %}" alt="">
+                <button id="add-element-trigger"
+                        data-dropdown-toggle="add-element-form"
+                        data-dropdown-placement="right-start"
+                        class="w-full p-1 outline-none"
+                        type="button">
+                    <img class="toolbar-icon"
+                         src="{% static 'imgs/view_file/toolbar/addElement.svg' %}" alt="">
+                </button>
             </div>
             {% include "files/view_file/components/tooltip-form-insert.html" %}
         </li>
@@ -82,8 +115,14 @@
             <div data-tooltip-target="tooltip-edit"
                  data-tooltip-placement="right"
                  class="w-9 h-9 rounded-md bg-gray-300 hover:h-11 hover:w-11 transition-all">
-                <img class="toolbar-icon"
-                     src="{% static 'imgs/view_file/toolbar/editElement.svg' %}" alt="">
+                <button id="edit-element-trigger"
+                        data-dropdown-toggle="edit-element-form"
+                        data-dropdown-placement="right-start"
+                        class="w-full p-1 outline-none"
+                        type="button">
+                    <img class="toolbar-icon"
+                         src="{% static 'imgs/view_file/toolbar/editElement.svg' %}" alt="">
+                </button>
             </div>
             {% include "files/view_file/components/tooltip-form-edit.html" %}
         </li>
@@ -102,7 +141,7 @@
     }
 
     .toolbar-tool div {
-        padding: 4px;
+    {#padding: 4px;#}
     }
 
     .toolbar-tool .toolbar-icon {
@@ -129,17 +168,19 @@
         border-bottom: 12px solid transparent;
         z-index: 1;
     }
+
     .fade {
         transition: all;
         animation: fadeAn 200ms forwards;
     }
+
     @keyframes fadeAn {
-        0%{
+        0% {
             opacity: 0;
         }
         100% {
             opacity: 1;
         }
     }
-    
+
 </style>

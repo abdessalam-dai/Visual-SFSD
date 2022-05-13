@@ -21,7 +21,8 @@ export default class IndexedFile extends TableFile {
         blocks = BLOCKS_DEFAULT,
         indexTable = [],
         maxIndex,
-        indexTableHtml
+        indexTableHtml,
+        indexTableContainer
     ) {
         super(
             name,
@@ -37,6 +38,7 @@ export default class IndexedFile extends TableFile {
         this.indexTable = indexTable;
         this.maxIndex = maxIndex;
         this.indexTableHtml = indexTableHtml;
+        this.indexTableContainer = indexTableContainer;
     }
 
     reset() {
@@ -47,15 +49,11 @@ export default class IndexedFile extends TableFile {
         this.createBoardsDOM();
     }
 
-    isInsertionAllowed() {
-        return this.nbInsertions < this.maxIndex;
-    }
-
     createIndexTableDOM() {
         this.indexTableHtml.selectAll('*').remove();
         for (let couple of this.indexTable) {
             let html = `
-            <div class="cell bg-gray-100 text-center border-gray-700">
+            <div class="cell no-select bg-gray-100 text-center border-gray-700">
                 <div class="key overflow-hidden w-12 h-20 min-w-fit text-gray-800 border-r-2 px-1 py-6 border-gray-500 border-b-2">
                     <div>${couple.key}</div>
                 </div>
@@ -68,6 +66,16 @@ export default class IndexedFile extends TableFile {
             </div>`
             this.indexTableHtml.node().insertAdjacentHTML('beforeend', html);
         }
+    }
+
+    scrollToCell(cell) {
+        let indexTableLeft = this.indexTableContainer.node().offsetLeft;
+        let cellLeft = cell.node().offsetLeft;
+
+        this.indexTableContainer.node().scroll({
+            left: cellLeft - indexTableLeft - 48,
+            behavior: "smooth",
+        });
     }
 
     getJsonFormat() {
