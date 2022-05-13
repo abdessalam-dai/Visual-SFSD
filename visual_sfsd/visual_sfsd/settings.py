@@ -39,8 +39,50 @@ INSTALLED_APPS = [
     'base',
     'files',
     'accounts',
-    # 'django.contrib.postgres'
+
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
 ]
+
+SOCIALACCOUNT_QUERY_EMAIL = True
+ACCOUNT_UNIQUE_EMAIL = True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+SITE_ID = 2
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 7
+ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 50
+
+# 1 day
+ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 86400
+# or any other page
+ACCOUNT_LOGOUT_REDIRECT_URL = '/accounts/login/'
+# redirects to profile page if not configured.
+LOGIN_REDIRECT_URL = '/files/dashboard'
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    }
+}
+
+ACCOUNT_FORMS = {
+    'login': 'accounts.forms.CustomLoginForm',
+    'signup': 'accounts.forms.CustomSignUpForm',
+    'reset_password': 'accounts.forms.CustomResetPasswordForm',
+    'reset_password_from_key': 'accounts.forms.CustomResetPasswordKeyForm',
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -70,6 +112,11 @@ TEMPLATES = [
             ],
         },
     },
+]
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
 WSGI_APPLICATION = 'visual_sfsd.wsgi.application'
@@ -131,7 +178,6 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]
 
-
 # LOGIN_URL = 'login'
 
 
@@ -140,9 +186,8 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'visual.sfsd@gmail.com'
-EMAIL_HOST_PASSWORD = ''
+EMAIL_HOST_PASSWORD = "xASxmm1#sXSAd!!@XZx2kjh1$la"
 EMAIL_PORT = 587

@@ -1,0 +1,51 @@
+{% extends "account/base.html" %}
+{% load i18n %}
+{% load static %}
+{% load account %}
+
+{% block head_title %}Confirm E-mail Address{% endblock %}
+
+{% block content %}
+    <div class="h-screen relative w-full flex flex-col space-y-8 justify-center items-center">
+        <a href="{% url 'account_login' %}"
+           class="rounded-lg absolute top-20 left-20 bg-gray-700 space-x-6 px-3 shadow-lg py-1 flex flex-row justify-center items-center">
+            <span class="font-medium text-white text-lg">Back to Login</span>
+            <img class="w-5" src="{% static 'imgs/404/arrow-return-left.svg' %}" alt="">
+        </a>
+        <h1 class="text-4xl">Confirm E-mail Address</h1>
+
+        {% if confirmation %}
+            {% user_display confirmation.email_address.user as user_display %}
+
+            <p class="text-lg">{% blocktrans with confirmation.email_address.email as email %}Please confirm that
+                <a href="mailto:{{ email }}" class="text-pink-900">{{ email }}</a> is an e-mail address for user
+                <span class="text-pink-900">{{ user_display }}</span>
+                .{% endblocktrans %}</p>
+
+            <form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
+                {% csrf_token %}
+                <button type="submit"
+                        class="rounded-full bg-[#879EF1] hover:bg-[#BA68C8] transition-all text-white text-2xl py-4 px-[50px] cursor-pointer">
+                    Confirm
+                </button>
+            </form>
+
+        {% else %}
+
+            <p class="text-lg">
+                {% url 'account_email' as email_url %}
+            </p>
+
+            <p class="text-lg">
+                {% blocktrans %}This e-mail confirmation link expired or is invalid. Please issue a new e-mail
+                    confirmation request.{% endblocktrans %}
+
+            </p>
+            <a href="{{ email_url }}"
+               class="rounded-full bg-[#879EF1] hover:bg-[#BA68C8] transition-all text-white text-2xl py-4 px-[50px] cursor-pointer">
+                New confirmation
+            </a>
+
+        {% endif %}
+    </div>
+{% endblock %}

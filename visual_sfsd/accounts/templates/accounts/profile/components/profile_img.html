@@ -1,0 +1,2 @@
+{% load static %}
+{% if not user.socialaccount_set.all.0.get_avatar_url %}{% static 'imgs/user.png' %} {% else %}{{ user.socialaccount_set.all.0.get_avatar_url }}{% endif %}

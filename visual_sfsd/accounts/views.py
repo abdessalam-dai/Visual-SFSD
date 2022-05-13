@@ -202,4 +202,4 @@ def change_password(request):
 def delete_account(request):
     user = request.user
     user.delete()
-    return redirect('login')
+    return redirect('account_login')

@@ -2,7 +2,7 @@
 
 <div class="h-max p-10  rounded-3xl bg-white text-center shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
     <div class="profile-img w-[220px] h-[220px] m-auto mt-5">
-        <img src="{% static 'imgs/user.png' %}" class="rounded-full w-full h-full" alt="">
+        <img src="{% include 'accounts/profile/components/profile_img.html' with user=user %}" class="rounded-full w-full h-full" alt="">
     </div>
     <div class="flex flex-col space-y-3 mt-5">
         <div>

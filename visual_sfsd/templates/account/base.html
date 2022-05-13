@@ -1,0 +1,59 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{% block head_title %}{% endblock %}</title>
+    {% block extra_head %}
+    {% endblock %}
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+
+    <!-- Style sheets -->
+    <link rel="stylesheet" href="{% static 'css/accounts/login.css' %}">
+</head>
+<body class="bg-[#D2DCFF]">
+{% block body %}
+
+{#    {% if messages %}#}
+{#        <div>#}
+{#            <strong>Messages:</strong>#}
+{#            <ul>#}
+{#                {% for message in messages %}#}
+{#                    <li>{{ message }}</li>#}
+{#                {% endfor %}#}
+{#            </ul>#}
+{#        </div>#}
+{#    {% endif %}#}
+
+    {% include 'components/messages.html' %}
+
+{#    <div>#}
+{#        <strong>Menu:</strong>#}
+{#        <ul>#}
+{#            {% if user.is_authenticated %}#}
+{#                <li><a href="{% url 'account_email' %}">Change E-mail</a></li>#}
+{#                <li><a href="{% url 'account_logout' %}">Sign Out</a></li>#}
+{#            {% else %}#}
+{#                <li><a href="{% url 'account_login' %}">Sign In</a></li>#}
+{#                <li><a href="{% url 'account_signup' %}">Sign Up</a></li>#}
+{#            {% endif %}#}
+{#        </ul>#}
+{#    </div>#}
+    {% block content %}
+    {% endblock %}
+{% endblock %}
+{% block extra_body %}
+{% endblock %}
+</body>
+</html>

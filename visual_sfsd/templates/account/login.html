@@ -1,0 +1,123 @@
+{% load static %}
+{% load account socialaccount %}
+{% get_providers as socialaccount_providers %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Login - VisualSFSD</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+
+    <!-- Style sheets -->
+    <link rel="stylesheet" href="{% static 'css/accounts/login.css' %}">
+</head>
+
+<body class="select-none">
+{#{% include 'components/messages.html' %}#}
+<div class="h-screen flex flex-row-reverse bg-[#D2DCFF]">
+    <div class="w-full flex flex-col  justify-between text-center py-20 px-10 2xl:rounded-l-[75px] bg-[white] 2xl:w-1/2">
+        <h1 class="text-center font-bold text-6xl mb-12">Login</h1>
+        <div class="w-full 2xl:w-2/3 2xl:px-[50px] m-auto mb-5">
+            {% include 'components/messages.html' %}
+        </div>
+        <div class="pb-20 2xl:py-0">
+            <div class="flex justify-center items-center">
+                <form method="POST"
+                      class="w-full 2xl:w-2/3 2xl:px-[50px]">
+                    {% csrf_token %}
+
+                    {# non field errors #}
+                    {% if form.non_field_errors %}
+                        <div class="text-red-500 mb-4">
+                            {% for err in form.non_field_errors %}
+                                <p class="form-error">{{ err }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    {# login #}
+                    <div class=" mb-8">
+                        <div class="mb-3">
+                            {{ form.login }}
+                        </div>
+                        <div class="text-red-500">
+                            {{ form.login.errors|escape }}
+                        </div>
+                    </div>
+
+                    {# password #}
+                    <div class=" mb-8">
+                        <div class="mb-3">
+                            {{ form.password }}
+                        </div>
+                        <div class="text-red-500">
+                            {{ form.password.errors|escape }}
+                        </div>
+                    </div>
+
+                    {# remember me #}
+                    <div class="mb-8">
+                        <div class="mb-3">
+                            <div class="flex items-start mb-6">
+                                {{ form.remember }}
+                                <label for="{{ form.remember.id_for_label }}"
+                                       class="ml-2 cursor-pointer -mt-0.5 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                    {{ form.remember.label }}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="text-red-500">
+                            {{ form.remember.errors|escape }}
+                        </div>
+                    </div>
+
+                    {% if redirect_field_value %}
+                        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+                    {% endif %}
+
+                    <button type="submit"
+                            class="rounded-full bg-[#879EF1] hover:bg-[#BA68C8] transition-all text-white text-2xl py-4 px-[50px] cursor-pointer">
+                        Log In
+                    </button>
+                </form>
+            </div>
+
+            <div class="relative mt-8">
+                <div class="google text-[#474747]">
+                    <p class="">Or sign in with google</p>
+                </div>
+            </div>
+            <a href="{% provider_login_url 'google' %}"
+               class="flex hover:bg-gray-100 transition-all justify-center items-center border-2 h-20 w-20 m-auto rounded-2xl mt-8">
+                <img src="{% static 'imgs/accounts/google.svg' %}" alt="Google">
+            </a>
+
+            <div class="flex flex-row justify-between mt-8 px-20">
+                <div>
+                    <span class="text-gray-700">Don't have an account ?</span><a class="ml-2"
+                                                                                 href="{{ signup_url }}">Sign Up</a>
+                </div>
+                <div>
+                    <a class="text-blue-900" href="{% url 'account_reset_password' %}">Forgot password ?</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="side-image w-0 flex justify-center items-center 2xl:w-1/2">
+        <img src="{% static 'imgs/accounts/login.svg' %}" alt="Login">
+    </div>
+</div>
+</body>
+</html>
+

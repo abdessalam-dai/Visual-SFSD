@@ -1,0 +1,22 @@
+{% extends "account/base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block head_title %}Verify Your E-mail Address{% endblock %}
+
+{% block content %}
+    <div class="h-screen w-full py-6 px-6 relative text-center flex flex-col space-y-8 justify-center items-center">
+        <a href="{% url 'account_login' %}"
+           class="rounded-lg absolute top-20 left-20 bg-gray-700 space-x-6 px-3 shadow-lg py-1 flex flex-row justify-center items-center">
+            <span class="font-medium text-white text-lg">Back to Login</span>
+            <img class="w-5" src="{% static 'imgs/404/arrow-return-left.svg' %}" alt="">
+        </a>
+        <h1 class="text-4xl">
+            Verify Your E-mail Address
+        </h1>
+
+        <p class="text-lg w-full lg:w-2/3">
+            We have sent an e-mail to you for verification. Follow the link provided to finalize the signup process. If you do not see the verification e-mail in your main inbox, check your spam folder. Please contact us if you do not receive the verification e-mail within a few minutes.
+        </p>
+    </div>
+{% endblock %}

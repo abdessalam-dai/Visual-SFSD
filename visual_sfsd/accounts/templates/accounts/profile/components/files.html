@@ -218,45 +218,18 @@
 <div class="flex justify-start mt-12 flex-wrap">
 
     {% for file in files %}
-        <div href="{% url 'view_file' file.id %}"
-             class="mb-8 mx-3.5 w-[220px] h-[190px] rounded-3xl bg-white  transition-all hover:-translate-y-1 focus:-translate-y-1 ">
-            <div class="file-info relative rounded-3xl w-full h-full   shadow-[0px_4px_4px_rgba(0,0,0,0.25)]"
-                 draggable="true"
-                 data-id="{{ file.id }}">
-{#                <div class="absolute top-4 right-4">#}
-{#                    <button id="file-dropdown-trigger-{{ file.id }}" data-dropdown-toggle="file-dropdown-{{ file.id }}"#}
-{#                            class="hidden sm:inline-block text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:outline-none focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-1.5"#}
-{#                            type="button">#}
-{#                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">#}
-{#                            <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path>#}
-{#                        </svg>#}
-{#                    </button>#}
-{#                    <!-- Dropdown menu -->#}
-{#                    <div id="file-dropdown-{{ file.id }}"#}
-{#                         class="hidden z-10 w-44 text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700">#}
-{#                        <div#}
-{#                                class="bg-slate-800 font-sans  rounded-b-xl absolute w-max">#}
-{#                            <ul>#}
-{#                                <li class="flex flex-row justify-between space-x-4 px-4 py-2 hover:bg-slate-600 transition-all {% if file.owner == request.user %} border-b-2{% endif %} items-center">#}
-{#                                    <span class="text-white font-semibold text-lg">Dark Mode</span>#}
-{#                                </li>#}
-{#                                {% if file.owner == request.user %}#}
-{#                                    <li id=""#}
-{#                                        class="flex cursor-pointer flex-row px-4 py-2 items-center space-x-4 justify-between hover:bg-slate-600 rounded-b-xl transition-all ">#}
-{#                                        <span class="text-red-400 font-semibold text-lg">Delete File</span>#}
-{#                                    </li>#}
-{#                                {% endif %}#}
-{#                            </ul>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
-                <a href="{% url 'view_file' file.id %}" class="block w-full h-full rounded-3xl pt-4 pl-6 pb-10 pr-12">
+        {% for file in files %}
+            <a href="{% url 'view_file' file.id %}"
+               class="mb-8 mx-3.5 w-[220px] h-[190px] rounded-3xl bg-white  transition-all hover:-translate-y-1 focus:-translate-y-1 ">
+                <div class="file-info rounded-3xl w-full h-full pt-4 pl-6 pb-10 pr-10  shadow-[0px_4px_4px_rgba(0,0,0,0.25)]"
+                     draggable="true"
+                     data-id="{{ file.id }}">
                     <h2 class="file-name font-bold text-4xl break-words">{{ file.name|truncatechars:10 }}</h2>
                     <p class="file-structure text-lg font-normal">{{ file.get_file_access_display }}</p>
                     <p class="file-type text-lg font-normal">{{ file.get_file_type_display }}</p>
                     <span class="text-indigo-900">{{ file.date_created|date:"Y-m-d" }}</span>
-                </a>
-            </div>
-        </div>
+                </div>
+            </a>
+        {% endfor %}
     {% endfor %}
 </div>
