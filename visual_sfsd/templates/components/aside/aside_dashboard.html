@@ -1,9 +1,13 @@
+{% load static %}
+
 <aside class="fixed top-0 left-0 w-[300px] h-screen z-20 rounded-tr-3xl rounded-br-3xl"
        style="background: #8846DD">
     <div class="top-sidebar h-1/2 ml-10 relative">
-        <div class="logo flex h-20  items-center">
-            <div class="w-1/3 h-1/3 bg-white"></div>
-            <h1 class="text-4xl text-white font-bold ml-4">SFSD</h1>
+        <div class="logo flex h-20  pt-4 items-center">
+            <a href="{% url 'home' %}" class="flex items-center p-2">
+                <img class="w-10" src="{% static 'imgs/logo/logo.svg' %}" alt="VSFSD">
+                <h1 class="text-4xl text-white font-bold ml-4">SFSD</h1>
+            </a>
         </div>
         <a href="{% url 'dashboard' %}"
            class="hover:bg-white transition-all duration-300 hover:text-[#8846DD] t rounded-l-full flex h-20 mt-20 items-center
@@ -48,7 +52,7 @@
         </a>
 
         <div class="fixed left-0 bottom-10 w-[300px]"> <!-- width depends on the side bar's width -->
-            <form method="post"  class="overflow-x-hidden"  action="{% url 'account_logout' %}">
+            <form method="post" class="overflow-x-hidden" action="{% url 'account_logout' %}">
                 {% csrf_token %}
                 {% if redirect_field_value %}
                     <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>

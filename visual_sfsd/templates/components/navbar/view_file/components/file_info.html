@@ -1,8 +1,8 @@
 {% load static %}
 
 <div class="logo-info flex flex-row space-x-10 items-center">
-    <a href="" class="items-center">
-        <div class="bg-sky-400 h-6 sm:h-10 sm:w-10 w-6 rounded-lg"></div>
+    <a href="{% url 'home' %}" class="items-center">
+        <img class="w-10" src="{% static 'imgs/logo/logo.svg' %}" alt="VSFSD">
     </a>
     <div class="flex m-0 p-0 "  style="position: relative;">
         <span class="file-name-all text-2xl text-white" style="cursor: pointer;">

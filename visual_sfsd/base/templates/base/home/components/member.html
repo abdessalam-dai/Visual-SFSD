@@ -1,0 +1,25 @@
+{% load static %}
+
+<div class="polygone-creator  flex flex-col  justify-center relative  items-center  text-center">
+    <img class="c-im w-32 h-32 z-10 bg-gray-400 absolute -top-10 rounded-full aspect-square"
+         src="{{ pic }}" alt="">
+    <div>
+        <img class="" src="{% static 'imgs/home/creator-polygone.svg' %}" alt="">
+        <div class="flex absolute top-28 w-full content-center flex-col justify-center text-center">
+            <span class="text-white text-xl font-medium hover:animate-pulse">{{ name }}</span>
+            <span class="text-gray-100 text-md">{{ role }}</span>
+        </div>
+        <div class="flex flex-row space-x-5 absolute justify-center text-[#272f77] w-full top-44 ">
+            <a href="{{ linkedin }}" target="_blank">
+                <i class="fa-brands fa-xl fa-linkedin hover:text-gray-900 hover:scale-110 transition-all duration-300"></i>
+            </a>
+            <a href="{{ email }}" target="_blank">
+                <i class="fa-solid fa-xl fa-envelope hover:text-gray-900 hover:scale-110 transition-all duration-300"></i>
+            </a>
+            <a href="{{ github }}" target="_blank">
+                <i class="fa-brands fa-xl fa-github hover:text-gray-900 hover:scale-110 transition-all duration-300"></i>
+            </a>
+
+        </div>
+    </div>
+</div>
