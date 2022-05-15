@@ -232,6 +232,8 @@ function nextStep() {
         activeStep++;
         steps[activeStep].classList.remove('hidden');
         highlightComponent(activeStep);
+    } else {
+        resetGuide();
     }
 
     step.textContent = (activeStep + 1).toString();
@@ -277,8 +279,8 @@ const openOverlayAndGuideModal = () => {
 
 // create a new file with shortcut Ctrl + y
 document.addEventListener('keydown', e => {
-    isGuideOpen = true;
     if (e.key.toLowerCase() === 'y' && e.ctrlKey) {
+        isGuideOpen = true;
         e.preventDefault();
         openOverlayAndGuideModal();
     }
