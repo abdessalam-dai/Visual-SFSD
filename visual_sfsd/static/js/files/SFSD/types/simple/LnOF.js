@@ -207,7 +207,7 @@ export default class LnOF extends ListFile {
                     bufferElement.select(".bloc .bloc-body ul")
                         .append("li")
                         .style("background", ENREG_HIGHLIGHT_GREEN)
-                        .attr("class", "border-b-2 h-10 flex justify-center flex-col")
+                        .attr("class", "border-b-2 h-8 text-sm flex justify-center flex-col")
                         .append("span")
                         .text(`${newEnreg.key}`);
 
