@@ -22,9 +22,8 @@
       ease-in-out
       m-0
       focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" aria-label="Type">
-                    <option class= {% if file_access == "all" %}selected{% endif %} value="all">All</option>
-                    <option {% if file_access == "sequential" %}selected{% endif %} value="sequential">Sequential
-                    </option>
+                    <option {% if file_access == "all" %}selected{% endif %} value="all">All</option>
+                    <option {% if file_access == "sequential" %}selected{% endif %} value="sequential">Sequential</option>
                     <option {% if file_access == "indexed" %}selected{% endif %} value="indexed">Indexed</option>
                     <option  {% if file_access == "hashing" %}selected{% endif %} value="hashing">Hashing</option>
                 </select>

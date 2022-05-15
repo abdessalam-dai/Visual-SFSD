@@ -533,18 +533,18 @@ const handleScrollButtons = () => {
 
 handleScrollButtons();
 // END - Scroll buttons for MS
-
-// START - Scroll buttons for index table
-const handleScrollButtonsIndexTable = () => {
-    DomElements.indexTableScrollLeftBtn.addEventListener('click', function () {
-        indexTableContainer.node().scrollLeft -= 48;
-    });
-
-    DomElements.indexTableScrollRightBtn.addEventListener('click', function () {
-        indexTableContainer.node().scrollLeft += 48;
-    });
-}
-if (FILE_ACCESS === 'indexed') handleScrollButtonsIndexTable();
+//
+// // START - Scroll buttons for index table
+// const handleScrollButtonsIndexTable = () => {
+//     DomElements.indexTableScrollLeftBtn.addEventListener('click', function () {
+//         indexTableContainer.node().scrollLeft -= 48;
+//     });
+//
+//     DomElements.indexTableScrollRightBtn.addEventListener('click', function () {
+//         indexTableContainer.node().scrollLeft += 48;
+//     });
+// }
+// if (FILE_ACCESS === 'indexed') handleScrollButtonsIndexTable();
 // END - Scroll buttons for index table
 
 

@@ -85,7 +85,7 @@ export default class ListFile extends SequentialFile {
         this.MSBoard.selectAll("*").remove();
 
         const blocDiv = `
-        <div class="bloc no-select w-48 shadow-lg shadow-black/50 rounded-t-lg flex-shrink-0" style="height: 352px;">
+        <div class="bloc no-select w-40 shadow-lg shadow-black/50 rounded-t-lg flex-shrink-0">
             <div
                 class="bloc-header text-white px-3 items-center font-medium h-8 rounded-t-lg w-full flex flex-row justify-between bg-slate-900">
                 <span class="bloc-index" style="position: relative"></span>
@@ -286,7 +286,7 @@ export default class ListFile extends SequentialFile {
         this.MSBoard.selectAll('.bloc')
             .data(this.blocks)
             .append("div")
-            .attr("class", `bloc-body w-full h-80 bg-[${ENREG_HIGHLIGHT_GREY}]`)
+            .attr("class", `bloc-body w-full h-64 bg-[${ENREG_HIGHLIGHT_GREY}]`)
             .append("ul")
             .attr("class", "text-lg font-medium text-center")
             .each(function (block) {
@@ -296,7 +296,7 @@ export default class ListFile extends SequentialFile {
                         .data(block.enregs)
                         .enter()
                         .append("li")
-                        .attr("class", `border-b-2 border-gray-700  bg-[${ENREG_HIGHLIGHT_GREY}] h-10 flex justify-center flex-col`)
+                        .attr("class", `border-b-2 border-gray-700  bg-[${ENREG_HIGHLIGHT_GREY}] h-8 flex justify-center flex-col`)
                         .style("opacity", "0")
                         .style("color", function (enreg) {
                             return enreg.removed ? "#a70000" : "black"
@@ -464,7 +464,7 @@ export default class ListFile extends SequentialFile {
         if (bufferIndex === 1) {
             this.buff.selectAll("*").remove()
             let buff = this.buff.append("div")
-                .attr("class", "bloc w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0 h-[352px]")
+                .attr("class", "bloc w-40 shadow-lg shadow-black/50 rounded-lg flex-shrink-0")
                 .html(blockElement.html());
 
             buff.select(".bloc-header .bloc-index")
@@ -485,7 +485,7 @@ export default class ListFile extends SequentialFile {
         } else {
             this.buff2.selectAll("*").remove()
             let buff = this.buff2.append("div")
-                .attr("class", "bloc w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0 h-[352px]")
+                .attr("class", "bloc w-40 shadow-lg shadow-black/50 rounded-lg flex-shrink-0")
                 .html(blockElement.html());
 
             buff.select(".bloc-header .bloc-index")
@@ -509,8 +509,7 @@ export default class ListFile extends SequentialFile {
     createNewBlockInBuff(newEnreg) {
         this.buff.selectAll("*").remove()
         let bufferElement = this.buff.append("div")
-            .attr("class", "bloc w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0")
-            .style("height", "352px");
+            .attr("class", "bloc w-40 h-64 shadow-lg shadow-black/50 rounded-lg flex-shrink-0");
 
         bufferElement.append("div")
             .attr("class", "bloc-header text-white px-3 items-center font-medium h-8 rounded-t-lg w-full flex flex-row justify-between bg-slate-900");
@@ -526,12 +525,12 @@ export default class ListFile extends SequentialFile {
             .text("NB=1");
 
         bufferElement.append("div")
-            .attr("class", `bloc-body w-full h-80 bg-[${ENREG_HIGHLIGHT_GREY}] rounded-b-lg`)
+            .attr("class", `bloc-body w-full h-64 bg-[${ENREG_HIGHLIGHT_GREY}] rounded-b-lg`)
             .append("ul")
             .attr("class", "text-lg font-medium text-center")
             .append("li")
             .style("background", ENREG_HIGHLIGHT_GREEN)
-            .attr("class", "border-b-2 h-10 flex justify-center flex-col")
+            .attr("class", "border-b-2 h-8 flex justify-center flex-col")
             .append("span")
             .text(`${newEnreg.key}`);
 

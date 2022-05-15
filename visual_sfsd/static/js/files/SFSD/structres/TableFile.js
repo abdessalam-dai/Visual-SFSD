@@ -318,7 +318,7 @@ export default class TableFile extends SequentialFile {
         if (bufferIndex === 1) {
             this.buff.selectAll("*").remove()
             let buff = this.buff.append("div")
-                .attr("class", "bloc w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0 h-[352px]")
+                .attr("class", "bloc w-40 shadow-lg shadow-black/50 rounded-lg flex-shrink-0")
                 .html(blockElement.html());
 
             buff.select(".bloc-header .bloc-index")
@@ -338,7 +338,7 @@ export default class TableFile extends SequentialFile {
         } else {
             this.buff2.selectAll("*").remove()
             let buff = this.buff2.append("div")
-                .attr("class", "bloc w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0 h-[352px]")
+                .attr("class", "bloc w-40 shadow-lg shadow-black/50 rounded-lg flex-shrink-0 h-64")
                 .html(blockElement.html());
 
             buff.select(".bloc-header .bloc-index")
@@ -373,7 +373,7 @@ export default class TableFile extends SequentialFile {
     createNewBlockInBuff(newEnreg) {
         this.buff.selectAll("*").remove()
         let bufferElement = this.buff.append("div")
-            .attr("class", "bloc w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0 h-[352px]");
+            .attr("class", "bloc w-40 shadow-lg shadow-black/50 rounded-lg flex-shrink-0 h-64");
 
         bufferElement.append("div")
             .attr("class", "bloc-header text-white px-3 items-center font-medium h-8 rounded-t-lg w-full flex flex-row justify-between bg-slate-900");
@@ -389,11 +389,11 @@ export default class TableFile extends SequentialFile {
             .text("NB=1");
 
         bufferElement.append("div")
-            .attr("class", `bloc-body w-full h-80 bg-[${ENREG_HIGHLIGHT_GREY}] rounded-b-lg`)
+            .attr("class", `bloc-body w-full h-64 bg-[${ENREG_HIGHLIGHT_GREY}] rounded-b-lg`)
             .append("ul")
             .attr("class", "text-lg font-medium text-center")
             .append("li")
-            .attr("class", `border-b-2 bg-[${ENREG_HIGHLIGHT_GREEN}] border-gray-700 h-10 flex justify-center flex-col`)
+            .attr("class", `border-b-2 bg-[${ENREG_HIGHLIGHT_GREEN}] border-gray-700 h-8 flex justify-center flex-col`)
             .append("span")
             .text(`${newEnreg.key}`);
     }
