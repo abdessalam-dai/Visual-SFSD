@@ -1,9 +1,10 @@
 {% load static %}
 
 <li class="">
-    <button data-dropdown-toggle="profile-menu" type="button">
+    <button id="profile-menu-btn" data-dropdown-toggle="profile-menu" type="button">
         <img src="{% include 'accounts/profile/components/profile_img.html' with user=request.user %}"
-             class="rounded-full w-10" alt="">
+             class="rounded-full w-10 bg-[#7F409D]"
+             alt="">
     </button>
     <div id="profile-menu" class="hidden relative show" style="z-index: 9999;">
 
