@@ -17,7 +17,8 @@ def contact(request):
         if form.is_valid():
             # create Contact object
             form.save()
-            return redirect('contact')
+            messages.success(request=request, message="Feedback received")
+            return redirect('dashboard')
         else:
             for field in form.errors:
                 form[field].field.widget.attrs[
