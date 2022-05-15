@@ -64,14 +64,29 @@ let nbSteps = steps.length - 1;
 
 let isGuideOpen = false;
 
+const toggle = document.querySelector("#toggle-guide");
+
 
 const resetGuide = () => {
+    toggle.checked = false;
     isGuideOpen = false;
     Array.from(document.querySelectorAll('.bright')).forEach((el) => el.classList.remove('bright'));
     activeStep = 0;
     guideModalOverlay.classList.add('hidden');
     guideModal.classList.add('hidden');
     step.textContent = (activeStep + 1).toString();
+
+    $.ajax({
+        type: 'POST',
+        url: CHANGE_NEW_USER_BOOLEAN,
+        data: {},
+        datatype: 'json',
+        success: function (response) {
+        },
+        error: function (response) {
+            toggle.checked = !toggle.checked;
+        }
+    });
 }
 
 const hideAllDropDowns = () => {
@@ -227,8 +242,9 @@ const highlightComponent = (index) => {
     }
 }
 
-highlightComponent(activeStep);
-isGuideOpen = true;
+// highlightComponent(activeStep);
+// isGuideOpen = true;
+
 
 // next button
 function nextStep() {
@@ -312,4 +328,12 @@ document.addEventListener('keyup', function (e) {
     if (e.key === "Escape") {
         resetGuide();
     }
+});
+
+if (toggle.checked) {
+    openOverlayAndGuideModal();
+}
+
+toggle.addEventListener('click', function (e) {
+    openOverlayAndGuideModal();
 });

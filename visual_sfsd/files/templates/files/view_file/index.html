@@ -12,6 +12,7 @@
         const FILE_NAME = "{{ file.name }}";
         const FILE_ACCESS = "{{ file.file_access }}";
         const FILE_TYPE = "{{ file.file_type }}";
+        const CHANGE_NEW_USER_BOOLEAN = "{% url 'change_new_user_boolean' %}"
 
         {% if file.owner == request.user %}
             const SAVE_FILE_URL = "{% url 'save_file' file.id %}";

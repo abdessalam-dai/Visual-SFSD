@@ -14,4 +14,5 @@ urlpatterns = [
     path('students/', views.students_list, name='students_list'),
 
     path('delete_account/', views.delete_account, name='delete_account'),
+    path('change_new_user_boolean/', views.change_new_user_boolean, name='change_new_user_boolean'),
 ]

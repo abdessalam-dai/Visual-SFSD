@@ -12,6 +12,7 @@ ROLE_CHOICES = [
 
 class Account(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    new_user = models.BooleanField(default=True)
     role = models.CharField(
         max_length=10,
         choices=ROLE_CHOICES,
