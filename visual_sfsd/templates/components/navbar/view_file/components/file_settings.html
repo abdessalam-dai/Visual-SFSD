@@ -31,9 +31,9 @@
                     </label>
                 </li>
                 <li class="flex flex-row justify-between space-x-4 px-4 py-2 hover:bg-slate-600 transition-all {% if file.owner == request.user %} border-b-2{% endif %} items-center">
-                    <span class="text-white font-semibold text-md">Dark Mode</span>
-                    <label for="toggle-example" class="flex relative items-center  cursor-pointer">
-                        <input type="checkbox" id="toggle-example" class="sr-only">
+                    <span class="text-white font-semibold text-md">Show Guide</span>
+                    <label for="toggle-guide" class="flex relative items-center  cursor-pointer">
+                        <input type="checkbox" {% if request.user.account.new_user %}checked{% endif %} id="toggle-guide" class="sr-only">
                         <div class="toggle-circ w-8 h-4 bg-gray-200 rounded-full border border-gray-200 toggle-bg dark:bg-gray-700 dark:border-gray-600"></div>
                     </label>
                 </li>

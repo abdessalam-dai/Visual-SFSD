@@ -3,7 +3,7 @@ import json
 from django.contrib.auth.models import User
 from django.apps import apps
 from django.contrib.auth.decorators import login_required
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
@@ -203,3 +203,16 @@ def delete_account(request):
     user = request.user
     user.delete()
     return redirect('account_login')
+
+
+@login_required
+def change_new_user_boolean(request):
+    try:
+        user = request.user
+        user.account.new_user = False
+        user.account.save()
+        return JsonResponse({"status": "ok"})
+    except:
+        pass
+
+    return JsonResponse({"status": "error"})
