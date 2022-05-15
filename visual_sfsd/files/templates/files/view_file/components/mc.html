@@ -1,13 +1,15 @@
 {% load static %}
+
 <div class="mc no-select overflow-hidden"
-     style="z-index: 2;">
+    id="mc">
     <div class="h-[95%]">
         <div id="mc-body"
-             class="px-5 mc-open overflow-hidden h-full bg-[#9EACF3] flex items-center  flex-col justify-center space-y-12">
+             class="px-5 mc-open overflow-hidden h-full bg-[#9EACF3] flex items-center  flex-col justify-center space-y-12"
+             style="z-index: 99999999">
              <div class="mc-description rounded-lg text-center font-medium text-white"
              style="padding: 10px 10px; font-size: 1.2em"></div>
              {% include "files/view_file/components/complexity.html" %}
-            <div class="buffers flex flex-row space-x-4 justify-center">
+            <div id="buffers" class="buffers flex flex-row space-x-4 justify-center">
                 <div class="buf flex flex-row justify-center">
                     <div class="bloc w-40 shadow-lg shadow-black/50 rounded-lg flex-shrink-0">
                         <div class="bloc-header text-white px-3 items-center font-medium  h-8 rounded-t-lg w-full flex flex-row justify-between bg-slate-900">
@@ -35,7 +37,8 @@
             </div>
         </div>
     </div>
-    <div style="z-index: 3; transform: translate(0, 0)"
+    <div style="transform: translate(0, 0)"
+         id="mc-footer"
             class="mc-footer bg-[#9EACF3] flex h-[5%] py-3 px-2 flex-row justify-between items-center">
         <img id="toggle-mc" title="Show or hide MC" src="{% static 'imgs/upMS.svg' %}" class="transition-all w-5" alt=""
              style="transform: rotate(180deg); cursor:pointer;">

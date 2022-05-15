@@ -1,11 +1,12 @@
 {% load static %}
 
-<div class="items-center tools rounded-r-lg mt-8 bg-slate-600 shadow-2xl mr-5 w-auto">
+<div id="toolbar" class="items-center tools rounded-r-lg mt-8 bg-slate-600 shadow-2xl mr-5 w-auto">
     <ul class="toolbar-options flex flex-col space-y-5 items-center w-12 py-3">
         <li class="toolbar-tool no-select">
             <div data-tooltip-target="tooltip-generate-data"
                  data-tooltip-placement="right"
-                 class="w-8 h-8 rounded-md bg-gray-300 hover:h-9 hover:w-9 transition-all">
+                 class="w-8 h-8 rounded-md bg-gray-300 hover:h-9 hover:w-9 transition-all"
+                 id="generate-data-area">
 
                 <button id="fill-with-dummy-data-trigger"
                         data-dropdown-toggle="fill-with-dummy-data-form"
@@ -27,7 +28,8 @@
         <li class="toolbar-tool  no-select">
             <div data-tooltip-target="tooltip-search"
                  data-tooltip-placement="right"
-                 class="w-8 h-8 rounded-md bg-gray-300 hover:h-9 hover:w-9 transition-all">
+                 class="w-8 h-8 rounded-md bg-gray-300 hover:h-9 hover:w-9 transition-all"
+                 id="search-area">
                 <button id="search-element-trigger"
                         data-dropdown-toggle="search-element-form"
                         data-dropdown-placement="right-start"
@@ -48,7 +50,8 @@
         <li class="toolbar-tool  no-select">
             <div data-tooltip-target="tooltip-remove-logically"
                  data-tooltip-placement="right"
-                 class="w-8 h-8 rounded-md bg-gray-300 hover:h-9 hover:w-9 transition-all">
+                 class="w-8 h-8 rounded-md bg-gray-300 hover:h-9 hover:w-9 transition-all"
+                 id="remove-logically-area">
                 <button id="remove-logically-trigger"
                         data-dropdown-toggle="remove-logically-form"
                         data-dropdown-placement="right-start"
@@ -71,7 +74,8 @@
             <li class="toolbar-tool no-select {% if not file.file_type == 'LOF' and not file.file_type == 'LnOF' and not file.file_access == 'indexed' %}  {% else %}hidden{% endif %}">
                 <div data-tooltip-target="tooltip-remove-physically"
                      data-tooltip-placement="right"
-                     class="w-8 h-8 rounded-md bg-gray-300 hover:h-9 hover:w-9 transition-all">
+                     class="w-8 h-8 rounded-md bg-gray-300 hover:h-9 hover:w-9 transition-all"
+                     id="remove-physically-area">
                     <button id="remove-physically-trigger"
                             data-dropdown-toggle="remove-physically-form"
                             data-dropdown-placement="right-start"
@@ -88,12 +92,20 @@
                 Remove physically
                 <div class="tooltip-arrow" data-popper-arrow></div>
             </div>
-{#        {% endif %}#}
+            {% include "files/view_file/components/tooltip-form-remove-physically.html" %}
+        </li>
+        <div id="tooltip-remove-physically" role="tooltip"
+             class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+            Remove physically
+            <div class="tooltip-arrow" data-popper-arrow></div>
+        </div>
+        {#        {% endif %}#}
 
         <li class="toolbar-tool  no-select">
             <div data-tooltip-target="tooltip-add-element"
                  data-tooltip-placement="right"
-                 class="w-8 h-8 rounded-md bg-gray-300 hover:h-9 hover:w-9 transition-all">
+                 class="w-8 h-8 rounded-md bg-gray-300 hover:h-9 hover:w-9 transition-all"
+                 id="add-element-area">
                 <button id="add-element-trigger"
                         data-dropdown-toggle="add-element-form"
                         data-dropdown-placement="right-start"
@@ -114,7 +126,8 @@
         <li class="toolbar-tool  no-select">
             <div data-tooltip-target="tooltip-edit"
                  data-tooltip-placement="right"
-                 class="w-8 h-8 rounded-md bg-gray-300 hover:h-9 hover:w-9 transition-all">
+                 class="w-8 h-8 rounded-md bg-gray-300 hover:h-9 hover:w-9 transition-all"
+                 id="edit-element-area">
                 <button id="edit-element-trigger"
                         data-dropdown-toggle="edit-element-form"
                         data-dropdown-placement="right-start"

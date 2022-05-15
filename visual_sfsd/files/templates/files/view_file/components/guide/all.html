@@ -1,0 +1,158 @@
+{% load static %}
+
+{#<button data-tooltip-target="tooltip-create-file"#}
+{#        data-tooltip-placement="left"#}
+{#        id="create-file-btn"#}
+{#        class="save-file-btn shadow-2xl bg-white z-5 left-0 bottom-20 rounded-full transition-all fixed w-[100px] h-[100px] flex justify-center items-center hover:bg-[#8846DD] hover:rotate-90">#}
+{#        <svg class="plus-btn" width="46" height="46" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">#}
+{#            <path d="M26 3C26 2.20435 25.6839 1.44129 25.1213 0.878679C24.5587 0.31607 23.7956 0 23 0C22.2044 0 21.4413 0.31607 20.8787 0.878679C20.3161 1.44129 20 2.20435 20 3V20H3C2.20435 20 1.44129 20.3161 0.878679 20.8787C0.31607 21.4413 0 22.2044 0 23C0 23.7956 0.31607 24.5587 0.878679 25.1213C1.44129 25.6839 2.20435 26 3 26H20V43C20 43.7957 20.3161 44.5587 20.8787 45.1213C21.4413 45.6839 22.2044 46 23 46C23.7956 46 24.5587 45.6839 25.1213 45.1213C25.6839 44.5587 26 43.7957 26 43V26H43C43.7957 26 44.5587 25.6839 45.1213 25.1213C45.6839 24.5587 46 23.7956 46 23C46 22.2044 45.6839 21.4413 45.1213 20.8787C44.5587 20.3161 43.7957 20 43 20H26V3Z" fill="#293CE4"/>#}
+{#            </svg>#}
+{#</button>#}
+{#<div id="tooltip-create-file" role="tooltip"#}
+{#     class="inline-block absolute invisible z-10 py-2 px-3 text-md font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">#}
+{#    New file#}
+{#    <div class="tooltip-arrow" data-popper-arrow></div>#}
+{#</div>#}
+
+<div id="guide-modal-overlay"
+     class="guide-modal-overlay fixed top-0 left-0 w-full h-screen z-[99999999]"></div>
+
+<div id="guide-modal"
+     class="no-select fade guide-modal fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] flex items-center justify-center z-[99999999] rounded-full">
+    <!-- Modal content -->
+    <div class="relative rounded-lg shadow bg-gray-800">
+        <!-- Modal header -->
+        <div class="flex justify-between items-start p-4 rounded-t border-b border-gray-600">
+            <h3 class="text-xl font-semibold text-white">
+                Guide
+            </h3>
+            <button type="button"
+                    class="text-gray-400 bg-transparent rounded-lg text-sm p-1.5 ml-auto inline-flex items-center hover:bg-gray-600 hover:text-white"
+                    id="close-guide-btn">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd"
+                          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                          clip-rule="evenodd"></path>
+                </svg>
+            </button>
+        </div>
+        <!-- Modal body -->
+        <div class="p-6">
+            <ul>
+                <li class="step">
+                    {% include 'files/view_file/components/guide/step1.html' %}
+                </li>
+                <li class="hidden step">
+                    {% include 'files/view_file/components/guide/step2.html' %}
+                </li>
+                <li class="hidden step">
+                    {% include 'files/view_file/components/guide/step3.html' %}
+                </li>
+                <li class="hidden step">
+                    {% include 'files/view_file/components/guide/step4.html' %}
+                </li>
+                <li class="hidden step">
+                    {% include 'files/view_file/components/guide/step5.html' %}
+                </li>
+                <li class="hidden step">
+                    {% include 'files/view_file/components/guide/step6.html' %}
+                </li>
+                <li class="hidden step">
+                    {% include 'files/view_file/components/guide/step7.html' %}
+                </li>
+                <li class="hidden step">
+                    {% include 'files/view_file/components/guide/step8.html' %}
+                </li>
+                 <li class="hidden step">
+                    {% include 'files/view_file/components/guide/step9.html' %}
+                </li>
+                 <li class="hidden step">
+                    {% include 'files/view_file/components/guide/step10.html' %}
+                </li>
+                 <li class="hidden step">
+                    {% include 'files/view_file/components/guide/step11.html' %}
+                </li>
+                 <li class="hidden step">
+                    {% include 'files/view_file/components/guide/step12.html' %}
+                </li>
+                 <li class="hidden step">
+                    {% include 'files/view_file/components/guide/step13.html' %}
+                </li>
+                 <li class="hidden step">
+                    {% include 'files/view_file/components/guide/step14.html' %}
+                </li>
+                <li class="hidden step">
+                    {% include 'files/view_file/components/guide/step15.html' %}
+                </li>
+                <li class="hidden step">
+                    {% include 'files/view_file/components/guide/step16.html' %}
+                </li>
+                <li class="hidden step">
+                    {% include 'files/view_file/components/guide/step17.html' %}
+                </li>
+                <li class="hidden step">
+                    {% include 'files/view_file/components/guide/step18.html' %}
+                </li>
+                <li class="hidden step">
+                    {% include 'files/view_file/components/guide/step19.html' %}
+                </li>
+            </ul>
+        </div>
+        <!-- Modal footer -->
+        <div class="flex justify-between p-6 space-x-2 rounded-b border-t border-gray-600">
+            <button id="prev-btn"
+                    type="button"
+                    class="text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-blue-600 hover:bg-blue-700 focus:ring-blue-800">
+                Previous
+            </button>
+            <span class="text-white py-2">
+                <span id="step">1</span>/19
+            </span>
+            <button id="next-btn"
+                    type="button"
+                    class="text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-blue-600 hover:bg-blue-700 focus:ring-blue-800">
+                Next
+            </button>
+        </div>
+    </div>
+</div>
+{##}
+{#<script>#}
+{#    $('*').on('mouseover', function (e) {#}
+{#        e.stopPropagation();#}
+{##}
+{#        if ($(this).is('body')) return; /* prevent flicker */#}
+{##}
+{#        $('*').removeClass('hovered');#}
+{#        $(this).addClass('hovered');#}
+{#    })#}
+{##}
+{#    $('*').on('mouseout', function () {#}
+{#        $(this).removeClass('hovered');#}
+{#    })#}
+{#</script>#}
+
+<style>
+    .top-left {
+        top: 15px;
+        right: 15px;
+        transform: translateX(0) translateY(0);
+    }
+
+    .fade {
+        opacity: 0;
+        animation: animateForm 500ms normal forwards;
+        animation-iteration-count: 1;
+        transition: all;
+        transition-duration: 300ms;
+    }
+
+    @keyframes animateForm {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+</style>

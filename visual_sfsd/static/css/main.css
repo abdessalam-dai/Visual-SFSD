@@ -7,7 +7,7 @@ input::-webkit-inner-spin-button {
 }
 
 input[type=number] {
-    -moz-appearance:textfield; /* Firefox */
+    -moz-appearance: textfield; /* Firefox */
 }
 
 .no-select {
@@ -111,6 +111,7 @@ input[type=number] {
 .show-adr {
     animation: showAdr 500ms forwards;
 }
+
 @keyframes showAdr {
     0% {
         opacity: 1;
@@ -152,4 +153,32 @@ input[type=number] {
     border-bottom: none !important;
     border-bottom-left-radius: 0.5rem;
     border-bottom-right-radius: 0.5rem;
+}
+
+.guide-modal-overlay {
+    background: rgba(0, 0, 0, 0.66);
+}
+
+
+.bright {
+    position: relative;
+    animation: blip forwards infinite 1000ms;
+    -webkit-box-shadow: inset 0px 0px 0px 3px #0ff;
+    -moz-box-shadow: inset 0px 0px 0px 3px #0ff;
+    box-shadow: inset 0px 0px 0px 3px #0ff;
+    z-index: 99999999999999 !important;
+}
+
+@keyframes blip {
+    0% {
+        -webkit-box-shadow: inset 0px 0px 0px 1px #0ff;
+        -moz-box-shadow: inset 0px 0px 0px 1px #0ff;
+        box-shadow: inset 0px 0px 0px 1px #0ff;
+    }
+
+    100% {
+        -webkit-box-shadow: inset 0px 0px 0px 3px #0ff;
+        -moz-box-shadow: inset 0px 0px 0px 3px #0ff;
+        box-shadow: inset 0px 0px 0px 3px #0ff;
+    }
 }

@@ -1,11 +1,11 @@
 {% load static %}
 
-<div class="logo-info flex flex-row space-x-10 items-center">
+<div class="logo-info flex flex-row space-x-7 items-center">
     <a href="{% url 'home' %}" class="items-center">
         <img class="w-9 hover:rotate-180 duration-300 transition-all" src="{% static 'imgs/logo/logo.svg' %}" alt="VSFSD">
     </a>
     <div class="flex m-0 p-0 "  style="position: relative;">
-        <span class="file-name-all text-xl text-white" style="cursor: pointer;">
+        <span id="navbar-file-name" lass="file-name-all text-xl text-white bg-[#7F409D] style="cursor: pointer;">
             <span class="font-bold text-slate-800">File :</span> <span class="file-name font-medium">{{ file.name }}</span>
             <span class="file-type font-medium text-red-300"> ({{ file.get_file_type_display }})</span>
         </span>
@@ -17,7 +17,7 @@
                            placeholder="new file Name" type="text" maxlength="100">
                 </form>
 
-                <div id="entete" class="characteristics-section ml-3" style="position: relative">
+                <div id="entete" class="characteristics-section ml-3 bg-[#7F409D]" style="position: relative">
                             <span class="characteristics-btn">
                                 <img src="{% static 'imgs/upMS.svg' %}" class="characteristics-image w-5"
                                      title="show characteristics" style="transform: rotate(180deg); cursor: pointer;">

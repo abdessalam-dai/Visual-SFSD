@@ -18,10 +18,9 @@
             const EDIT_FILE_NAME_URL = "{% url 'save_file_name' file.id %}";
             const TOGGLE_FILE_VISIBILITY_URL = "{% url 'toggle_public' file.id %}";
         {% endif %}
-
-        console.log(fileData);
     </script>
     <script type="module" src="{% static 'js/files/view_file/index.js' %}"></script>
+    <script type="module" src="{% static 'js/files/view_file/guide.js' %}"></script>
     {% if file.owner == request.user %}
         <script type="module" src="{% static 'js/files/view_file/shared/saveFile.js' %}"></script>
         <script type="module" src="{% static 'js/files/view_file/shared/deleteFile.js' %}"></script>
@@ -42,6 +41,7 @@
 
 
 {% block content %}
+    {% include "files/view_file/components/guide/all.html" %}
     {% include "files/view_file/components/animation-speed.html" %}
 
     {% if file.owner == request.user %}
