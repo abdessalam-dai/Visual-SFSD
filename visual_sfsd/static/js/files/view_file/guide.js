@@ -77,6 +77,8 @@ const resetGuide = () => {
 const hideAllDropDowns = () => {
     guideModal.classList.remove("top-left");
     guideModal.classList.add("left-[50%]");
+    guideModal.classList.add("w-[500px]");
+    guideModal.classList.remove("w-[300px]");
 
     animationSpeed.classList.add("translate-y-11");
     animationSpeed.classList.remove("translate-y-0");
@@ -106,8 +108,10 @@ const highlightComponent = (index) => {
     }
 
     if (index === 2) {
+        guideModal.classList.remove("w-[500px]");
         guideModal.classList.remove("left-[50%]");
         guideModal.classList.add("top-left");
+        guideModal.classList.add("w-[300px]");
         ms.classList.add("bright");
     }
 
@@ -223,7 +227,8 @@ const highlightComponent = (index) => {
     }
 }
 
-highlightComponent(activeStep)
+highlightComponent(activeStep);
+isGuideOpen = true;
 
 // next button
 function nextStep() {
@@ -280,7 +285,6 @@ const openOverlayAndGuideModal = () => {
 // create a new file with shortcut Ctrl + y
 document.addEventListener('keydown', e => {
     if (e.key.toLowerCase() === 'y' && e.ctrlKey) {
-        isGuideOpen = true;
         e.preventDefault();
         openOverlayAndGuideModal();
     }
@@ -308,4 +312,4 @@ document.addEventListener('keyup', function (e) {
     if (e.key === "Escape") {
         resetGuide();
     }
-})
+});
