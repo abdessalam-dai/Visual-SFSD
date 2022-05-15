@@ -3,7 +3,7 @@
 <li class="">
     <button id="profile-menu-btn" data-dropdown-toggle="profile-menu" type="button">
         <img src="{% include 'accounts/profile/components/profile_img.html' with user=request.user %}"
-             class="rounded-full w-10 bg-[#7F409D]"
+             class="rounded-full w-8 bg-[#7F409D]"
              alt="">
     </button>
     <div id="profile-menu" class="hidden relative show" style="z-index: 9999;">
@@ -13,10 +13,10 @@
             <ul>
                 <li class="border-b-2">
                     <a href="{% url 'settings' %}"
-                       class="flex flex-row px-4 py-2 space-x-4 justify-start items-center hover:bg-slate-600 transition-all">
+                       class="flex flex-row px-4 py-1.5 space-x-4 justify-start items-center hover:bg-slate-600 transition-all">
                         <img src="{% include 'accounts/profile/components/profile_img.html' with user=request.user %}"
-                             class="w-10 rounded-full" alt="">
-                        <div class="flex flex-col text-white">
+                             class="w-8 rounded-full" alt="">
+                        <div class="flex flex-col text-sm text-white">
                             <span class="font-semibold">{{ request.user.first_name }} {{ request.user.last_name }}</span>
                             <span class="font-normal ">{{ user.account.get_role_display }}</span>
                         </div>
@@ -25,8 +25,8 @@
                 <li class="border-b-2">
                     <a href="{% url 'dashboard' %}"
                        class="flex flex-row px-4 py-2 space-x-4 justify-start items-center hover:px-2 hover:bg-slate-600 transition-all">
-                        <img src="{% static 'imgs/dashBoardIcon.svg' %}" class="w-8" alt="">
-                        <span class="text-white font-semibold text-lg">Dashboard</span>
+                        <img src="{% static 'imgs/dashBoardIcon.svg' %}" class="w-6" alt="">
+                        <span class="text-white font-semibold text-md">Dashboard</span>
                     </a>
                 </li>
                 <li>
@@ -37,8 +37,8 @@
                         {% endif %}
                         <button type="submit"
                                 class="flex w-full flex-row px-4 py-2 space-x-4 justify-start items-center hover:bg-slate-600 hover:px-2 transition-all rounded-b-xl">
-                            <img src="{% static 'imgs/logoutIcon.svg' %}" class="w-8" alt="">
-                            <span class="text-red-500 font-semibold text-lg">Log Out</span>
+                            <img src="{% static 'imgs/logoutIcon.svg' %}" class="w-6" alt="">
+                            <span class="text-red-500 font-semibold text-md">Log Out</span>
                         </button>
                     </form>
                 </li>

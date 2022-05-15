@@ -1,24 +1,24 @@
 {% load static%}
-<div class="settings-section flex flex-row justify-center space-x-7 flex-wrap p-20">
-    <div class="profile-info mb-7 p-10 mb-4 rounded-3xl bg-white text-center shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
-        <h2 class="block text-center font-bold text-4xl">Profile</h2>
-        <div class="mt-8">
+<div class="settings-section flex flex-row justify-center space-x-20 flex-wrap pb-5 ">
+    <div class="profile-info mb-7 p-5 mb-4 rounded-3xl bg-white text-center shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
+        <h2 class="block text-center font-bold text-3xl">Profile</h2>
+        <div class="mt-6">
             {% include 'accounts/settings/components/update_profile_form.html' %}
         </div>
     </div>
     <div>
-        <div class="security p-16 pt-10 bg-white mb-7 rounded-3xl shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
-            <h1 class="block text-center font-bold text-4xl">Security</h1>
+        <div class="security px-10 py-7  bg-white mb-7 rounded-3xl shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
+            <h1 class="block text-center font-bold text-3xl">Security</h1>
             <div class="flex justify-center">
                 <button id="open-change-password-modal"
-                        class="text-white bg-[#5C5C5C] hover:bg-[#BA68C8] transition-all font-medium p-6 rounded-3xl mt-6">Change password</button>
+                        class="text-white bg-[#5C5C5C] hover:bg-[#BA68C8] transition-all font-medium py-3 px-5 rounded-3xl mt-6">Change password</button>
             </div>
         </div>
-        <div class="deletion-account p-16 pt-10 bg-white rounded-3xl shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
-            <h1 class="block text-center font-bold text-4xl">Deletion</h1>
+        <div class="deletion-account  px-10 py-7 bg-white rounded-3xl shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
+            <h1 class="block text-center font-bold text-3xl">Deletion</h1>
             <div class="flex justify-center">
                 <button id="open-delete-account-modal"
-                        class="delete-account-btn text-white bg-[#BC2F2F] hover:p-7 font-medium hover:bg-[#db4646] transition-all p-6 rounded-3xl mt-6">Delete Account</button>
+                        class="text-md delete-account-btn text-white bg-[#BC2F2F] hover:px-7 hover:py-4 font-medium hover:bg-[#db4646] transition-all py-3 px-5 rounded-full mt-6">Delete Account</button>
             </div>
         </div>
     </div>

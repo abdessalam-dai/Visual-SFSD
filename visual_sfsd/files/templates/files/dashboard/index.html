@@ -28,8 +28,7 @@
 {% block content %}
     {% include 'components/aside/aside_dashboard.html' with active_page='dashboard' %}
 
-    <div class="p-20">
-        {% include 'files/dashboard/components/display_all_files_btn.html' with files=files %}
+    <div class="py-5">
         {% include 'accounts/profile/components/files.html' with files=files %}
         {% include 'files/dashboard/components/delete_file_area.html' with files=files %}
         {% include 'files/dashboard/components/pagination.html' with page=files %}

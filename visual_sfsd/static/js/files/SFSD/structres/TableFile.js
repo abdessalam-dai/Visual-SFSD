@@ -61,7 +61,7 @@ export default class TableFile extends SequentialFile {
         this.MSBoard.selectAll("*").remove();
 
         const blocDiv = `
-        <div class="bloc no-select w-48 shadow-lg shadow-black/50 rounded-lg flex-shrink-0 h-[352px]">
+        <div class="bloc no-select w-40 shadow-lg shadow-black/50 rounded-lg flex-shrink-0">
             <div
                 class="bloc-header text-white px-3 items-center font-medium h-8 rounded-t-lg w-full flex flex-row justify-between bg-slate-900">
                 <span class="bloc-index no-select" style="position: relative"></span>
@@ -200,36 +200,36 @@ export default class TableFile extends SequentialFile {
             return `
                 <button id="dropdownDefault" class="outline-none" data-dropdown-toggle="enreg-dropdown-${enreg.key}">                
                 </button>
-                <div id="enreg-dropdown-${enreg.key}" class="enreg-dropdown z-10 fade rounded-b-md hidden bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700"
-                style="position: absolute; top: 40px; width: 192px; z-index: 900">
-                    <ul class="border-b-md text-sm bg-gray-800 rounded-b-md text-white dark:text-gray-200" aria-labelledby="dropdownDefault">
+                <div id="enreg-dropdown-${enreg.key}" class="enreg-dropdown  z-10 w-40 fade rounded-b-md hidden bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700"
+                style="position: absolute;  z-index: 900">
+                    <ul class="border-b-md font-normal text-sm bg-gray-800 rounded-b-md text-white dark:text-gray-200" aria-labelledby="dropdownDefault">
                           <li class="border-b-2">
                             <span
-                            class="flex flex-row justify-between block px-4 py-2">
-                                    <span class="text-sm text-blue-300">key</span>
+                            class="flex flex-row justify-between block px-4 py-1">
+                                    <span class="text-sm text-blue-300 font-medium">key</span>
                                     <span>${enreg.key}</span>
                             </span>
                           </li>
                           <li class="border-b-2">
                             <span
-                            class="flex flex-row justify-between block px-4 py-2">
-                                    <span class="text-sm text-blue-300">field1</span>
+                            class="flex flex-row justify-between block px-4 py-1">
+                                    <span class="text-sm text-blue-300 font-medium">field1</span>
                                     <span style="word-wrap: anywhere">${enreg.field1}</span>
                             </span>
                           </li>
                           <li class="border-b-2">
                            <span
-                           class="flex flex-row justify-between block px-4 py-2">
-                                   <span class="text-sm text-blue-300">field2</span>
+                           class="flex flex-row justify-between block px-4 py-1">
+                                   <span class="text-sm text-blue-300 font-medium">field2</span>
                                    <span style="word-wrap: anywhere">${enreg.field2}</span>
                            </span>
                          </li>
                          <li class="border-b-2 rounded-b-md">
                            <span
-                           class="flex flex-row justify-between block px-4 py-2">
-                                   <span class="text-sm text-blue-300">removed</span>
+                           class="flex flex-row justify-between block px-4 py-1">
+                                   <span class="text-sm text-blue-300 font-medium">removed</span>
                                    <span>${enreg.removed}</span>
-                           </span>
+                           </span> 
                          </li>
                     </ul>
                 </div>`
@@ -238,7 +238,7 @@ export default class TableFile extends SequentialFile {
         this.MSBoard.selectAll('.bloc')
             .data(this.blocks)
             .append("div")
-            .attr("class", `bloc-body w-full h-80 bg-[${ENREG_HIGHLIGHT_GREY}] rounded-b-lg`)
+            .attr("class", `bloc-body w-full h-64 bg-[${ENREG_HIGHLIGHT_GREY}] rounded-b-lg`)
             .append("ul")
             .attr("class", "text-lg font-medium text-center")
             .each(function (block) {
@@ -247,7 +247,7 @@ export default class TableFile extends SequentialFile {
                     .data(block.enregs)
                     .enter()
                     .append("li")
-                    .attr("class", `border-b-2 bg-[${ENREG_HIGHLIGHT_GREY}] border-gray-700 h-10 flex justify-center flex-col`)
+                    .attr("class", `border-b-2 bg-[${ENREG_HIGHLIGHT_GREY}] border-gray-700 h-8 flex justify-center flex-col`)
                     .style("opacity", "0")
                     .style("color", function (enreg) {
                         return enreg.removed ? "#a70000" : "black"
@@ -274,7 +274,7 @@ export default class TableFile extends SequentialFile {
                             .style("opacity", "1")
                     })
                     .select("button")
-                    .classed("overflow-hidden flex flex-col justify-center items-center w-full h-full", true)
+                    .classed("overflow-hidden flex text-sm flex-col justify-center items-center w-full h-full", true)
                     .append("span")
                     .text(function (enreg) {
                         return enreg.key;
