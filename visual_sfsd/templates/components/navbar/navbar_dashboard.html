@@ -1,18 +1,18 @@
 {% load static %}
 
-<nav class="fixed top-0 left-0 w-full flex bg-white p-4 z-10">
-    <div class="w-[400px]"></div>
-    <div class="flex grow">
+<nav class="fixed top-0 left-0 w-full flex bg-white px-4 py-2.5 z-10">
+    
+    <div class="flex grow ml-80 items-center">
         <form method="GET" action="{% url 'dashboard' %}">
-            <div class="flex py-3 px-5 space-x-2 rounded-md" style="background-color: #DCD9D9">
+            <div class="flex py-2 px-4 space-x-2 rounded-md" style="background-color: #DCD9D9">
                 {% csrf_token %}
-                <select name="file_access"
+                <select name="file_access" 
                         class="form-select appearance-none cursor-pointer
       block
       w-full
-      px-3
-      py-1.5
-      text-base
+      px-2.5
+      py-0
+      text-xs
       font-normal
       text-gray-700
       bg-white bg-clip-padding bg-no-repeat
@@ -22,31 +22,32 @@
       ease-in-out
       m-0
       focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" aria-label="Type">
-                    <option {% if file_access == "all" %}selected{% endif %} value="all">All</option>
+                    <option class= {% if file_access == "all" %}selected{% endif %} value="all">All</option>
                     <option {% if file_access == "sequential" %}selected{% endif %} value="sequential">Sequential
                     </option>
                     <option {% if file_access == "indexed" %}selected{% endif %} value="indexed">Indexed</option>
-                    <option {% if file_access == "hashing" %}selected{% endif %} value="hashing">Hashing</option>
+                    <option  {% if file_access == "hashing" %}selected{% endif %} value="hashing">Hashing</option>
                 </select>
-                <input class="border-0 outline-0 bg-transparent pl-2 focus:ring-0"
+                <input class="border-0 text-xs outline-0 bg-transparent pl-2 focus:ring-0"
                        type="search"
                        placeholder="Search my files"
                        name="query"
+                       required
                        value="{{ query }}"
                 />
                 <button type="submit" class="w-[7rem] flex items-center justify-center">
-                    <img class="w-4/6" src="{% static 'imgs/navbar-dashboard/search.svg' %}" alt="Search">
+                    <img class="w-3/6 hover:w-7/12 transition-all" src="{% static 'imgs/navbar-dashboard/search.svg' %}" alt="Search">
                 </button>
             </div>
         </form>
+        {% include 'files/dashboard/components/display_all_files_btn.html' with files=files %}
     </div>
     <a href="{% url 'profile' request.user.username %}"
-       class="profile flex mr-4 items-center px-3 hover:bg-gray-200 transition-all hover:px-4 rounded-md transition-all">
-        <div class="img-profile mr-5">
-{#            <img src="{% static 'imgs/user.png' %}" class="rounded-full w-12" alt="">#}
-            <img src="{% include 'accounts/profile/components/profile_img.html' with user=request.user %}" class="rounded-full w-12" alt="">
+       class="profile flex  items-center px-2 hover:bg-gray-200 transition-all hover:px-4 rounded-md transition-all">
+        <div class="img-profile mr-3">
+            <img src="{% include 'accounts/profile/components/profile_img.html' with user=request.user %}" class="rounded-full w-10" alt="">
         </div>
-        <div class="user-info">
+        <div class="user-info text-sm space-y-0">
             <div class="text-[#222] font-bold">{{ request.user.first_name }} {{ request.user.last_name }}</div>
             <div class="user-type">{{ request.user.account.get_role_display }}</div>
         </div>

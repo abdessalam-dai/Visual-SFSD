@@ -28,7 +28,7 @@
 {% block content %}
     {% include 'components/aside/aside_dashboard.html' with active_page='students' %}
 
-    <div class="p-20">
+    <div class="p-5">
         {% include 'accounts/students_list/components/students.html' with students=students %}
         {% include 'accounts/students_list/components/pagination.html' with page=students %}
     </div>

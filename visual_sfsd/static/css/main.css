@@ -21,24 +21,24 @@ input[type=number] {
 
 /* width */
 .ms-container::-webkit-scrollbar {
-    width: 20px;
+    width: 10px;
 }
 
 /* Track */
 .ms-container::-webkit-scrollbar-track {
     box-shadow: inset 0 0 5px grey;
-    border-radius: 10px;
+    border-radius: 5px;
 }
 
 /* Handle */
 .ms-container::-webkit-scrollbar-thumb {
     background: #93C5FD;
-    border-radius: 10px;
+    border-radius: 5px;
 }
 
 /* width */
 .index-table-container::-webkit-scrollbar {
-    width: 20px;
+    width: 10px;
 }
 
 /* Track */

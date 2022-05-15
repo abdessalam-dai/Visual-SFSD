@@ -1,27 +1,20 @@
 {% load static %}
 <div class="ms w-2/3 flex flex-col">
     {% if file.file_access == 'indexed' %}
-        <div class="my-5 py-5 index-table-container overflow-x-scroll flex justify-start">
+        <div class="py-3 index-table-container overflow-x-scroll flex justify-start">
             {% include "files/view_file/components/index-table.html" %}
         </div>
-        <div class="flex flex-row justify-between no-select">
-            <button id="index-table-scroll-left-btn" class="hover:-translate-x-1 transition-all">
-                <img src="{% static 'imgs/scroll-bar/left-arrow.png' %}" alt="" class="w-7">
-            </button>
-            <button id="index-table-scroll-right-btn" class="hover:translate-x-1 transition-all">
-                <img src="{% static 'imgs/scroll-bar/right-arrow.png' %}" alt="" class="w-7">
-            </button>
-        </div>
+        
     {% endif %}
     <div>
-        <div class="ms-container overflow-x-scroll flex flex-row space-x-8 flex-shrink-0">
+        <div class="ms-container i overflow-x-scroll flex flex-row space-x-8 flex-shrink-0">
         </div>
         <div class="flex flex-row justify-between mt-4 no-select">
             <button id="scroll-left-btn" class="hover:-translate-x-1 transition-all">
-                <img src="{% static 'imgs/scroll-bar/left-arrow.png' %}" alt="" class="w-7">
+                <img src="{% static 'imgs/scroll-bar/left-arrow.png' %}" alt="" class="w-5">
             </button>
             <button id="scroll-right-btn" class="hover:translate-x-1 transition-all">
-                <img src="{% static 'imgs/scroll-bar/right-arrow.png' %}" alt="" class="w-7">
+                <img src="{% static 'imgs/scroll-bar/right-arrow.png' %}" alt="" class="w-5">
             </button>
         </div>
     </div>

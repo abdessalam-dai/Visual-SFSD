@@ -26,16 +26,16 @@
 
 <body class="select-none">
 {#{% include 'components/messages.html' %}#}
-<div class="h-screen flex flex-row-reverse bg-[#D2DCFF]">
-    <div class="w-full flex flex-col  justify-between text-center py-20 px-10 2xl:rounded-l-[75px] bg-[white] 2xl:w-1/2">
-        <h1 class="text-center font-bold text-6xl mb-12">Login</h1>
-        <div class="w-full 2xl:w-2/3 2xl:px-[50px] m-auto mb-5">
+<div class="md:h-screen flex flex-row-reverse bg-[#D2DCFF]">
+    <div class="w-full flex flex-col  justify-center text-center py-7 px-5 md:rounded-l-[75px] bg-white md:w-1/2">
+        <h1 class="text-center font-bold text-4xl mb-10">Login</h1>
+        <div class="w-4/5 md:w-2/3 ">
             {% include 'components/messages.html' %}
         </div>
-        <div class="pb-20 2xl:py-0">
+        <div class="pb-20 md:py-0">
             <div class="flex justify-center items-center">
                 <form method="POST"
-                      class="w-full 2xl:w-2/3 2xl:px-[50px]">
+                      class="w-4/5 md:w-2/3">
                     {% csrf_token %}
 
                     {# non field errors #}
@@ -49,7 +49,7 @@
 
                     {# login #}
                     <div class=" mb-8">
-                        <div class="mb-3">
+                        <div class="mb-5">
                             {{ form.login }}
                         </div>
                         <div class="text-red-500">
@@ -73,7 +73,7 @@
                             <div class="flex items-start mb-6">
                                 {{ form.remember }}
                                 <label for="{{ form.remember.id_for_label }}"
-                                       class="ml-2 cursor-pointer -mt-0.5 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                       class="ml-2 cursor-pointer -mt-0.5 text-sm font-medium text-gray-900     ">
                                     {{ form.remember.label }}
                                 </label>
                             </div>
@@ -88,34 +88,33 @@
                     {% endif %}
 
                     <button type="submit"
-                            class="rounded-full bg-[#879EF1] hover:bg-[#BA68C8] transition-all text-white text-2xl py-4 px-[50px] cursor-pointer">
+                            class="rounded-full bg-[#879EF1] hover:bg-[#BA68C8] transition-all text-white text-xl py-4 px-12 cursor-pointer">
                         Log In
                     </button>
                 </form>
             </div>
 
             <div class="relative mt-8">
-                <div class="google text-[#474747]">
+                <div class="google md:text-sm text-md text-[#474747] after:hidden md:after:block before:hidden md:before:block">
                     <p class="">Or sign in with google</p>
                 </div>
             </div>
             <a href="{% provider_login_url 'google' %}"
-               class="flex hover:bg-gray-100 transition-all justify-center items-center border-2 h-20 w-20 m-auto rounded-2xl mt-8">
-                <img src="{% static 'imgs/accounts/google.svg' %}" alt="Google">
+               class="flex hover:bg-gray-100 transition-all justify-center items-center border-2 h-16 w-16 m-auto rounded-2xl mt-8">
+                <img src="{% static 'imgs/accounts/google.svg' %}" class="w-8 h-8"alt="Google">
             </a>
 
-            <div class="flex flex-row justify-between mt-8 px-20">
+            <div class="flex md:flex-row flex-col space-y-2 justify-between mdm:t-4 mt-6 md:px-16">
                 <div>
-                    <span class="text-gray-700">Don't have an account ?</span><a class="ml-2"
-                                                                                 href="{{ signup_url }}">Sign Up</a>
+                    <span class="text-gray-700 text-sm font-medium">Don't have an account ?</span><a class="ml-2 text-sm font-semibold hover:text-indigo-800 transition-all" href="{{ signup_url }}">Sign Up</a>
                 </div>
                 <div>
-                    <a class="text-blue-900" href="{% url 'account_reset_password' %}">Forgot password ?</a>
+                    <a class="text-blue-900 transition-all text-sm hover:text-indigo-700" href="{% url 'account_reset_password' %}">Forgot password ?</a>
                 </div>
             </div>
         </div>
     </div>
-    <div class="side-image w-0 flex justify-center items-center 2xl:w-1/2">
+    <div class="side-image w-0 flex justify-center items-center md:w-1/2">
         <img src="{% static 'imgs/accounts/login.svg' %}" alt="Login">
     </div>
 </div>

@@ -20,29 +20,34 @@
     <link rel="icon" href="{% static 'imgs/logo/logo.svg' %}"/>
 </head>
 
-<body class="select-none">
+<body class="select-none md:overflow-y-hidden">
 {#{% include 'components/messages.html' %}#}
 <div class="h-screen flex flex-row-reverse bg-[#D2DCFF]">
-    <div class="w-full text-center flex flex-col justify-center py-20 px-10 2xl:rounded-l-[75px] bg-[white] 2xl:w-1/2">
-        <div class="flex mb-10 flex-row px-5 justify-start">
-            <a href="{% url 'dashboard' %}"
-               class="rounded-lg bg-gray-700 space-x-3 px-3 shadow-lg py-1 flex flex-row justify-center items-center">
-                <span class="font-medium text-white text-lg">Dashboard</span>
-                <img class="w-5" src="{% static 'imgs/404/arrow-return-left.svg' %}" alt="">
-            </a>
-        </div>
-        <div>
-            <h1 class="text-center font-bold text-6xl mb-12">Contact Us</h1>
-            <div class="w-full 2xl:w-2/3 2xl:px-[50px] m-auto mb-5">
+    <div class="w-full text-center flex flex-col justify-center py-5 px-10 md:rounded-l-[75px] bg-[white] md:w-1/2">
+        
+        <div class="">
+            <div class="mb-12 flex flex-row justify-center items-center">
+                <a href="{% url 'dashboard' %}" class="back-dashboard transition-all hover:-translate-x-3 duration-300"><div class="w-12 -translate-x-5"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs"  x="0" y="0" viewBox="0 0 473.654 473.654" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g>
+                    <circle xmlns="http://www.w3.org/2000/svg" style="" cx="236.827" cy="236.827" r="236.827" fill="#6e85d6" data-original="#4abc96" class=""></circle>
+                    <path xmlns="http://www.w3.org/2000/svg" style="" d="M338.465,207.969c-43.487,0-86.975,0-130.459,0c11.08-11.08,22.161-22.161,33.241-33.245  c25.56-25.56-14.259-65.084-39.883-39.456c-27.011,27.011-54.018,54.022-81.029,81.033c-10.841,10.841-10.549,28.907,0.213,39.669  c27.011,27.007,54.018,54.018,81.029,81.025c25.56,25.56,65.084-14.259,39.456-39.883c-11.013-11.013-22.026-22.026-33.039-33.035  c43.357,0,86.713,0,130.066,0C374.283,264.077,374.604,207.969,338.465,207.969z" fill="#ffffff" data-original="#ffffff"></path>
+                    <g xmlns="http://www.w3.org/2000/svg">
+                    </g>
+                    </svg>
+                </div></a>
+                <h1 class="text-center font-bold text-4xl">Contact Us</h1>
+            </div>
+            
+            
+            <div class="w-full md:w-2/3 md:px-[50px] m-auto mb-5">
                 {% include 'components/messages.html' %}
             </div>
-            <div class="flex justify-center items-center">
+            <div class="flex justify-center pb-5 items-center">
                 <form method="POST"
-                      class="w-full 2xl:w-2/3 2xl:px-[50px]">
+                      class="w-5/6 md:w-2/3 ">
                     {% csrf_token %}
 
                     {% for tag in form %}
-                        <div class=" mb-8">
+                        <div class=" mb-5">
                             <div class="mb-3">
                                 {{ tag }}
                             </div>
@@ -60,10 +65,15 @@
             </div>
         </div>
     </div>
-    <div class="side-image w-0 flex justify-center items-center 2xl:w-1/2">
+    <div class="side-image flex justify-center items-center w-0 md:w-1/2">
         <img src="{% static 'imgs/accounts/contact.svg' %}" alt="Contact">
     </div>
 </div>
 </body>
 </html>
 
+<style>
+    .back-dashboard:hover div svg circle {
+        fill: #BA68C8;
+    }
+</style>

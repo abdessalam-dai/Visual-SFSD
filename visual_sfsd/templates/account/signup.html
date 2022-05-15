@@ -24,14 +24,14 @@
 </head>
 
 <body class="bg-[#D2DCFF]">
-<div class="h-screen flex bg-[#D2DCFF]">
-    <div class="w-full flex flex-col  justify-between text-center py-20 px-10 2xl:rounded-r-[75px] bg-[white] 2xl:w-1/2">
-        <h1 class="text-center font-bold text-6xl mb-12">Register</h1>
-        <div class="pb-20 2xl:py-0">
+<div class="md:h-screen flex bg-[#D2DCFF]">
+    <div class="w-full flex flex-col  justify-between text-center py-7 px-5 md:rounded-r-[75px] bg-[white] md:w-1/2">
+        <h1 class="text-center font-bold text-4xl mb-10">Register</h1>
+        <div class="pb-20 md:py-0">
             <div class="flex justify-center items-center">
                 <form method="POST"
                       action="{% url 'account_signup' %}"
-                      class="w-full 2xl:w-2/3 2xl:px-[50px]">
+                      class="w-4/5 md:w-2/3 ">
                     {% csrf_token %}
 
                     {# non field errors #}
@@ -43,18 +43,9 @@
                         </div>
                     {% endif %}
 
-{#                    {% for field in form %}#}
-{#                        <div class=" mb-8">#}
-{#                            <div class="mb-3">#}
-{#                                {{ field }}#}
-{#                            </div>#}
-{#                            <div class="text-red-500">#}
-{#                                {{ field.errors|escape }}#}
-{#                            </div>#}
-{#                        </div>#}
-{#                    {% endfor %}#}
 
-                <div class=" mb-8">
+
+                <div class=" mb-6">
                         <div class="mb-3">
                             {{ form.username }}
                         </div>
@@ -62,7 +53,7 @@
                             {{ form.username.errors|escape }}
                         </div>
                     </div>
-                    <div class="flex flex-row space-x-5  mb-8">
+                    <div class="flex flex-row space-x-5  mb-6">
                         <div>
                             <div>
                                 {{ form.first_name }}
@@ -80,7 +71,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class=" mb-8">
+                    <div class=" mb-6">
                         <div class="mb-3">
                             {{ form.email }}
                         </div>
@@ -88,7 +79,7 @@
                             {{ form.email.errors|escape }}
                         </div>
                     </div>
-                    <div class="mb-8">
+                    <div class="mb-6">
                         <div class="flex flex-row space-x-5 mb-3">
                             {{ form.password1 }}
                             {{ form.password2 }}
@@ -104,32 +95,32 @@
                     {% endif %}
 
                     <button type="submit"
-                            class="rounded-full bg-[#879EF1] hover:bg-[#BA68C8] transition-all text-white text-2xl py-4 px-[50px] cursor-pointer">
+                            class="rounded-full bg-[#879EF1] hover:bg-[#BA68C8] transition-all text-white text-lg py-4 px-12 cursor-pointer">
                         Sign Up
                     </button>
                 </form>
             </div>
 
-            <div class="alternative-signup relative mt-8">
+            <div class="alternative-signup relative mt-6">
                 <div class="google text-[474747]">
-                    <p class="">Or sign up with google</p>
+                    <p class="text-sm">Or sign up with google</p>
                 </div>
             </div>
             <a href="{% provider_login_url 'google' %}"
-               class="flex hover:bg-gray-100 transition-all justify-center items-center border-2 h-20 w-20 m-auto rounded-2xl mt-8">
-                <img src="{% static 'imgs/accounts/google.svg' %}" alt="Google">
+               class="flex hover:bg-gray-100 transition-all justify-center items-center border-2 h-16 w-16 m-auto rounded-2xl mt-4">
+                <img src="{% static 'imgs/accounts/google.svg' %}" class="w-8 h-8" alt="Google">
             </a>
 
-            <div class="flex flex-row justify-center mt-8 px-20">
+            <div class="flex flex-row justify-center mt-4 md:px-10">
                 <div>
-                    <span class="text-gray-700">Already have an account ?</span><a class="ml-2"
+                    <span class="text-gray-700">Already have an account ? </span><a class=""
                                                                                    href="{% url 'account_login' %}">Login</a>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class=" side-image  w-0 2xl:w-1/2 flex justify-center items-center">
+    <div class=" side-image  w-0 md:w-1/2 flex justify-center items-center">
         <img src="{% static 'imgs/accounts/register.svg' %}" alt="Register">
     </div>
 </div>

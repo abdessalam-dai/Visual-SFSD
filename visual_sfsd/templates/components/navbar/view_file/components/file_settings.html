@@ -3,45 +3,45 @@
 <li>
     <button data-dropdown-toggle="file-menu" id="menu-btn" type="button">
         <img src="{% static 'imgs/ci_settings-filledsettings.svg' %}"
-             class="w-10 hover:rotate-45 transition-all"
+             class="w-8 hover:rotate-45 transition-all"
              alt="">
     </button>
-    <div id="file-menu" class="hidden relative show" style="z-index: 9999;">      
+    <div id="file-menu" class="hidden relative show" style="z-index: 999999999999999999999;">      
         <div
              class="bg-slate-800 font-sans  rounded-b-xl absolute w-max"
              style=" right: -40px">
             <ul>
                 {% if file.owner == request.user %}
-                    <li class="flex flex-row px-4 py-2 space-x-4 items-center hover:bg-slate-600 transition-all  border-b-2 justify-between">
-                        <span class="text-white text-lg font-semibold">Public</span>
+                    <li class="flex flex-row px-4 py-2 space-x-2 items-center hover:bg-slate-600 transition-all  border-b-2 justify-between">
+                        <span class="text-white text-md font-semibold">Public</span>
                         <label for="toggle-file-visibility-btn"
                                class="flex relative items-center cursor-pointer">
                             <input type="checkbox" id="toggle-file-visibility-btn" class="sr-only"
                                    {% if file.is_public %}checked=true{% endif %}>
-                            <div class="w-11 h-6 bg-gray-200 rounded-full border border-gray-200 toggle-bg dark:bg-gray-700 dark:border-gray-600"></div>
+                            <div  class="toggle-circ w-8 h-4 bg-gray-200 rounded-full border border-gray-200 toggle-bg dark:bg-gray-700 dark:border-gray-600"></div>
                         </label>
                     </li>
                 {% endif %}
-                <li class="flex flex-row px-4 py-2 space-x-4 items-center  border-b-2 hover:bg-slate-600 transition-all justify-between">
-                    <span class="text-white text-lg font-semibold">Animations</span>
+                <li class="flex flex-row px-4 py-2 space-x-4 items-center  border-b-2 hove  r:bg-slate-600 transition-all justify-between">
+                    <span class="text-white text-md font-semibold">Animations</span>
                     <label for="toggle-animation"
                            class="flex relative items-center cursor-pointer">
                         <input type="checkbox" id="toggle-animation" class="sr-only" checked>
-                        <div class="w-11 h-6 bg-gray-200 rounded-full border border-gray-200 toggle-bg dark:bg-gray-700 dark:border-gray-600"></div>
+                        <div class="toggle-circ w-8 h-4 bg-gray-200 rounded-full border border-gray-200 toggle-bg dark:bg-gray-700 dark:border-gray-600"></div>
                     </label>
                 </li>
                 <li class="flex flex-row justify-between space-x-4 px-4 py-2 hover:bg-slate-600 transition-all {% if file.owner == request.user %} border-b-2{% endif %} items-center">
-                    <span class="text-white font-semibold text-lg">Dark Mode</span>
+                    <span class="text-white font-semibold text-md">Dark Mode</span>
                     <label for="toggle-example" class="flex relative items-center  cursor-pointer">
                         <input type="checkbox" id="toggle-example" class="sr-only">
-                        <div class="w-11 h-6 bg-gray-200 rounded-full border border-gray-200 toggle-bg dark:bg-gray-700 dark:border-gray-600"></div>
+                        <div class="toggle-circ w-8 h-4 bg-gray-200 rounded-full border border-gray-200 toggle-bg dark:bg-gray-700 dark:border-gray-600"></div>
                     </label>
                 </li>
                 {% if file.owner == request.user %}
                     <li id="open-delete-file-modal"
                         class="flex cursor-pointer flex-row px-4 py-2 items-center space-x-4 justify-between hover:bg-slate-600 rounded-b-xl transition-all ">
-                        <span class="text-red-400 font-semibold text-lg">Delete File</span>
-                        <img src="{% static 'imgs/deleteFileIcon.svg' %}" class="w-6" alt="">
+                        <span class="text-red-400 font-semibold text-md">Delete File</span>
+                        <img src="{% static 'imgs/deleteFileIcon.svg' %}" class="w-5" alt="">
                     </li>
                 {% endif %}
             </ul>
@@ -51,3 +51,11 @@
 {% if file.owner == request.user %}
     {% include 'components/navbar/view_file/components/delete_file.html' %}
 {% endif %}
+<style>
+    .toggle-circ::after {
+        width: 15px;
+        height: 15px;
+        top: 1px;
+        
+    }
+</style>

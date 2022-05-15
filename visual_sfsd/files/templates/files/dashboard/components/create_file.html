@@ -3,8 +3,8 @@
 <button data-tooltip-target="tooltip-create-file"
         data-tooltip-placement="left"
         id="create-file-btn"
-        class="save-file-btn shadow-2xl bg-white z-5 right-20 bottom-20 rounded-full transition-all fixed w-[100px] h-[100px] flex justify-center items-center hover:bg-[#8846DD] hover:rotate-90">
-        <svg class="plus-btn" width="46" height="46" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+        class="save-file-btn shadow-2xl bg-white z-5 right-16 bottom-16 rounded-full transition-all fixed w-20 h-20 flex justify-center items-center hover:bg-[#8846DD] hover:rotate-90">
+        <svg class="plus-btn" width="40" height="40" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M26 3C26 2.20435 25.6839 1.44129 25.1213 0.878679C24.5587 0.31607 23.7956 0 23 0C22.2044 0 21.4413 0.31607 20.8787 0.878679C20.3161 1.44129 20 2.20435 20 3V20H3C2.20435 20 1.44129 20.3161 0.878679 20.8787C0.31607 21.4413 0 22.2044 0 23C0 23.7956 0.31607 24.5587 0.878679 25.1213C1.44129 25.6839 2.20435 26 3 26H20V43C20 43.7957 20.3161 44.5587 20.8787 45.1213C21.4413 45.6839 22.2044 46 23 46C23.7956 46 24.5587 45.6839 25.1213 45.1213C25.6839 44.5587 26 43.7957 26 43V26H43C43.7957 26 44.5587 25.6839 45.1213 25.1213C45.6839 24.5587 46 23.7956 46 23C46 22.2044 45.6839 21.4413 45.1213 20.8787C44.5587 20.3161 43.7957 20 43 20H26V3Z" fill="#293CE4"/>
             </svg>            
 </button>
@@ -22,7 +22,7 @@
     <div class="bg-white rounded-3xl text-center">
         <form method="POST" action="">
             {% csrf_token %}
-            <div class="p-20">
+            <div class="p-10">
                 <!-- START - step 1 -->
                 <div id="step-1" class=" fade">
                     <div>
@@ -49,23 +49,23 @@
                 <!-- hidden input for file access type -->
                 <input name="access" id="file-access" type="text" value="sequential" class="hidden">
                 <div id="step-2" class="hidden fade">
-                    <h1 class="font-bold text-3xl">Choose the type of <span
+                    <h1 class="font-bold text-2xl">Choose the type of <span
                             class="text-purple-600">file organization</span>
                     </h1>
                     <ul class="flex flex-row justify-center mt-10">
                         <li data-access="sequential"
                             id="file-access-btn"
-                            class="transition-all ease-in-out bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer rounded-l-2xl">
+                            class="transition-all ease-in-out bg-neutral-600 text-white text-lg py-5 px-10 border border-white hover:bg-green-500 cursor-pointer rounded-l-2xl">
                             Sequential
                         </li>
                         <li data-access="indexed"
                             id="file-access-btn"
-                            class="transition-all ease-in-out bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer">
+                            class="transition-all ease-in-out bg-neutral-600 text-white text-lg py-5 px-10 border border-white hover:bg-green-500 cursor-pointer">
                             Indexed
                         </li>
                         <li data-access="hashing"
                             id="file-access-btn"
-                            class="transition-all ease-in-out bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer rounded-r-2xl">
+                            class="transition-all ease-in-out bg-neutral-600 text-white text-lg py-5 px-10 border border-white hover:bg-green-500 cursor-pointer rounded-r-2xl">
                             Hashing
                         </li>
                     </ul>
@@ -76,47 +76,47 @@
                 <input name="type" id="file-type" type="text" value="TOF" class="hidden">
                 <!-- START - step 3 -->
                 <div id="step-3-sequential" class="hidden fade">
-                    <h1 class="font-bold text-3xl">Choose the type of <span class="text-purple-600">file</span></h1>
+                    <h1 class="font-bold text-2xl">Choose the type of <span class="text-purple-600">file</span></h1>
                     <ul class="flex flex-row justify-center mt-10">
                         <li data-type="TOF"
                             id="file-type-btn"
-                            class="transition-all ease-in-out bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer rounded-l-2xl">
+                            class="transition-all ease-in-out bg-neutral-600 text-white text-lg py-5 px-10 border border-white hover:bg-green-500 cursor-pointer rounded-l-2xl">
                             TOF
                         </li>
                         <li data-type="TnOF"
                             id="file-type-btn"
-                            class="transition-all ease-in-out bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer">
+                            class="transition-all ease-in-out bg-neutral-600 text-white text-lg py-5 px-10 border border-white hover:bg-green-500 cursor-pointer">
                             TnOF
                         </li>
                         <li data-type="LOF"
                             id="file-type-btn"
-                            class="transition-all ease-in-out bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer">
+                            class="transition-all ease-in-out bg-neutral-600 text-white text-lg py-5 px-10 border border-white hover:bg-green-500 cursor-pointer">
                             LOF
                         </li>
                         <li data-type="LnOF"
                             id="file-type-btn"
-                            class="transition-all ease-in-out bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer rounded-r-2xl">
+                            class="transition-all ease-in-out bg-neutral-600 text-white text-lg py-5 px-10 border border-white hover:bg-green-500 cursor-pointer rounded-r-2xl">
                             LnOF
                         </li>
                     </ul>
                 </div>
                 <div id="step-3-indexed" class="hidden fade">
-                    <h1 class="font-bold text-3xl">Choose the type of <span class="text-purple-600">file</span></h1>
+                    <h1 class="font-bold text-2xl">Choose the type of <span class="text-purple-600">file</span></h1>
                     <ul class="flex flex-row justify-center mt-10">
                         <li data-type="clustered"
                             id="file-type-btn"
-                            class="transition-all ease-in-out bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer rounded-l-2xl">
+                            class="transition-all ease-in-out bg-neutral-600 text-white text-lg py-5 px-10 border border-white hover:bg-green-500 cursor-pointer rounded-l-2xl">
                             Clustered
                         </li>
                         <li data-type="not_clustered"
                             id="file-type-btn"
-                            class="transition-all ease-in-out bg-neutral-600 text-white text-xl py-5 px-10 border border-white hover:bg-green-500 cursor-pointer rounded-r-2xl">
+                            class="transition-all ease-in-out bg-neutral-600 text-white text-lg py-5 px-10 border border-white hover:bg-green-500 cursor-pointer rounded-r-2xl">
                             Not Clustered
                         </li>
                     </ul>
                 </div>
                 <div id="step-3-hashing" class="hidden fade">
-                    <h1 class="font-bold text-3xl">Choose the type of <span class="text-purple-600">file</span></h1>
+                    <h1 class="font-bold text-2xl">Choose the type of <span class="text-purple-600">file</span></h1>
                     <ul class="flex flex-row justify-center mt-10">
                         <li data-type="essai_linear"
                             id="file-type-btn"
@@ -129,10 +129,10 @@
 
                 <!-- START - step 4 -->
                 <div id="step-4" class="hidden fade">
-                    <h1 class="font-bold text-3xl mb-8">File configuration</h1>
+                    <h1 class="font-bold text-2xl mb-8">File configuration</h1>
                     <div class="text-left mb-4">
                         <label for="max-nb-enregs"
-                               class="block mb-2 text-lg font-medium text-gray-900 dark:text-gray-300">
+                               class="block mb-2 text-md font-medium text-gray-900 dark:text-gray-300">
                             Max. number of elements per block
                         </label>
                         <input name="max-nb-enregs"
@@ -142,14 +142,14 @@
                                type="number" placeholder="Max. number of elements per block"
                                min="4"
                                max="8"
-                               class="w-full px-3 py-2 border border-slate-300 rounded-md text-lg shadow-sm placeholder-gray-400 px-4
+                               class="w-full px-3 py-2 border border-slate-300 rounded-md text-md shadow-sm placeholder-gray-400 px-4
                                 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
                                 bg-gray-50"
                         />
                     </div>
                     <div class="text-left mb-4">
                         <label for="max-nb-blocks"
-                               class="block mb-2 text-lg font-medium text-gray-900 dark:text-gray-300">
+                               class="block mb-2 text-md font-medium text-gray-900 dark:text-gray-300">
                             Max. number of blocks
                         </label>
                         <input name="max-nb-blocks"
@@ -159,7 +159,7 @@
                                type="number" placeholder="Max. number of blocks"
                                min="5"
                                max="100"
-                               class="w-full px-3 py-2 border border-slate-300 rounded-md text-lg shadow-sm placeholder-gray-400 px-4
+                               class="w-full px-3 py-2 border border-slate-300 rounded-md text-md shadow-sm placeholder-gray-400 px-4
                                 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
                                 bg-gray-50"
                         />
@@ -167,7 +167,7 @@
                     <!-- For indexed files only -->
                     <div class="text-left mb-4 hidden" id="index-table-size-container">
                         <label for="index-table-size"
-                               class="block mb-2 text-lg font-medium text-gray-900 dark:text-gray-300">
+                               class="block mb-2 text-md font-medium text-gray-900 dark:text-gray-300">
                             Index table size
                         </label>
                         <input name="index-table-size"
@@ -177,20 +177,17 @@
                                type="number" placeholder="Index table size"
                                min="5"
                                max="100"
-                               class="w-full px-3 py-2 border border-slate-300 rounded-md text-lg shadow-sm placeholder-gray-400 px-4
+                               class="w-full px-3 py-2 border border-slate-300 rounded-md text-md shadow-sm placeholder-gray-400 px-4
                                 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
                                 bg-gray-50"
                         />
                     </div>
 
-{#                    <!-- For indexed files only -->#}
-{#                    <div id="index-table-size" class="hidden mt-2 text-lg font-medium text-gray-900">#}
-{#                        Index table size = <span>800</span>#}
-{#                    </div>#}
+
 
                     <button id="submit-create-file"
                             type="submit"
-                            class="text-white mt-8 bg-[#733A8E] disabled:bg-gray-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-2xl w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                            class="text-white  mt-8 bg-[#733A8E] disabled:bg-gray-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-xl w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                         Create
                     </button>
                 </div>

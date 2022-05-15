@@ -6,7 +6,7 @@ from allauth.account.forms import LoginForm, SignupForm, ResetPasswordForm, Rese
 
 from .models import Account
 
-input_classes = 'focus:outline-blue-500 block m-auto p-5 w-full rounded-full custom-shadow'
+input_classes = 'focus:outline-blue-500 block m-auto px-4 py-4 text-sm w-full rounded-full custom-shadow'
 remember_input_classes = 'w-4 h-4 cursor-pointer border border-red-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800'
 
 
