@@ -26,6 +26,20 @@
             background: #cfcfcf;
         }
 
+        .display-mobile-case {
+            background-image: url("{% static 'imgs/404/display-mobile/bg.svg' %}");
+            background-repeat: no-repeat;
+            background-size: cover;
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            height: 100%;
+            width: 100%;
+            z-index: 100000000000000000000000000;
+        }
+
         .dotted-loader {
             z-index: 9999999;
             width: 100px;
@@ -113,7 +127,7 @@
 
     {% endblock %}
     <script defer type="module" src="{% static 'js/toasts.js' %}"></script>
-
+    <script defer type="module" src="{% static 'js/mobileDisplayCase.js' %}"></script>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -122,6 +136,18 @@
 </head>
 
 <body>
+
+<div class="display-mobile-case hidden">
+    <div class="flex flex-col h-screen space-y-10 items-center justify-center px-10">
+        <img src="{% static 'imgs/404/display-mobile/logo.svg' %}" class="hover:rotate-180 duration-300 w-40 absolute top-10" alt="">
+        <h1 class="font-bold text-3xl text-center  text-white">Win rayah a lahbiba? akhroj akrhoj</h1>
+        <p class="text-white text-center bg-indigo-900 text-lg font-medium px-5 py-3 rounded-3xl">VSFSD isn’t scompatible with mobile screens yet, please activate the desktop site option or switch to a desktop screen.</p>
+        <div class="flex flex-row absolute bottom-10 justify-between transition-all shadow-xl hover:bg-[#d44aab] bg-[#6F7DFF] space-x-8 px-4 rounded-2xl py-2">
+            <span class="font-semibold text-white text-lg">Home</span>
+            <img src="{% static 'imgs/404/display-mobile/buttonLeft.svg' %}" class="w-6" alt="">
+        </div>
+    </div>
+</div>
 <div class="dotted-loader" id="screen_loading"></div>
 
 {% block navbar %}
