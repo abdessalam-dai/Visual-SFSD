@@ -51,12 +51,14 @@
             <i class="fa-solid fa-circle-question text-3xl w-11 ml-6 mr-3"></i>
             <h3 class="text-xl font-bold">Feedback</h3>
         </a>
+        {% if request.user.is_staff %}
         <a href="{% url 'feedback_list' %}"
            class="hover:bg-white transition-all duration-300 hover:text-[#8846DD] rounded-l-full flex py-3  items-center
-                {% if active_page == 'feedback_list' %}text-[#8846DD] bg-white active{% else %}not-active text-white bg-[#8846DD]{% endif %}">
+                {% if active_page == 'feedbacks_list' %}text-[#8846DD] bg-white active{% else %}not-active text-white bg-[#8846DD]{% endif %}">
             <i class="fa-solid fa-list text-3xl w-11 ml-6 mr-3"></i>
             <h3 class="text-xl font-bold">Feedbacks</h3>
         </a>
+        {% endif %}
     </div>
         <div class="fixed left-0 bottom-10 w-60"> <!-- width depends on the side bar's width -->
             <form method="post" class="overflow-x-hidden" action="{% url 'account_logout' %}">
