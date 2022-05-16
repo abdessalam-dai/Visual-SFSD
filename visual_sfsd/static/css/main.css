@@ -151,8 +151,8 @@ input[type=number] {
 
 .bloc-body ul li:nth-child(8) {
     border-bottom: none !important;
-    border-bottom-left-radius: 0.5rem;
-    border-bottom-right-radius: 0.5rem;
+    /*border-bottom-left-radius: 0.5rem;*/
+    /*border-bottom-right-radius: 0.5rem;*/
 }
 
 .guide-modal-overlay {

@@ -6,7 +6,7 @@
         <div class="logo flex flex-col h-20 w-full pt-4 items-center">
             <a href="{% url 'home' %}" class="flex  items-center p-2">
                 <img class="w-9 duration-300 hover:rotate-180 transition-all" src="{% static 'imgs/logo/logo.svg' %}" alt="VSFSD">
-                <h1 class="text-3xl text-white  hover:animate-pulse font-bold ml-4">SFSD</h1>
+                <h1 class="text-3xl text-white  hover:animate-pulse font-bold ml-4">VSFSD</h1>
             </a>
         </div>
         <div class="space-y-3 ml-8 mt-12">
@@ -50,6 +50,12 @@
                 {% if active_page == 'help' %}text-[#8846DD] bg-white active{% else %}not-active text-white bg-[#8846DD]{% endif %}">
             <i class="fa-solid fa-circle-question text-3xl w-11 ml-6 mr-3"></i>
             <h3 class="text-xl font-bold">Feedback</h3>
+        </a>
+        <a href="{% url 'feedback_list' %}"
+           class="hover:bg-white transition-all duration-300 hover:text-[#8846DD] rounded-l-full flex py-3  items-center
+                {% if active_page == 'feedback_list' %}text-[#8846DD] bg-white active{% else %}not-active text-white bg-[#8846DD]{% endif %}">
+            <i class="fa-solid fa-list text-3xl w-11 ml-6 mr-3"></i>
+            <h3 class="text-xl font-bold">Feedbacks</h3>
         </a>
     </div>
         <div class="fixed left-0 bottom-10 w-60"> <!-- width depends on the side bar's width -->

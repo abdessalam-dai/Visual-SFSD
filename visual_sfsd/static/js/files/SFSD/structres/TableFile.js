@@ -61,7 +61,7 @@ export default class TableFile extends SequentialFile {
         this.MSBoard.selectAll("*").remove();
 
         const blocDiv = `
-        <div class="bloc no-select w-40 shadow-lg shadow-black/50 rounded-lg flex-shrink-0">
+        <div class="bloc overflow-hidden no-select w-40 shadow-lg shadow-black/50 rounded-lg flex-shrink-0">
             <div
                 class="bloc-header text-white px-3 items-center font-medium h-8 rounded-t-lg w-full flex flex-row justify-between bg-slate-900">
                 <span class="bloc-index no-select" style="position: relative"></span>
@@ -77,6 +77,7 @@ export default class TableFile extends SequentialFile {
         this.MSBoard.selectAll('.bloc')
             .data(this.blocks)
             .select(".bloc-index")
+            .classed("text-sm", true)
             .append("span")
             .style("cursor", "pointer")
             .text(function (block, index) {
@@ -86,6 +87,7 @@ export default class TableFile extends SequentialFile {
         this.MSBoard.selectAll('.bloc')
             .data(this.blocks)
             .select(".bloc-nb")
+            .classed("text-sm", true)
             .style("z-index", "103")
             .text(function (block) {
                 return `NB=${block.nb}`;
@@ -97,10 +99,11 @@ export default class TableFile extends SequentialFile {
             .attr("class", "tool-tip-index")
             .classed("rounded-lg", true)
             .classed("px-4 py-2", true)
+            .classed("text-sm", true)
             .style("position", "absolute")
-            .style("bottom", "35px")
+            .style("top", "35px")
             .style("left", "-7px")
-            .style("width", "180px")
+            .style("width", "150px")
             .style("z-index", "10")
             .style("visibility", "hidden")
             .style("background", "black")
@@ -167,18 +170,19 @@ export default class TableFile extends SequentialFile {
         this.MSBoard.selectAll(".bloc-nb")
             .append("div")
             .attr("class", "tool-tip-nb")
+            .classed("text-sm", true)
             .classed("rounded-lg", true)
             .classed("px-4 py-2", true)
             .style("position", "absolute")
-            .style("bottom", "35px")
-            .style("right", "-15px")
-            .style("width", "180px")
+            .style("top", "35px")
+            .style("right", "-10px")
+            .style("width", "150px")
             .style("z-index", "10")
             .style("visibility", "hidden")
             .style("background", "black")
             .style("color", "white")
             .style("z-index", "99")
-            .text("Number of elements");
+            .text("Num. of elements");
 
         this.MSBoard.selectAll(".bloc-nb")
             .on("mouseover", function (e) {
@@ -196,13 +200,13 @@ export default class TableFile extends SequentialFile {
 
         let cpt = 1;
 
-        let dropDown = (enreg) => {
+        let dropDown = (enreg, top) => {
             return `
-                <button id="dropdownDefault" class="outline-none" data-dropdown-toggle="enreg-dropdown-${enreg.key}">                
+                <button id="enreg-dropdown-${enreg.key}-btn" class="outline-none" data-dropdown-toggle="enreg-dropdown-${enreg.key}">                
                 </button>
-                <div id="enreg-dropdown-${enreg.key}" class="enreg-dropdown  z-10 w-40 fade rounded-b-md hidden bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700"
-                style="position: absolute;  z-index: 900">
-                    <ul class="border-b-md font-normal text-sm bg-gray-800 rounded-b-md text-white dark:text-gray-200" aria-labelledby="dropdownDefault">
+                <div class="enreg-dropdown absolute overflow-hidden ${top ? 'top-8 rounded-b-md' : 'bottom-8 rounded-t-md'} hidden z-10 w-40 fade bg-white divide-y divide-gray-100 shadow dark:bg-gray-700"
+                style="position: absolute;  z-index: 115">
+                    <ul class="font-normal text-sm bg-gray-800 text-white dark:text-gray-200">
                           <li class="border-b-2">
                             <span
                             class="flex flex-row justify-between block px-4 py-1">
@@ -224,7 +228,7 @@ export default class TableFile extends SequentialFile {
                                    <span style="word-wrap: anywhere">${enreg.field2}</span>
                            </span>
                          </li>
-                         <li class="border-b-2 rounded-b-md">
+                         <li class="border-b-2">
                            <span
                            class="flex flex-row justify-between block px-4 py-1">
                                    <span class="text-sm text-blue-300 font-medium">removed</span>
@@ -238,9 +242,9 @@ export default class TableFile extends SequentialFile {
         this.MSBoard.selectAll('.bloc')
             .data(this.blocks)
             .append("div")
-            .attr("class", `bloc-body w-full h-64 bg-[${ENREG_HIGHLIGHT_GREY}] rounded-b-lg`)
+            .classed(`bloc-body w-full h-64 bg-[${ENREG_HIGHLIGHT_GREY}] rounded-b-lg`, true)
             .append("ul")
-            .attr("class", "text-lg font-medium text-center")
+            .attr("class", "text-sm font-medium text-center")
             .each(function (block) {
                 d3.select(this)
                     .selectAll("li")
@@ -254,8 +258,8 @@ export default class TableFile extends SequentialFile {
                     })
                     .style("cursor", "pointer")
                     .style("position", "relative")
-                    .each(function (enreg) {
-                        d3.select(this).node().insertAdjacentHTML('beforeend', dropDown(enreg));
+                    .each(function (enreg, index) {
+                        d3.select(this).node().insertAdjacentHTML('beforeend', dropDown(enreg, index < 4));
                     })
                     .on("mouseover", function () {
                         d3.select(this)
@@ -274,6 +278,16 @@ export default class TableFile extends SequentialFile {
                             .style("opacity", "1")
                     })
                     .select("button")
+                    .on("mouseover", function () {
+                        d3.select(this.parentNode)
+                            .select(".enreg-dropdown")
+                            .classed("hidden", false);
+                    })
+                    .on("mouseout", function () {
+                        d3.select(this.parentNode)
+                            .select(".enreg-dropdown")
+                            .classed("hidden", true);
+                    })
                     .classed("overflow-hidden flex text-sm flex-col justify-center items-center w-full h-full", true)
                     .append("span")
                     .text(function (enreg) {
@@ -376,7 +390,7 @@ export default class TableFile extends SequentialFile {
             .attr("class", "bloc w-40 shadow-lg shadow-black/50 rounded-lg flex-shrink-0 h-64");
 
         bufferElement.append("div")
-            .attr("class", "bloc-header text-white px-3 items-center font-medium h-8 rounded-t-lg w-full flex flex-row justify-between bg-slate-900");
+            .attr("class", "bloc-header text-sm text-white px-3 items-center font-medium h-8 rounded-t-lg w-full flex flex-row justify-between bg-slate-900");
 
         bufferElement.select(".bloc .bloc-header")
             .append("span")
@@ -391,7 +405,7 @@ export default class TableFile extends SequentialFile {
         bufferElement.append("div")
             .attr("class", `bloc-body w-full h-64 bg-[${ENREG_HIGHLIGHT_GREY}] rounded-b-lg`)
             .append("ul")
-            .attr("class", "text-lg font-medium text-center")
+            .attr("class", "text-sm font-medium text-center")
             .append("li")
             .attr("class", `border-b-2 bg-[${ENREG_HIGHLIGHT_GREEN}] border-gray-700 h-8 flex justify-center flex-col`)
             .append("span")

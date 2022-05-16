@@ -1,0 +1,29 @@
+{% extends "main.html" %}
+
+{% load static %}
+
+{% block title %}
+    Feedbacks -
+{% endblock title %}
+
+{% block stylesheets %}
+    <!-- This style sheet in necessary because it contains body style -->
+    <link rel="stylesheet" href="{% static 'css/dashboard/dashboard.css' %}">
+{% endblock %}
+
+
+{% block navbar %}
+    {% include 'components/navbar/navbar_dashboard.html' %}
+{% endblock %}
+
+
+{% block content %}
+    {% include 'components/aside/aside_dashboard.html' with active_page='feedbacks_list' %}
+
+    <div class="p-5 flex flex-col space-y-10 justify-center ">
+        {% for feedback in feedbacks %}
+            {% include 'base/feedbacks/components/feedback.html' with feedback=feedback %}
+        {% endfor %}
+        {#        {% include 'accounts/students_list/components/pagination.html' with page=students %}#}
+    </div>
+{% endblock content %}

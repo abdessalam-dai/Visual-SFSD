@@ -151,7 +151,7 @@ export default class SequentialFile {
             .data(block.enregs)
             .enter()
             .append("li")
-            .attr("class", `border-b-2 bg-[${ENREG_HIGHLIGHT_GREY}] border-gray-700 h-10 flex justify-center flex-col`)
+            .attr("class", `border-b-2 bg-[${ENREG_HIGHLIGHT_GREY}] border-gray-700 h-8 flex justify-center flex-col`)
             .style("color", function (enreg) {
                 return enreg.removed ? "#a70000" : "black"
             })

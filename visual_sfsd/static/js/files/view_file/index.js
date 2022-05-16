@@ -12,7 +12,7 @@ import * as DomElements from "./DomElements.js";
 import "./shared/fileHead.js";
 import "./shared/MC.js";
 import {addToast} from "../../toasts.js";
-import {keyToSearch} from "./DomElements.js";
+import {keyToSearch, toolbarOptions} from "./DomElements.js";
 
 
 // START - useful functions
@@ -352,6 +352,7 @@ const handleGenerateData = () => {
             addToast("Invalid inputs (check the file's characteristics)", "danger");
             return;
         }
+        $("#fill-with-dummy-data-trigger").click();
 
         changeButtonsState(true);
 
@@ -389,6 +390,7 @@ const handleSearch = () => {
             addToast("Invalid input", "danger");
             return;
         }
+        $("#search-element-trigger").click();
 
         changeButtonsState(true);
 
@@ -415,6 +417,7 @@ const handleRemove = () => {
             addToast("Invalid input", "danger");
             return;
         }
+        $("#remove-logically-trigger").click();
 
         changeButtonsState(true);
 
@@ -440,6 +443,7 @@ const handleRemovePhysically = () => {
             addToast("Invalid input", "danger");
             return;
         }
+        $("#remove-physically-trigger").click();
 
         changeButtonsState(true);
 
@@ -469,6 +473,7 @@ const handleInsert = () => {
             addToast("Invalid inputs", "danger");
             return;
         }
+        $("#add-element-trigger").click();
 
         changeButtonsState(true);
 
@@ -498,6 +503,7 @@ const handleEdit = () => {
             addToast("Invalid inputs", "danger");
             return;
         }
+        $("#edit-element-trigger").click();
 
         changeButtonsState(true);
 
@@ -520,6 +526,31 @@ handleEdit();
 // END - Edit Enreg.
 
 
+// START - handle toolbar forms
+
+Array.from(DomElements.toolbarOptions).forEach((option) => {
+    const btn = option.querySelector("div:nth-child(1) button");
+    const container = option.querySelector("div:nth-child(2)");
+    const form = option.querySelector(".toolbar-form");
+    const firstInput = form.querySelector("div:first-child input:first-child");
+
+    btn.addEventListener('click', function() {
+        firstInput.focus();
+    });
+});
+
+Array.from(DomElements.toolbarOptions).forEach((option) => {
+    // const btn = option.querySelector("div:nth-child(1) button");
+    // const container = option.querySelector("div:nth-child(2)");
+    const form = option.querySelector(".toolbar-form");
+
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+    });
+});
+// END - handle toolbar forms
+
+
 // START - Scroll buttons for MS
 const handleScrollButtons = () => {
     DomElements.scrollLeftBtn.addEventListener('click', function () {
@@ -533,19 +564,5 @@ const handleScrollButtons = () => {
 
 handleScrollButtons();
 // END - Scroll buttons for MS
-//
-// // START - Scroll buttons for index table
-// const handleScrollButtonsIndexTable = () => {
-//     DomElements.indexTableScrollLeftBtn.addEventListener('click', function () {
-//         indexTableContainer.node().scrollLeft -= 48;
-//     });
-//
-//     DomElements.indexTableScrollRightBtn.addEventListener('click', function () {
-//         indexTableContainer.node().scrollLeft += 48;
-//     });
-// }
-// if (FILE_ACCESS === 'indexed') handleScrollButtonsIndexTable();
-// END - Scroll buttons for index table
-
 
 export {newFile};

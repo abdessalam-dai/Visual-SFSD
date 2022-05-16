@@ -85,7 +85,7 @@ export default class ListFile extends SequentialFile {
         this.MSBoard.selectAll("*").remove();
 
         const blocDiv = `
-        <div class="bloc no-select w-40 shadow-lg shadow-black/50 rounded-t-lg flex-shrink-0">
+        <div class="bloc overflow-hidden no-select w-40 shadow-lg shadow-black/50 rounded-lg flex-shrink-0">
             <div
                 class="bloc-header text-white px-3 items-center font-medium h-8 rounded-t-lg w-full flex flex-row justify-between bg-slate-900">
                 <span class="bloc-index" style="position: relative"></span>
@@ -104,6 +104,7 @@ export default class ListFile extends SequentialFile {
         this.MSBoard.selectAll('.bloc')
             .data(this.blocks)
             .select(".bloc-index")
+            .classed("text-sm", true)
             .append("span")
             .style("cursor", function (block) {
                 if (block !== null) return "pointer";
@@ -117,6 +118,7 @@ export default class ListFile extends SequentialFile {
         this.MSBoard.selectAll('.bloc')
             .data(this.blocks)
             .select(".bloc-nb")
+            .classed("text-sm", true)
             .text(function (block) {
                 if (block !== null) return `NB=${block.nb}`;
                 return "#";
@@ -132,10 +134,11 @@ export default class ListFile extends SequentialFile {
                         .attr("class", "tool-tip-index")
                         .classed("rounded-lg", true)
                         .classed("px-4 py-2", true)
+                        .classed("text-sm", true)
                         .style("position", "absolute")
-                        .style("bottom", "35px")
+                        .style("top", "35px")
                         .style("left", "-7px")
-                        .style("width", "180px")
+                        .style("width", "150px")
                         .style("z-index", "10")
                         .style("visibility", "hidden")
                         .style("background", "black")
@@ -199,18 +202,19 @@ export default class ListFile extends SequentialFile {
                     d3.select(this)
                         .append("div")
                         .attr("class", "tool-tip-nb")
+                        .classed("text-sm", true)
                         .classed("rounded-lg", true)
                         .classed("px-4 py-2", true)
                         .style("position", "absolute")
-                        .style("bottom", "35px")
-                        .style("right", "-15px")
-                        .style("width", "180px")
+                        .style("top", "35px")
+                        .style("right", "-10px")
+                        .style("width", "150px")
                         .style("z-index", "10")
                         .style("visibility", "hidden")
                         .style("background", "black")
                         .style("color", "white")
                         .style("z-index", "99")
-                        .text("Number of elements");
+                        .text("Num. of elements");
                 }
             });
 
@@ -244,40 +248,40 @@ export default class ListFile extends SequentialFile {
         // Add blocks bodies and fill them with data
         let cpt = 1;
 
-        let dropDown = (enreg) => {
+        let dropDown = (enreg, top) => {
             return `
-                <button id="dropdownDefault" class="outline-none" data-dropdown-toggle="enreg-dropdown-${enreg.key}">                
+                <button id="enreg-dropdown-${enreg.key}-btn" class="outline-none" data-dropdown-toggle="enreg-dropdown-${enreg.key}">                
                 </button>
-                <div id="enreg-dropdown-${enreg.key}" class="enreg-dropdown z-10 fade rounded-b-md hidden bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700"
-                style="position: absolute; top: 40px; width: 192px; z-index: 900">
-                    <ul class="border-b-md text-sm bg-gray-800 rounded-b-md text-white dark:text-gray-200" aria-labelledby="dropdownDefault">
+                <div class="enreg-dropdown absolute overflow-hidden ${top ? 'top-8 rounded-b-md' : 'bottom-8 rounded-t-md'} hidden z-10 w-40 fade bg-white divide-y divide-gray-100 shadow dark:bg-gray-700"
+                style="position: absolute;  z-index: 115">
+                    <ul class="font-normal text-sm bg-gray-800 text-white dark:text-gray-200">
                           <li class="border-b-2">
                             <span
-                            class="flex flex-row justify-between block px-4 py-2">
-                                    <span class="text-sm text-blue-300">key</span>
+                            class="flex flex-row justify-between block px-4 py-1">
+                                    <span class="text-sm text-blue-300 font-medium">key</span>
                                     <span>${enreg.key}</span>
                             </span>
                           </li>
                           <li class="border-b-2">
                             <span
-                            class="flex flex-row justify-between block px-4 py-2">
-                                    <span class="text-sm text-blue-300">field1</span>
+                            class="flex flex-row justify-between block px-4 py-1">
+                                    <span class="text-sm text-blue-300 font-medium">field1</span>
                                     <span style="word-wrap: anywhere">${enreg.field1}</span>
                             </span>
                           </li>
                           <li class="border-b-2">
                            <span
-                           class="flex flex-row justify-between block px-4 py-2">
-                                   <span class="text-sm text-blue-300">field2</span>
+                           class="flex flex-row justify-between block px-4 py-1">
+                                   <span class="text-sm text-blue-300 font-medium">field2</span>
                                    <span style="word-wrap: anywhere">${enreg.field2}</span>
                            </span>
                          </li>
-                         <li class="border-b-2 rounded-b-md">
+                         <li class="border-b-2">
                            <span
-                           class="flex flex-row justify-between block px-4 py-2">
-                                   <span class="text-sm text-blue-300">removed</span>
+                           class="flex flex-row justify-between block px-4 py-1">
+                                   <span class="text-sm text-blue-300 font-medium">removed</span>
                                    <span>${enreg.removed}</span>
-                           </span>
+                           </span> 
                          </li>
                     </ul>
                 </div>`
@@ -286,9 +290,9 @@ export default class ListFile extends SequentialFile {
         this.MSBoard.selectAll('.bloc')
             .data(this.blocks)
             .append("div")
-            .attr("class", `bloc-body w-full h-64 bg-[${ENREG_HIGHLIGHT_GREY}]`)
+            .classed(`bloc-body w-full h-64 bg-[#edeaea] rounded-b-lg`, true)
             .append("ul")
-            .attr("class", "text-lg font-medium text-center")
+            .attr("class", "text-sm font-medium text-center")
             .each(function (block) {
                 if (block !== null) {
                     d3.select(this)
@@ -303,8 +307,8 @@ export default class ListFile extends SequentialFile {
                         })
                         .style("cursor", "pointer")
                         .style("position", "relative")
-                        .each(function (enreg) {
-                            d3.select(this).node().insertAdjacentHTML('beforeend', dropDown(enreg));
+                        .each(function (enreg, index) {
+                            d3.select(this).node().insertAdjacentHTML('beforeend', dropDown(enreg, index < 4));
                         })
                         .on("mouseover", function () {
                             d3.select(this)
@@ -323,6 +327,16 @@ export default class ListFile extends SequentialFile {
                                 .style("opacity", "1")
                         })
                         .select("button")
+                        .on("mouseover", function () {
+                            d3.select(this.parentNode)
+                                .select(".enreg-dropdown")
+                                .classed("hidden", false);
+                        })
+                        .on("mouseout", function () {
+                            d3.select(this.parentNode)
+                                .select(".enreg-dropdown")
+                                .classed("hidden", true);
+                        })
                         .classed("overflow-hidden flex flex-col justify-center items-center w-full h-full", true)
                         .append("span")
                         .text(function (enreg) {
@@ -335,7 +349,7 @@ export default class ListFile extends SequentialFile {
         this.MSBoard.selectAll(".bloc")
             .data(this.blocks)
             .append("div")
-            .attr("class", "bloc-footer text-white px-3 items-center font-medium h-8 rounded-b-lg w-full flex flex-row justify-between")
+            .attr("class", "bloc-footer text-sm text-white px-3 items-center font-medium h-8 rounded-b-lg w-full flex flex-row justify-between")
             .classed("bg-slate-900", function (block) {
                 return block !== null;
             })
@@ -512,7 +526,7 @@ export default class ListFile extends SequentialFile {
             .attr("class", "bloc w-40 h-64 shadow-lg shadow-black/50 rounded-lg flex-shrink-0");
 
         bufferElement.append("div")
-            .attr("class", "bloc-header text-white px-3 items-center font-medium h-8 rounded-t-lg w-full flex flex-row justify-between bg-slate-900");
+            .attr("class", "bloc-header text-sm text-white px-3 items-center font-medium h-8 rounded-t-lg w-full flex flex-row justify-between bg-slate-900");
 
         bufferElement.select(".bloc .bloc-header")
             .append("span")
@@ -527,7 +541,7 @@ export default class ListFile extends SequentialFile {
         bufferElement.append("div")
             .attr("class", `bloc-body w-full h-64 bg-[${ENREG_HIGHLIGHT_GREY}] rounded-b-lg`)
             .append("ul")
-            .attr("class", "text-lg font-medium text-center")
+            .attr("class", "text-sm font-medium text-center")
             .append("li")
             .style("background", ENREG_HIGHLIGHT_GREEN)
             .attr("class", "border-b-2 h-8 flex justify-center flex-col")

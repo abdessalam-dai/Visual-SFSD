@@ -1,0 +1,5 @@
+<div class="h-max py-6 px-9 w-4/5 m-auto rounded-3xl bg-white text-center shadow-[0px_4px_4px_rgba(0,0,0,0.25)] bg-white transition-all hover:-translate-y-1 focus:-translate-y-1 ">
+    <h3 class="text-xl text-center font-bold">{{ feedback.name }} - {{ feedback.email }}</h3>
+    <h3 class="text-md text-blue-700">{{ feedback.subject }} (<span class="text-indigo-900">{{ feedback.date_created|date:"Y-m-d" }}</span>)</h3>
+    <h3 class="text-md">{{ feedback.message }}</h3>
+</div>

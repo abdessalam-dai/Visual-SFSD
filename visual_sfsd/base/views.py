@@ -1,6 +1,8 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, HttpResponse
 from .forms import ContactForm
+from .models import Contact
 
 
 def home(request):
@@ -28,3 +30,15 @@ def contact(request):
 
     context = {'form': form}
     return render(request, 'base/contact/index.html', context)
+
+
+@login_required
+def feedback_list(request):
+    if not request.user.is_staff:
+        return redirect("dashboard")
+
+    feedbacks = Contact.objects.all()
+    context = {
+        'feedbacks': feedbacks
+    }
+    return render(request, 'base/feedbacks/index.html', context)

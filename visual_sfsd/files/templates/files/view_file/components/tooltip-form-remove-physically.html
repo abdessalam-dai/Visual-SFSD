@@ -1,8 +1,11 @@
 <div id="remove-physically-form"
-     class="z-10 hidden bg-white relative shadow w-60 dark:bg-gray-700 toolbar-tooltip-container">
-    <div class="fade toolbar-tooltip form -top-10 flex justify-center items-center flex-row">
-        <div class="rect"></div>
+     style="z-index: 120"
+     class="hidden bg-white relative shadow w-60 dark:bg-gray-700 toolbar-tooltip-container">
+    <div class="fade toolbar-tooltip form -top-[2.35rem] flex justify-center items-center flex-row">
+        <div class="rect"
+        style="z-index: 130"></div>
         <div class="space-y-1 relative inline-block bg-purple-400 shadow-md shadow-black/30 rounded-b-xl rounded-tl-xl rounded-tr-xl py-2">
+            <form class="toolbar-form">
             <div class="flex justify-center">
                 <input
                         autocomplete="off"
@@ -11,10 +14,12 @@
             </div>
             <div class="flex justify-center">
                 <button id="remove-physically-btn"
+                        type="submit"
                         class="mt-2 py-2 px-4 bg-emerald-400 rounded-3xl text-gray-800 hover:bg-blue-500 hover:text-white transition-all text-xs font-medium text-center">
                     Remove physically
                 </button>
             </div>
+            </form>
         </div>
     </div>
 </div>
