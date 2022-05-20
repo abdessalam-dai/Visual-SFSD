@@ -520,7 +520,7 @@ export default class TOF extends TableFile {
                     }
 
                     // the block is not full (nb < B) OR (i) is the last block
-                    if ((currBlock.nb !== MAX_NB_ENREGS_DEFAULT) || (i === this.nbBlocks - 1)) {
+                    if ((currBlock.nb !== this.maxNbEnregs) || (i === this.nbBlocks - 1)) {
                         continueShifting = false;
                         currBlock.enregs.pop();
                         currBlock.nb -= 1;
