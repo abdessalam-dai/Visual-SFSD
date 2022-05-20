@@ -2,7 +2,6 @@ import TableFile from '../../structres/TableFile.js';
 import Enreg from '../../structres/Enreg.js';
 import Block from '../../structres/Block.js';
 import {
-    MAX_NB_ENREGS_DEFAULT,
     ENREG_HIGHLIGHT_GREY,
     ENREG_HIGHLIGHT_GREEN,
     ENREG_HIGHLIGHT_ORANGE,
@@ -55,9 +54,6 @@ export default class TOF extends TableFile {
                 lastKey = midBlock.enregs[midBlockNb - 1].key;
 
             if (animate) {
-                console.log(this.blocks[i]);
-                console.log(i);
-
                 midBlockElement = this.MSBoard.select(`.bloc:nth-child(${i + 1})`);
 
                 await this.traverseBlockAnimation(i, delay);

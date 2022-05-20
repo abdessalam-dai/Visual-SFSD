@@ -43,7 +43,7 @@ export const addToast = (message = "", type = "danger") => {
     // hide toast by clicking on button
     lastMessage.select("button")
         .on("click", function () {
-            console.log(lastMessage)
+            // console.log(lastMessage)
             lastMessage.remove()
         })
 

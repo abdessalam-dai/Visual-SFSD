@@ -10,7 +10,7 @@ export const deleteFile = (pk) => {
         },
         datatype: 'json',
         success: function (response) {
-            console.log(response["status"]);
+            // console.log(response["status"]);
             addToast("File has been deleted", "success");
         },
         error: function (response) {

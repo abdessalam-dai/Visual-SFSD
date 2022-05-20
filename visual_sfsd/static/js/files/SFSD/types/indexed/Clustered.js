@@ -413,8 +413,6 @@ export default class Clustered extends IndexedFile {
 
                     if (j === currBlock.nb) { // if we are going to be inserting in the last enreg of the block
                         continueShifting = false;
-                        console.log(this.indexTable[i])
-                        console.log(lastEnreg)
                         this.indexTable[i].key = newEnreg.key;
                         this.indexTable[i].i = i;
                         this.indexTable[i].j = currBlock.nb;

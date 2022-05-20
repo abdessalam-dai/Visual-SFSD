@@ -3,7 +3,7 @@ import Enreg from '../../structres/Enreg.js';
 import Block from '../../structres/Block.js';
 import {
     ENREG_HIGHLIGHT_GREEN,
-    ENREG_HIGHLIGHT_GREY, ENREG_HIGHLIGHT_ORANGE,
+    ENREG_HIGHLIGHT_GREY,
     ENREG_HIGHLIGHT_PURPLE, ENREG_HIGHLIGHT_RED,
 } from "../../../constants.js";
 import {delay, sleep} from "../../../view_file/shared/animationSpeed.js";
@@ -48,9 +48,6 @@ export default class LOF extends ListFile {
                 lastKey = currBlock.enregs[currBlockNb - 1].key;
 
             if (animate) {
-                console.log(this.blocks[i]);
-                console.log(i);
-
                 currBlockElement = this.MSBoard.select(`.bloc:nth-child(${i + 1})`);
 
                 await this.traverseBlockAnimation(i, delay);
@@ -77,7 +74,6 @@ export default class LOF extends ListFile {
                 // if (animate) await this.highlightInstruction(8);
                 while (eLow <= eHigh && !found && !stop) {
                     j = Math.floor((eLow + eHigh) / 2);
-                    console.log("j = ", j)
 
                     // if (animate) await this.highlightInstruction(10);
 

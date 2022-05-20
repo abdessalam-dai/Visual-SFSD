@@ -1,7 +1,7 @@
 import Enreg from '../../structres/Enreg.js';
 import Block from '../../structres/Block.js';
 import {
-    BLOCKS_DEFAULT, ENREG_HIGHLIGHT_GREEN, ENREG_HIGHLIGHT_GREY, ENREG_HIGHLIGHT_RED,
+    BLOCKS_DEFAULT, ENREG_HIGHLIGHT_GREEN, ENREG_HIGHLIGHT_RED,
     MAX_NB_BLOCKS,
     MAX_NB_ENREGS_DEFAULT,
     NB_BLOCKS_DEFAULT,

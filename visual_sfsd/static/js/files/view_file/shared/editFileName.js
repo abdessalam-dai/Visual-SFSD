@@ -22,7 +22,7 @@ fileNameAndFileTypeSpan.addEventListener('dblclick', (e) => {
 formForFileName.addEventListener('submit', (e) => {
     e.preventDefault();
     DomElements.entete.classList.remove("hidden");
-    console.log(editFileNameInput.value.length)
+    // console.log(editFileNameInput.value.length)
     if (editFileNameInput.value.length > 100 || editFileNameInput.value.length === 0) {
         editFileNameInput.value = "";
         editFileNameInput.focus();

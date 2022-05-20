@@ -5,14 +5,14 @@ import LnOF from "../SFSD/types/simple/LnOF.js";
 import NotClustered from "../SFSD/types/indexed/NotClustered.js";
 import Clustered from "../SFSD/types/indexed/Clustered.js";
 import EssaiLinear from "../SFSD/types/hashing/EssaiLinear.js";
-import {Block, Enreg} from "../SFSD/SFSD.js";
+import Block from "../SFSD/structres/Block.js";
+import Enreg from "../SFSD/structres/Enreg.js";
 import IndexCouple from "../SFSD/structres/IndexCouple.js";
 import {animate} from "./shared/animationSpeed.js";
 import * as DomElements from "./DomElements.js";
 import "./shared/fileHead.js";
 import "./shared/MC.js";
 import {addToast} from "../../toasts.js";
-import {keyToSearch, toolbarOptions} from "./DomElements.js";
 
 
 // START - useful functions
@@ -58,7 +58,7 @@ for (let block of fileData["blocks"]) {
     }
     blocks.push(b);
 }
-console.log(blocks)
+// console.log(blocks)
 // END - put the blocks in an array
 
 // START - put the index table in an array
@@ -170,7 +170,7 @@ if (FILE_TYPE === "not_clustered") {
     );
 }
 
-console.log(newFile.getJsonFormat());
+// console.log(newFile.getJsonFormat());
 newFile.createBoardsDOM();
 if (FILE_ACCESS === "indexed") {
     newFile.createIndexTableDOM();
@@ -361,8 +361,6 @@ const handleGenerateData = () => {
 
         let data = generateData(n, min, max);
 
-        console.log(data)
-
         for (const enreg of data) {
             await newFile.insert(
                 enreg.key,
@@ -401,7 +399,7 @@ const handleSearch = () => {
             pos: pos,
             readTimes: readTimes
         } = await newFile.search(key, animate);
-        console.log(found, pos)
+        // console.log(found, pos)
         changeButtonsState(false)
     });
 }
@@ -422,11 +420,11 @@ const handleRemove = () => {
         changeButtonsState(true);
 
         let key = parseInt(DomElements.keyToRemove.value);
-        console.log(key)
+        // console.log(key)
 
         let removeSuccess = await newFile.removeLogically(key, animate);
 
-        console.log(removeSuccess)
+        // console.log(removeSuccess)
 
         changeButtonsState(false);
     });
@@ -454,7 +452,7 @@ const handleRemovePhysically = () => {
         newFile.createBoardsDOM();
         if (FILE_ACCESS === 'indexed') newFile.createIndexTableDOM();
 
-        console.log(removeSuccess);
+        // console.log(removeSuccess);
 
         changeButtonsState(false);
     });
@@ -483,7 +481,7 @@ const handleInsert = () => {
 
         let insertingResult = await newFile.insert(key, field1, field2, false, animate);
 
-        console.log(insertingResult)
+        // console.log(insertingResult)
 
         changeButtonsState(false);
 
@@ -513,7 +511,7 @@ const handleEdit = () => {
 
         let editingResults = await newFile.editEnreg(key, field1, field2, false, animate);
 
-        console.log(editingResults);
+        // console.log(editingResults);
 
         changeButtonsState(false);
 
@@ -534,7 +532,7 @@ Array.from(DomElements.toolbarOptions).forEach((option) => {
     const form = option.querySelector(".toolbar-form");
     const firstInput = form.querySelector("div:first-child input:first-child");
 
-    btn.addEventListener('click', function() {
+    btn.addEventListener('click', function () {
         firstInput.focus();
     });
 });
@@ -564,5 +562,15 @@ const handleScrollButtons = () => {
 
 handleScrollButtons();
 // END - Scroll buttons for MS
+
+
+// START - copy file link to clipboard
+const copyLinkBtn = document.querySelector("#copy-link-btn");
+
+copyLinkBtn.addEventListener("click", function () {
+    navigator.clipboard.writeText(window.location.href);
+    addToast("Link copied to clipboard", "success");
+});
+// END - copy file link to clipboard
 
 export {newFile};

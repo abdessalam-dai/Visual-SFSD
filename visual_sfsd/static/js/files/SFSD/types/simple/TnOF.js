@@ -43,7 +43,6 @@ export default class TnOF extends TableFile {
                     midElement = bufferElement.select(".bloc-body ul")
                         .select(`li:nth-child(${j + 1})`);
                 }
-                console.log(midElement)
                 if (key === currBlock.enregs[j].key) {
                     found = true;
                     elementBGColor = ENREG_HIGHLIGHT_GREEN;

@@ -133,7 +133,6 @@ def dashboard(request):
                 and 4 <= int(max_nb_enregs) <= 8 \
                 and 5 <= int(index_table_size) <= 100:
             data = {
-                "name": f_name,
                 "characteristics": {
                     "maxNbEnregs": max_nb_enregs,
                     "maxNbBlocks": max_nb_blocks,

@@ -68,6 +68,10 @@ const toggle = document.querySelector("#toggle-guide");
 
 
 const resetGuide = () => {
+    activeStep = 0;
+    Array.from(steps).forEach((step) => step.classList.add('hidden'));
+    steps[0].classList.remove('hidden');
+
     toggle.checked = false;
     isGuideOpen = false;
     Array.from(document.querySelectorAll('.bright')).forEach((el) => el.classList.remove('bright'));
@@ -95,8 +99,8 @@ const hideAllDropDowns = () => {
     guideModal.classList.add("w-[500px]");
     guideModal.classList.remove("w-[300px]");
 
-    animationSpeed.classList.add("translate-y-11");
     animationSpeed.classList.remove("translate-y-0");
+    animationSpeed.classList.add("translate-y-11");
 
     fileHeadDropdown.classList.add("hidden");
     entete.querySelector("span img").transform = 'rotate(-180deg)'
@@ -112,7 +116,7 @@ const highlightComponent = (index) => {
     Array.from(document.querySelectorAll('.bright')).forEach((el) => el.classList.remove('bright'));
     hideAllDropDowns();
 
-    console.log(index)
+    // console.log(index)
     // global view
     if (index === 0) {
         viewFileNavbar.classList.add("bright");
@@ -254,6 +258,9 @@ function nextStep() {
         steps[activeStep].classList.remove('hidden');
         highlightComponent(activeStep);
     } else {
+        animationSpeed.classList.remove("translate-y-0");
+        animationSpeed.classList.add("translate-y-11");
+        steps[activeStep].classList.add('hidden');
         resetGuide();
     }
 
@@ -310,13 +317,6 @@ document.addEventListener('keydown', e => {
 closeGuideBtn.addEventListener('click', function (e) {
     resetGuide();
 })
-
-// this is to fix later
-// handle click on the show guide button
-// DE.createFileBtn.addEventListener('click', function (e) {
-//     openOverlayAndGuideModal();
-// });
-
 
 // handle click on the overlay (to close the modal)
 guideModalOverlay.addEventListener('click', function (e) {

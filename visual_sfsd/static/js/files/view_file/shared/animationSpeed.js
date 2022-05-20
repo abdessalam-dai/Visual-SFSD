@@ -11,7 +11,7 @@ const animationSpeedBar = document.querySelector("#animation-speed-bar");
 function handleChangeAnimationSpeed() {
     animationSpeedBar.addEventListener("change", function () {
         delay = (200 - animationSpeedBar.value) / 100;
-        console.log(delay);
+        // console.log(delay);
     });
 }
 

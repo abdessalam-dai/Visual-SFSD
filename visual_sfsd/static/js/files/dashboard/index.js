@@ -148,7 +148,7 @@ const handleStep4 = () => {
     let maxNbEnregs = parseInt(DE.maxNbEnregs.value.trim());
     let indexTableSize = parseInt(DE.indexTableSize.value.trim());
 
-    console.log(indexTableSize)
+    // console.log(indexTableSize)
 
     DE.submitCreateFile.disabled = isNaN(maxNbBlocks) || maxNbBlocks < 5 || maxNbBlocks > 100
         || isNaN(maxNbEnregs) || maxNbEnregs < 4 || maxNbEnregs > 8
