@@ -574,11 +574,11 @@ copyLinkBtn.addEventListener("click", function () {
 // END - copy file link to clipboard
 
 window.addEventListener("offline", (event) => {
-    addToast("lost connection" , "danger");
+    addToast("Connection lost" , "danger");
 });
 
 window.addEventListener("online", (event) => {
-    addToast("connection restored" , "success");
+    addToast("Connection restored" , "success");
 });
 
 
