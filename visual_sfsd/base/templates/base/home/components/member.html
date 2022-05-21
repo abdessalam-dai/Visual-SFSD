@@ -7,7 +7,7 @@
         <img class="" src="{% static 'imgs/home/creator-polygone.svg' %}" alt="">
         <div class="flex absolute top-28 w-full content-center flex-col justify-center text-center">
             <span class="text-white text-xl font-medium hover:animate-pulse">{{ name }}</span>
-            <span class="text-gray-100 text-md">{{ role }}</span>
+            <span class="text-gray-100 {% if name == 'Ouassim Hamdani' %}text-sm{% else %}text-md{% endif %}">{{ role }}</span>
         </div>
         <div class="flex flex-row space-x-5 absolute justify-center text-[#272f77] w-full top-44 ">
             <a href="{{ linkedin }}" target="_blank">

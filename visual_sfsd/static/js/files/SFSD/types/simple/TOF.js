@@ -358,7 +358,7 @@ export default class TOF extends TableFile {
                             bufferElement.select(".bloc .bloc-body ul")
                                 .append("li")
                                 .style("background", ENREG_HIGHLIGHT_GREEN)
-                                .attr("class", "border-b-2 h-8 text-sm flex justify-center flex-col")
+                                .attr("class", "border-b-2 border-gray-700 h-8 text-sm flex justify-center flex-col")
                                 .append("span")
                                 .text(`${newEnreg.key}`);
 
@@ -385,7 +385,7 @@ export default class TOF extends TableFile {
                                 bufferElement.select(".bloc .bloc-body ul")
                                     .append("li")
                                     .style("background", ENREG_HIGHLIGHT_GREEN)
-                                    .attr("class", "border-b-2 h-8 text-sm flex justify-center flex-col")
+                                    .attr("class", "border-b-2 border-gray-700 h-8 text-sm flex justify-center flex-col")
                                     .append("span")
                                     .text(`${lastEnreg.key}`);
 

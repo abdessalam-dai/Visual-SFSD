@@ -22,7 +22,7 @@
 
             <h3 class="text-xl font-bold">Dashboard</h3>
         </a>
-        {% if request.user.is_staff %}
+        {% if request.user.is_superuser %}
             <a href="{% url 'admin:index' %}"
                target="_blank"
                class="hover:bg-white transition-all duration-300 hover:text-[#8846DD] rounded-l-full flex py-3  items-center

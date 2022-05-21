@@ -303,6 +303,7 @@ const openOverlayAndGuideModal = () => {
     highlightComponent(activeStep);
     guideModalOverlay.classList.remove('hidden');
     guideModal.classList.remove('hidden');
+    fileMenu.classList.add('hidden');
 }
 
 // create a new file with shortcut Ctrl + y

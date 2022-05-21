@@ -250,10 +250,10 @@ export default class ListFile extends SequentialFile {
 
         let dropDown = (enreg, top) => {
             return `
-                <button id="enreg-dropdown-${enreg.key}-btn" class="outline-none" data-dropdown-toggle="enreg-dropdown-${enreg.key}">                
+                <button class="outline-none"">                
                 </button>
-                <div class="enreg-dropdown absolute overflow-hidden ${top ? 'top-8 rounded-b-md' : 'bottom-8 rounded-t-md'} hidden z-10 w-40 fade bg-white divide-y divide-gray-100 shadow dark:bg-gray-700"
-                style="position: absolute;  z-index: 115">
+                <div class="transition-all duration-300 enreg-dropdown absolute overflow-hidden ${top ? 'top-8 rounded-b-md' : 'bottom-8 rounded-t-md'} invisible z-10 w-40 fade bg-white divide-y divide-gray-100 shadow dark:bg-gray-700"
+                style="position: absolute;  z-index: 115; transition: visibility 0s ease-in 200ms">
                     <ul class="font-normal text-sm bg-gray-800 text-white dark:text-gray-200">
                           <li class="border-b-2">
                             <span
@@ -330,12 +330,12 @@ export default class ListFile extends SequentialFile {
                         .on("mouseover", function () {
                             d3.select(this.parentNode)
                                 .select(".enreg-dropdown")
-                                .classed("hidden", false);
+                                .classed("invisible", false);
                         })
                         .on("mouseout", function () {
                             d3.select(this.parentNode)
                                 .select(".enreg-dropdown")
-                                .classed("hidden", true);
+                                .classed("invisible", true);
                         })
                         .classed("overflow-hidden flex flex-col justify-center items-center w-full h-full", true)
                         .append("span")
