@@ -139,15 +139,15 @@
 <div class="display-mobile-case hidden">
     <div class="flex flex-col h-screen space-y-10 items-center justify-center px-10">
         <img src="{% static 'imgs/404/display-mobile/logo.svg' %}"
-             class="hover:rotate-180 duration-300 w-40 absolute top-10" alt="">
-        <h1 class="font-bold text-3xl text-center  text-white">Win rayah? akhroj akrhoj</h1>
-        <p class="text-white text-center bg-indigo-900 text-lg font-medium px-5 py-3 rounded-3xl">VSFSD isn’t
-            scompatible with mobile screens yet, please activate the desktop site option or switch to a desktop
+             class="hover:rotate-180 duration-300 w-24 absolute top-10" alt="">
+        <h1 class="font-bold text-3xl text-center  text-white">Visual SFSD looks better on larger screens</h1>
+        <p class="text-white text-center bg-indigo-900 text-lg font-medium px-5 py-3 rounded-3xl">This tool isn’t
+            compatible with mobile screens yet, please activate the desktop site option or switch to a desktop
             screen.</p>
-        <div class="flex flex-row absolute bottom-10 justify-between transition-all shadow-xl hover:bg-[#d44aab] bg-[#6F7DFF] space-x-8 px-4 rounded-2xl py-2">
-            <a href="{% url 'home' %}" class="font-semibold text-white text-lg">Home</a>
+        <a href="{% url 'home' %}" class="flex flex-row absolute bottom-10 justify-between transition-all shadow-xl hover:bg-[#d44aab] bg-[#6F7DFF] space-x-8 px-4 rounded-2xl py-2">
+            <span class="font-semibold text-white text-lg">Home</span>
             <img src="{% static 'imgs/404/display-mobile/buttonLeft.svg' %}" class="w-6" alt="">
-        </div>
+        </a>
     </div>
 </div>
 <div class="dotted-loader" id="screen_loading"></div>
