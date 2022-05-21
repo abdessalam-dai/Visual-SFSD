@@ -573,4 +573,13 @@ copyLinkBtn.addEventListener("click", function () {
 });
 // END - copy file link to clipboard
 
+window.addEventListener("offline", (event) => {
+    addToast("lost connection" , "danger");
+});
+
+window.addEventListener("online", (event) => {
+    addToast("connection restored" , "success");
+});
+
+
 export {newFile};
