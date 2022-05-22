@@ -10,7 +10,6 @@ let imageHtmlElementOfSet =  imageHtmlElement.offsetTop;
       $('#nav-toggle').click(function() {
         $('.nav-container a').slideToggle();
         
-        console.log("s")
       });
       // Hamburger to X toggle
       $('#nav-toggle').on('click', function() {
@@ -21,7 +20,6 @@ let imageHtmlElementOfSet =  imageHtmlElement.offsetTop;
 
   window.addEventListener("resize",()=> {
         if (innerWidth>768) {
-            console.log("ssss");
             document.querySelectorAll(".nav-container a").forEach((i) =>{i.style.display="block"}) ;
         }
         else{
@@ -57,7 +55,6 @@ window.addEventListener("scroll", function(){
 
 
 const sections = document.querySelectorAll(".sec");
-console.log(sections);
 let navBgOn = false
 const NavList = document.querySelectorAll(".nav-container a");
 window.addEventListener("scroll", ()=>{
@@ -71,7 +68,6 @@ window.addEventListener("scroll", ()=>{
     })
     NavList.forEach(li => {
         li.classList.remove("activeSect");
-        console.log(li.id)
 
         if (li.id.includes(current)) {
             li.classList.add('activeSect');
@@ -95,7 +91,6 @@ window.addEventListener("scroll", ()=>{
 
 
 $(".link").on("click", function(e) {
-  console.log(this.hash);
   if (this.hash !== '') {
       e.preventDefault();
 
